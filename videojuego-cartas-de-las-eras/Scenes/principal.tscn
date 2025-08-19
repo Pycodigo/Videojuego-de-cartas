@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://bhv68ga71uery"]
+
+[node name="principal" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="fondo" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.501
+anchor_right = 0.5
+anchor_bottom = 0.501
+offset_left = -576.0
+offset_top = -324.648
+offset_right = 576.0
+offset_bottom = 324.352
+color = Color(0, 0, 0, 1)
+
+[node name="titulo" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.499
+anchor_top = 0.201
+anchor_right = 0.499
+anchor_bottom = 0.201
+offset_left = -283.848
+offset_top = -34.248
+offset_right = 283.152
+offset_bottom = 34.752
+theme_override_font_sizes/font_size = 50
+text = "Insertar título del juego"
