@@ -37,7 +37,7 @@
 <ul>
   <li>Godot Engine, de versión 4 en adelante: Ideal para el 2D, aunque use un poco de 3D. Escenas reutilizables, lo que ahorra trabajo innecesario.</li>
   <li>Django, con Python: manejo de usuarios. Ideal para crear partidas en línea.</li>
-  <li>SQLite (local, durante desarrollo): rápido y sin configuración. PostgreSQL (producción): más robusto para multijugaodr y datos persistentes: para base de datos.</li>
+  <li>SQLite (local, durante desarrollo): rápido y sin configuración. PostgreSQL (producción): más robusto para multijugador y datos persistentes: para base de datos.</li>
 </ul>
 <br/>
 <h3>🤵<u>Desarrollador</u></h3>
