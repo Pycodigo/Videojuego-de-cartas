@@ -1,6 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bhv68ga71uery"]
+[gd_scene load_steps=7 format=3 uid="uid://bhv68ga71uery"]
 
 [ext_resource type="Texture2D" uid="uid://dc50b0udohe0h" path="res://Images/config.png" id="1_6ndk6"]
+[ext_resource type="Texture2D" uid="uid://ddqa4nhj4en0e" path="res://Images/hoja (modos de juego).png" id="1_l1yxy"]
+[ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/btn_menu.gd" id="2_7w63j"]
 [ext_resource type="Texture2D" uid="uid://dbjmuyg4pmhjr" path="res://Images/reglas.png" id="2_l1yxy"]
 [ext_resource type="Texture2D" uid="uid://c5od8lr5gv00j" path="res://Images/creditos.png" id="3_7w63j"]
 [ext_resource type="Texture2D" uid="uid://cyloah0bpjr17" path="res://Images/salir.png" id="4_lop0i"]
@@ -41,71 +43,72 @@ theme_override_font_sizes/font_size = 50
 text = "Insertar título del juego"
 
 [node name="modos" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.566
-anchor_right = 0.5
-anchor_bottom = 0.566
-offset_left = -172.0
-offset_top = -31.768
-offset_right = 141.0
-offset_bottom = 31.232
-theme_override_font_sizes/font_size = 40
-text = "Modos de juego"
+layout_mode = 2
+anchor_left = 0.494
+anchor_top = 0.529
+anchor_right = 0.494
+anchor_bottom = 0.529
+offset_left = -99.088
+offset_top = -111.792
+offset_right = 99.912
+offset_bottom = 111.208
+icon = ExtResource("1_l1yxy")
+expand_icon = true
+script = ExtResource("2_7w63j")
 
 [node name="config" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.895
-anchor_top = 0.424
-anchor_right = 0.895
-anchor_bottom = 0.424
-offset_left = -46.04
-offset_top = -44.752
-offset_right = 45.96
-offset_bottom = 45.248
+anchor_left = 0.857
+anchor_top = 0.423
+anchor_right = 0.857
+anchor_bottom = 0.423
+offset_left = -46.264
+offset_top = -45.104
+offset_right = 45.736
+offset_bottom = 44.896
 icon = ExtResource("1_6ndk6")
 expand_icon = true
 
 [node name="reglas" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.109
-anchor_top = 0.434
-anchor_right = 0.109
-anchor_bottom = 0.434
-offset_left = -45.568
-offset_top = -45.232
-offset_right = 46.432
-offset_bottom = 44.768
+anchor_left = 0.129
+anchor_top = 0.437
+anchor_right = 0.129
+anchor_bottom = 0.437
+offset_left = -45.608
+offset_top = -45.176
+offset_right = 46.392
+offset_bottom = 44.824
 icon = ExtResource("2_l1yxy")
 expand_icon = true
 
 [node name="créditos" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.21
-anchor_top = 0.886
-anchor_right = 0.21
-anchor_bottom = 0.886
-offset_left = -45.92
-offset_top = -45.1281
-offset_right = 46.08
-offset_bottom = 44.8719
+anchor_left = 0.181
+anchor_top = 0.798
+anchor_right = 0.181
+anchor_bottom = 0.798
+offset_left = -45.512
+offset_top = -45.104
+offset_right = 46.488
+offset_bottom = 44.896
 icon = ExtResource("3_7w63j")
 expand_icon = true
+script = ExtResource("2_7w63j")
 
 [node name="salir" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.799
-anchor_top = 0.898
-anchor_right = 0.799
-anchor_bottom = 0.898
-offset_left = -45.448
-offset_top = -44.9041
-offset_right = 46.552
-offset_bottom = 45.0959
+anchor_left = 0.801
+anchor_top = 0.785
+anchor_right = 0.801
+anchor_bottom = 0.785
+offset_left = -45.7521
+offset_top = -44.68
+offset_right = 46.2479
+offset_bottom = 45.32
 icon = ExtResource("4_lop0i")
 expand_icon = true
