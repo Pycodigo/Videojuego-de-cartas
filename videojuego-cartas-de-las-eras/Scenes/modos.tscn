@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://c1jn1aos7b6xt"]
+[gd_scene load_steps=7 format=3 uid="uid://c1jn1aos7b6xt"]
 
 [ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/test/volver.png" id="1_bf5c0"]
 [ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/btn_menu.gd" id="2_c3ayc"]
 [ext_resource type="Texture2D" uid="uid://b36yhggvahxp6" path="res://Images/test/editor.png" id="3_c3ayc"]
+[ext_resource type="Texture2D" uid="uid://3ghyxi0sfn31" path="res://Images/test/hoja (duelo).png" id="4_sm8xl"]
+[ext_resource type="Texture2D" uid="uid://mjst6chub151" path="res://Images/test/hoja (campaña).png" id="5_5jk1s"]
+[ext_resource type="Texture2D" uid="uid://bav1kjust62a4" path="res://Images/test/hoja (desafío).png" id="6_j80um"]
 
 [node name="modos" type="Control"]
 layout_mode = 3
@@ -55,7 +58,7 @@ icon = ExtResource("1_bf5c0")
 expand_icon = true
 script = ExtResource("2_c3ayc")
 
-[node name="Button" type="Button" parent="."]
+[node name="editor" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.906
@@ -68,6 +71,48 @@ offset_right = 54.288
 offset_bottom = 52.408
 icon = ExtResource("3_c3ayc")
 expand_icon = true
+
+[node name="duelo" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.271
+anchor_top = 0.478
+anchor_right = 0.271
+anchor_bottom = 0.478
+offset_left = -82.192
+offset_top = -95.744
+offset_right = 81.808
+offset_bottom = 95.256
+icon = ExtResource("4_sm8xl")
+expand_icon = true
+
+[node name="campaña" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.51
+anchor_top = 0.785
+anchor_right = 0.51
+anchor_bottom = 0.785
+offset_left = -82.5201
+offset_top = -95.68
+offset_right = 81.4799
+offset_bottom = 95.32
+icon = ExtResource("5_5jk1s")
+expand_icon = true
 script = ExtResource("2_c3ayc")
+
+[node name="desafío" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.729
+anchor_top = 0.5
+anchor_right = 0.729
+anchor_bottom = 0.5
+offset_left = -81.808
+offset_top = -106.0
+offset_right = 82.192
+offset_bottom = 85.0
+icon = ExtResource("6_j80um")
+expand_icon = true
 
 [connection signal="pressed" from="volver" to="volver" method="_on_volver_pressed"]
