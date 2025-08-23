@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dbjmuyg4pmhjr"
-path="res://.godot/imported/reglas.png-f702172d7f0aefee23405d4c85b2d959.ctex"
+uid="uid://bgb014lbv4p2p"
+path="res://.godot/imported/volver.png-4b2835e8af1af216d21c299e9f913a6d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/reglas.png"
-dest_files=["res://.godot/imported/reglas.png-f702172d7f0aefee23405d4c85b2d959.ctex"]
+source_file="res://Images/test/volver.png"
+dest_files=["res://.godot/imported/volver.png-4b2835e8af1af216d21c299e9f913a6d.ctex"]
 
 [params]
 

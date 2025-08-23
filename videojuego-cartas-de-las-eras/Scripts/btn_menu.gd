@@ -42,3 +42,10 @@ func _on_mouse_exited():
 	
 	# Volver a ejecutar la animación de movimiento.
 	_start_animation()
+
+func _on_modos_pressed() -> void:
+	get_tree().change_scene_to_file("res://Scenes/modos.tscn")
+
+
+func _on_volver_pressed() -> void:
+	get_tree().change_scene_to_file("res://Scenes/principal.tscn")

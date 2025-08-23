@@ -1,0 +1,73 @@
+[gd_scene load_steps=4 format=3 uid="uid://c1jn1aos7b6xt"]
+
+[ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/test/volver.png" id="1_bf5c0"]
+[ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/btn_menu.gd" id="2_c3ayc"]
+[ext_resource type="Texture2D" uid="uid://b36yhggvahxp6" path="res://Images/test/editor.png" id="3_c3ayc"]
+
+[node name="modos" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="fondo" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.501
+anchor_right = 0.5
+anchor_bottom = 0.501
+offset_left = -576.0
+offset_top = -324.648
+offset_right = 576.0
+offset_bottom = 324.352
+color = Color(0, 0, 0, 1)
+
+[node name="titulo" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.499
+anchor_top = 0.201
+anchor_right = 0.499
+anchor_bottom = 0.201
+offset_left = -283.848
+offset_top = -34.248
+offset_right = 283.152
+offset_bottom = 34.752
+theme_override_font_sizes/font_size = 50
+text = "Modos de juego"
+horizontal_alignment = 1
+
+[node name="volver" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.906
+anchor_top = 0.864
+anchor_right = 0.906
+anchor_bottom = 0.864
+offset_left = -45.712
+offset_top = -44.872
+offset_right = 46.288
+offset_bottom = 45.128
+icon = ExtResource("1_bf5c0")
+expand_icon = true
+script = ExtResource("2_c3ayc")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.906
+anchor_top = 0.129
+anchor_right = 0.906
+anchor_bottom = 0.129
+offset_left = -53.712
+offset_top = -52.592
+offset_right = 54.288
+offset_bottom = 52.408
+icon = ExtResource("3_c3ayc")
+expand_icon = true
+script = ExtResource("2_c3ayc")
+
+[connection signal="pressed" from="volver" to="volver" method="_on_volver_pressed"]

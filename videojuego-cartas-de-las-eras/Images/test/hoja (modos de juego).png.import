@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dc50b0udohe0h"
-path="res://.godot/imported/config.png-89ee9e62a1a5e947cb34ac479e11cbc5.ctex"
+uid="uid://ddqa4nhj4en0e"
+path="res://.godot/imported/hoja (modos de juego).png-a6511bc087a871e17bc550b347d84ee8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/config.png"
-dest_files=["res://.godot/imported/config.png-89ee9e62a1a5e947cb34ac479e11cbc5.ctex"]
+source_file="res://Images/test/hoja (modos de juego).png"
+dest_files=["res://.godot/imported/hoja (modos de juego).png-a6511bc087a871e17bc550b347d84ee8.ctex"]
 
 [params]
 
