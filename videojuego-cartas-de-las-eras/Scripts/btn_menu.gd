@@ -13,6 +13,9 @@ func _ready() -> void:
 	connect("mouse_entered", Callable(self, "_on_mouse_entered"))
 	# Detectar que el ratón salió.
 	connect("mouse_exited", Callable(self, "_on_mouse_exited"))
+	
+	# Forzar tamaño mínimo.
+	DisplayServer.window_set_min_size(Vector2i(1024, 600))
 
 func _start_animation():
 	# Crea un bucle.
@@ -46,6 +49,18 @@ func _on_mouse_exited():
 func _on_modos_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/modos.tscn")
 
-
+# Volver desde modos de juego.
 func _on_volver_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/principal.tscn")
+
+
+func _on_salir_pressed() -> void:
+	get_tree().quit()
+
+# Volver desde configuración.
+func _on_volver_config_pressed() -> void:
+	get_tree().change_scene_to_file("res://Scenes/principal.tscn")
+
+
+func _on_config_pressed() -> void:
+	get_tree().change_scene_to_file("res://Scenes/config.tscn")

@@ -15,19 +15,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="fondo" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.501
-anchor_right = 0.5
-anchor_bottom = 0.501
-offset_left = -576.0
-offset_top = -324.648
-offset_right = 576.0
-offset_bottom = 324.352
-color = Color(0, 0, 0, 1)
-
 [node name="titulo" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = -1
@@ -69,6 +56,7 @@ offset_right = 45.736
 offset_bottom = 44.896
 icon = ExtResource("1_6ndk6")
 expand_icon = true
+script = ExtResource("2_7w63j")
 
 [node name="reglas" type="Button" parent="."]
 layout_mode = 1
@@ -97,7 +85,6 @@ offset_right = 46.488
 offset_bottom = 44.896
 icon = ExtResource("3_7w63j")
 expand_icon = true
-script = ExtResource("2_7w63j")
 
 [node name="salir" type="Button" parent="."]
 layout_mode = 1
@@ -112,5 +99,8 @@ offset_right = 46.2479
 offset_bottom = 45.32
 icon = ExtResource("4_lop0i")
 expand_icon = true
+script = ExtResource("2_7w63j")
 
 [connection signal="pressed" from="modos" to="modos" method="_on_modos_pressed"]
+[connection signal="pressed" from="config" to="modos" method="_on_config_pressed"]
+[connection signal="pressed" from="salir" to="modos" method="_on_salir_pressed"]
