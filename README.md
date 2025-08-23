@@ -1,5 +1,5 @@
 # Videojuego-de-cartas
-<p align="left">📔<img src="https://img.shields.io/badge/Estado-Organizando%20Ideas-yellow"/>📔</p>
+<p align="left">🚧<img src="https://img.shields.io/badge/Estado%20-%20En%20desarrollo-red"/>🚧</p>
 
 <h3><u>Índice</u></h3>
 
@@ -29,11 +29,10 @@
 <br/>
 <h3>📁<u>Descargar, descomprimir y ejecutar el proyecto</u>📂</h3>
 <hr/>
-<p>Disponible cuando el proyecto esté un poco avanzado</p>
+<p>Disponible cuando el proyecto sea mínimamente jugable (o con una demo).</p>
 <br/>
 <h3><u>Tecnologías usadas</u></h3>
 <hr/>
-<p>Se piensan usar:</p>
 <ul>
   <li>Godot Engine, de versión 4 en adelante: Ideal para el 2D, aunque use un poco de 3D. Escenas reutilizables, lo que ahorra trabajo innecesario.</li>
   <li>Django, con Python: manejo de usuarios. Ideal para crear partidas en línea.</li>
