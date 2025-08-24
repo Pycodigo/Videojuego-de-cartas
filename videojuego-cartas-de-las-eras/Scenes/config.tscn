@@ -59,51 +59,107 @@ current_tab = 0
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="resolución" type="HBoxContainer" parent="opc/Gráficos"]
+[node name="VBoxContainer" type="VBoxContainer" parent="opc/Gráficos"]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.495
-anchor_top = 0.091
-anchor_right = 0.495
-anchor_bottom = 0.091
-offset_left = -372.465
-offset_top = -20.856
-offset_right = 372.535
-offset_bottom = 21.144
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = 29.0
+offset_right = -28.0
+offset_bottom = -171.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 30
+
+[node name="resolución" type="HBoxContainer" parent="opc/Gráficos/VBoxContainer"]
+layout_mode = 2
 theme_override_constants/separation = 250
 
-[node name="Label" type="Label" parent="opc/Gráficos/resolución"]
+[node name="Label" type="Label" parent="opc/Gráficos/VBoxContainer/resolución"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Resolución"
 horizontal_alignment = 1
 
-[node name="opc" type="OptionButton" parent="opc/Gráficos/resolución"]
+[node name="opc" type="OptionButton" parent="opc/Gráficos/VBoxContainer/resolución"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="modo" type="HBoxContainer" parent="opc/Gráficos"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.497
-anchor_top = 0.247
-anchor_right = 0.497
-anchor_bottom = 0.247
-offset_left = -372.583
-offset_top = -20.848
-offset_right = 372.417
-offset_bottom = 21.152
+[node name="modo" type="HBoxContainer" parent="opc/Gráficos/VBoxContainer"]
+layout_mode = 2
 theme_override_constants/separation = 200
 
-[node name="Label" type="Label" parent="opc/Gráficos/modo"]
+[node name="Label" type="Label" parent="opc/Gráficos/VBoxContainer/modo"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Modo ventana"
 horizontal_alignment = 1
 
-[node name="ventana" type="OptionButton" parent="opc/Gráficos/modo"]
+[node name="ventana" type="OptionButton" parent="opc/Gráficos/VBoxContainer/modo"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="sincro" type="HBoxContainer" parent="opc/Gráficos/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 100
+
+[node name="Label" type="Label" parent="opc/Gráficos/VBoxContainer/sincro"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Sincronización vertical"
+horizontal_alignment = 1
+
+[node name="CheckButton" type="CheckButton" parent="opc/Gráficos/VBoxContainer/sincro"]
+layout_mode = 2
+alignment = 1
+expand_icon = true
+
+[node name="fps" type="HBoxContainer" parent="opc/Gráficos/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 320
+
+[node name="HSlider" type="HSlider" parent="opc/Gráficos"]
+layout_mode = 2
+anchor_left = 0.512
+anchor_top = 0.635
+anchor_right = 0.512
+anchor_bottom = 0.635
+offset_left = -298.184
+offset_top = -8.16003
+offset_right = 297.816
+offset_bottom = 7.83997
+min_value = 20.0
+max_value = 120.0
+step = 5.0
+value = 60.0
+
+[node name="Label" type="Label" parent="opc/Gráficos"]
+layout_mode = 2
+anchor_left = 0.068
+anchor_top = 0.63
+anchor_right = 0.068
+anchor_bottom = 0.63
+offset_left = -24.38
+offset_top = -21.176
+offset_right = 24.62
+offset_bottom = 20.824
+theme_override_font_sizes/font_size = 30
+text = "Fps"
+
+[node name="Label2" type="Label" parent="opc/Gráficos"]
+layout_mode = 2
+anchor_left = 0.94
+anchor_top = 0.639
+anchor_right = 0.94
+anchor_bottom = 0.639
+offset_left = -17.084
+offset_top = -20.9201
+offset_right = 16.916
+offset_bottom = 21.08
+theme_override_font_sizes/font_size = 30
+text = "30"
+horizontal_alignment = 1
 
 [node name="Sonido" type="TabBar" parent="opc"]
 visible = false
@@ -116,5 +172,7 @@ layout_mode = 2
 metadata/_tab_index = 2
 
 [connection signal="pressed" from="volver" to="volver" method="_on_volver_config_pressed"]
-[connection signal="item_selected" from="opc/Gráficos/resolución/opc" to="." method="_on_opc_item_selected"]
-[connection signal="item_selected" from="opc/Gráficos/modo/ventana" to="." method="_on_vindow_item_selected"]
+[connection signal="item_selected" from="opc/Gráficos/VBoxContainer/resolución/opc" to="." method="_on_opc_item_selected"]
+[connection signal="item_selected" from="opc/Gráficos/VBoxContainer/modo/ventana" to="." method="_on_vindow_item_selected"]
+[connection signal="toggled" from="opc/Gráficos/VBoxContainer/sincro/CheckButton" to="." method="_on_check_button_toggled"]
+[connection signal="changed" from="opc/Gráficos/HSlider" to="." method="_on_fps_slider_changed"]

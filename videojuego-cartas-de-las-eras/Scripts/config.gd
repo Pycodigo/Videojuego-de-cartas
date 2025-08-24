@@ -1,7 +1,9 @@
 extends Control
 
-@onready var resolution_type = $"opc/Gráficos/resolución/opc"
-@onready var window_mode = $"opc/Gráficos/modo/ventana"
+@onready var resolution_type = $"opc/Gráficos/VBoxContainer/resolución/opc"
+@onready var window_mode = $"opc/Gráficos/VBoxContainer/modo/ventana"
+@onready var fps_slider = $"opc/Gráficos/HSlider"
+@onready var fps_label = $"opc/Gráficos/Label2"
 
 # Tamaño mínimo.
 var min_width = 1024
@@ -34,6 +36,23 @@ func _ready() -> void:
 	
 	# Desactivar resolución si estamos en pantalla completa, incluso al volver.
 	resolution_type.disabled = (DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN)
+	
+	# Comprobar los fps del ordenador.
+	print(Engine.get_frames_per_second())
+	
+	# Configuración incial de los fps.
+	fps_slider.min_value = 20
+	fps_slider.max_value = 120
+	fps_slider.step = 5
+	fps_slider.value = 60
+	
+	# Aplicar valor inicial.
+	Engine.max_fps = int(fps_slider.value)
+	# Mostrar en texto.
+	fps_label.text = str(int(fps_slider.value))
+	
+	# Conectar la barra de los fps.
+	fps_slider.connect("value_changed", Callable(self, "_on_fps_slider_changed"))
 
 func _on_opc_item_selected(index: int) -> void:
 	var res = resolutions[index]
@@ -60,3 +79,21 @@ func _on_vindow_item_selected(mode: int) -> void:
 	
 	# Desactivar resolución si estamos en pantalla completa.
 	resolution_type.disabled = (DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN)
+
+
+func _on_check_button_toggled(pressed: bool) -> void:
+	# Comprobar si el botón está activado.
+	if pressed:
+		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
+		print("vsync activado")
+	else:
+		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+		print("vsync desactivado")
+
+
+func _on_fps_slider_changed(fps_value:float) -> void:
+	# Cambiar fps dinámicamente.
+	Engine.max_fps = int(fps_value)
+	# Mostrar el texto.
+	fps_label.text = str(int(fps_value))
+	print(Engine.get_frames_per_second())
