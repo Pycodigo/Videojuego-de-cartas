@@ -58,9 +58,40 @@ offset_right = 403.536
 offset_bottom = 223.296
 current_tab = 0
 
-[node name="Gráficos" type="TabBar" parent="opc"]
+[node name="General" type="TabBar" parent="opc"]
 layout_mode = 2
 metadata/_tab_index = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="opc/General"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 31.0
+offset_top = 38.0
+offset_right = -37.0
+offset_bottom = -27.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="idioma" type="HBoxContainer" parent="opc/General/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 250
+
+[node name="Label" type="Label" parent="opc/General/VBoxContainer/idioma"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Idioma"
+horizontal_alignment = 1
+
+[node name="idioma" type="OptionButton" parent="opc/General/VBoxContainer/idioma"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Gráficos" type="TabBar" parent="opc"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="opc/Gráficos"]
 layout_mode = 1
@@ -163,7 +194,7 @@ horizontal_alignment = 1
 [node name="Sonido" type="TabBar" parent="opc"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 1
+metadata/_tab_index = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="opc/Sonido"]
 layout_mode = 1
@@ -227,11 +258,6 @@ offset_right = 110.043
 offset_bottom = 21.576
 theme_override_font_sizes/font_size = 25
 text = "Probar efecto"
-
-[node name="TabBar3" type="TabBar" parent="opc"]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 2
 
 [node name="ButtonSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_p4uu7")

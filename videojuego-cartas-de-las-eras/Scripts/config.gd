@@ -1,5 +1,6 @@
 extends Control
 
+@onready var language = $opc/General/VBoxContainer/idioma/idioma
 @onready var resolution_type = $"opc/Gráficos/VBoxContainer/resolución/opc"
 @onready var window_mode = $"opc/Gráficos/VBoxContainer/modo/ventana"
 @onready var fps_slider = $"opc/Gráficos/FPSlider"
@@ -8,6 +9,12 @@ extends Control
 # Tamaño mínimo.
 var min_width = 1024
 var min_height = 600
+
+# Lista de idiomas.
+var idioms: Array[String] = [
+	"Español",
+	"Gallego"
+]
 
 # Lista de resoluciones disponibles.
 var resolutions = [
@@ -29,6 +36,9 @@ const window_modes: Array[String] = [
 func _ready() -> void:
 	# Iniciar música.
 	$MenuChill.play(Global.music)
+	
+	for idiom in idioms:
+		language.add_item(idiom)
 	
 	# Llenar las opciones.
 	for res in resolutions:
