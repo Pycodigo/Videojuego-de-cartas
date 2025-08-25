@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://xrc2gvhblmqb"]
+[gd_scene load_steps=7 format=3 uid="uid://xrc2gvhblmqb"]
 
 [ext_resource type="Script" uid="uid://e0xl2f3rvud6" path="res://Scripts/config.gd" id="1_6u63q"]
 [ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/test/volver.png" id="1_gyli8"]
 [ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/btn_menu.gd" id="2_6u63q"]
+[ext_resource type="PackedScene" uid="uid://mp8x3lwf3mq0" path="res://Scenes/sonido.tscn" id="4_lrmn4"]
+[ext_resource type="AudioStream" uid="uid://bmthy11a5bnsc" path="res://Sound effects/Test/button sound.wav" id="5_p4uu7"]
+[ext_resource type="AudioStream" uid="uid://kf1c3t0v75k0" path="res://Music/Test/menu_chill.wav" id="6_a7ocr"]
 
 [node name="config" type="Control"]
 layout_mode = 3
@@ -64,10 +67,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 28.0
-offset_top = 29.0
-offset_right = -28.0
-offset_bottom = -171.0
+offset_left = 24.496
+offset_top = 50.904
+offset_right = -31.504
+offset_bottom = -149.096
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 30
@@ -115,48 +118,44 @@ layout_mode = 2
 alignment = 1
 expand_icon = true
 
-[node name="fps" type="HBoxContainer" parent="opc/Gráficos/VBoxContainer"]
+[node name="FPSlider" type="HSlider" parent="opc/Gráficos"]
 layout_mode = 2
-theme_override_constants/separation = 320
-
-[node name="HSlider" type="HSlider" parent="opc/Gráficos"]
-layout_mode = 2
-anchor_left = 0.512
-anchor_top = 0.635
-anchor_right = 0.512
-anchor_bottom = 0.635
-offset_left = -298.184
-offset_top = -8.16003
-offset_right = 297.816
-offset_bottom = 7.83997
+anchor_left = 0.507
+anchor_top = 0.728
+anchor_right = 0.507
+anchor_bottom = 0.728
+offset_left = -297.653
+offset_top = -7.94403
+offset_right = 298.347
+offset_bottom = 8.05597
 min_value = 20.0
 max_value = 120.0
 step = 5.0
 value = 60.0
 
-[node name="Label" type="Label" parent="opc/Gráficos"]
+[node name="fps" type="Label" parent="opc/Gráficos"]
 layout_mode = 2
-anchor_left = 0.068
-anchor_top = 0.63
-anchor_right = 0.068
-anchor_bottom = 0.63
-offset_left = -24.38
-offset_top = -21.176
-offset_right = 24.62
-offset_bottom = 20.824
+anchor_left = 0.063
+anchor_top = 0.719
+anchor_right = 0.063
+anchor_bottom = 0.719
+offset_left = -24.345
+offset_top = -21.2
+offset_right = 24.655
+offset_bottom = 20.8
 theme_override_font_sizes/font_size = 30
 text = "Fps"
 
-[node name="Label2" type="Label" parent="opc/Gráficos"]
+[node name="fps_num" type="Label" parent="opc/Gráficos"]
 layout_mode = 2
-anchor_left = 0.94
-anchor_top = 0.639
-anchor_right = 0.94
-anchor_bottom = 0.639
-offset_left = -17.084
-offset_top = -20.9201
-offset_right = 16.916
-offset_bottom = 21.08
+anchor_left = 0.939
+anchor_top = 0.733
+anchor_right = 0.939
+anchor_bottom = 0.733
+offset_left = -17.2771
+offset_top = -21.024
+offset_right = 16.7229
+offset_bottom = 20.976
 theme_override_font_sizes/font_size = 30
 text = "30"
 horizontal_alignment = 1
@@ -166,13 +165,86 @@ visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
+[node name="VBoxContainer" type="VBoxContainer" parent="opc/Sonido"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 58.0
+offset_top = 40.0
+offset_right = -75.0
+offset_bottom = -102.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="general" type="Label" parent="opc/Sonido/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Volumen general"
+horizontal_alignment = 1
+
+[node name="Master" parent="opc/Sonido/VBoxContainer" instance=ExtResource("4_lrmn4")]
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+bus_name = "Master"
+
+[node name="musica" type="Label" parent="opc/Sonido/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Música"
+horizontal_alignment = 1
+
+[node name="Musica" parent="opc/Sonido/VBoxContainer" instance=ExtResource("4_lrmn4")]
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+bus_name = "Music"
+
+[node name="efectos" type="Label" parent="opc/Sonido/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Efectos de sonido"
+horizontal_alignment = 1
+
+[node name="Efectos" parent="opc/Sonido/VBoxContainer" instance=ExtResource("4_lrmn4")]
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+bus_name = "Sound effects"
+
+[node name="prueba" type="Button" parent="opc/Sonido"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.179
+anchor_top = 0.883
+anchor_right = 0.179
+anchor_bottom = 0.883
+offset_left = -109.957
+offset_top = -21.424
+offset_right = 110.043
+offset_bottom = 21.576
+theme_override_font_sizes/font_size = 25
+text = "Probar efecto"
+
 [node name="TabBar3" type="TabBar" parent="opc"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
+[node name="ButtonSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_p4uu7")
+volume_db = 15.0
+bus = &"Sound effects"
+
+[node name="MenuChill" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_a7ocr")
+bus = &"Music"
+
 [connection signal="pressed" from="volver" to="volver" method="_on_volver_config_pressed"]
 [connection signal="item_selected" from="opc/Gráficos/VBoxContainer/resolución/opc" to="." method="_on_opc_item_selected"]
 [connection signal="item_selected" from="opc/Gráficos/VBoxContainer/modo/ventana" to="." method="_on_vindow_item_selected"]
 [connection signal="toggled" from="opc/Gráficos/VBoxContainer/sincro/CheckButton" to="." method="_on_check_button_toggled"]
-[connection signal="changed" from="opc/Gráficos/HSlider" to="." method="_on_fps_slider_changed"]
+[connection signal="changed" from="opc/Gráficos/FPSlider" to="." method="_on_fps_slider_changed"]
+[connection signal="pressed" from="opc/Sonido/prueba" to="." method="_on_btn_test_pressed"]

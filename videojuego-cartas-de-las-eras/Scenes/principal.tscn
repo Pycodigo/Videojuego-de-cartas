@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bhv68ga71uery"]
+[gd_scene load_steps=9 format=3 uid="uid://bhv68ga71uery"]
 
 [ext_resource type="Texture2D" uid="uid://dc50b0udohe0h" path="res://Images/test/config.png" id="1_6ndk6"]
 [ext_resource type="Texture2D" uid="uid://ddqa4nhj4en0e" path="res://Images/test/hoja (modos de juego).png" id="1_l1yxy"]
@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://dbjmuyg4pmhjr" path="res://Images/test/reglas.png" id="2_l1yxy"]
 [ext_resource type="Texture2D" uid="uid://c5od8lr5gv00j" path="res://Images/test/creditos.png" id="3_7w63j"]
 [ext_resource type="Texture2D" uid="uid://cyloah0bpjr17" path="res://Images/test/salir.png" id="4_lop0i"]
+[ext_resource type="AudioStream" uid="uid://bmthy11a5bnsc" path="res://Sound effects/Test/button sound.wav" id="7_8ed56"]
+[ext_resource type="AudioStream" uid="uid://kf1c3t0v75k0" path="res://Music/Test/menu_chill.wav" id="8_hjo07"]
 
 [node name="principal" type="Control"]
 layout_mode = 3
@@ -100,6 +102,15 @@ offset_bottom = 45.32
 icon = ExtResource("4_lop0i")
 expand_icon = true
 script = ExtResource("2_7w63j")
+
+[node name="ButtonSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_8ed56")
+volume_db = 15.0
+bus = &"Sound effects"
+
+[node name="MenuChill" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_hjo07")
+bus = &"Music"
 
 [connection signal="pressed" from="modos" to="modos" method="_on_modos_pressed"]
 [connection signal="pressed" from="config" to="modos" method="_on_config_pressed"]

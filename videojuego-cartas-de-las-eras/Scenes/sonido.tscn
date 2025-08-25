@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://mp8x3lwf3mq0"]
+
+[ext_resource type="Script" uid="uid://co228urq51xtb" path="res://Scripts/sonido.gd" id="1_dy3ej"]
+
+[node name="HSlider" type="HSlider"]
+script = ExtResource("1_dy3ej")

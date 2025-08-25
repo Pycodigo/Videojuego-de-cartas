@@ -2,8 +2,8 @@ extends Control
 
 @onready var resolution_type = $"opc/Gráficos/VBoxContainer/resolución/opc"
 @onready var window_mode = $"opc/Gráficos/VBoxContainer/modo/ventana"
-@onready var fps_slider = $"opc/Gráficos/HSlider"
-@onready var fps_label = $"opc/Gráficos/Label2"
+@onready var fps_slider = $"opc/Gráficos/FPSlider"
+@onready var fps_label = $"opc/Gráficos/fps_num"
 
 # Tamaño mínimo.
 var min_width = 1024
@@ -27,6 +27,9 @@ const window_modes: Array[String] = [
 ]
 
 func _ready() -> void:
+	# Iniciar música.
+	$MenuChill.play(Global.music)
+	
 	# Llenar las opciones.
 	for res in resolutions:
 		resolution_type.add_item(str(res.x) + "x" + str(res.y))
@@ -38,26 +41,20 @@ func _ready() -> void:
 	resolution_type.disabled = (DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN)
 	
 	# Comprobar los fps del ordenador.
-	print(Engine.get_frames_per_second())
-	
-	# Configuración incial de los fps.
-	fps_slider.min_value = 20
-	fps_slider.max_value = 120
-	fps_slider.step = 5
-	fps_slider.value = 60
+	print(str(Engine.get_frames_per_second()) + " fps actuales.")
 	
 	# Aplicar valor inicial.
 	Engine.max_fps = int(fps_slider.value)
 	# Mostrar en texto.
 	fps_label.text = str(int(fps_slider.value))
 	
-	# Conectar la barra de los fps.
+	#Conectar los fps.
 	fps_slider.connect("value_changed", Callable(self, "_on_fps_slider_changed"))
 
 func _on_opc_item_selected(index: int) -> void:
 	var res = resolutions[index]
 	
-	# Forzar tamaño mínimo.
+	# Forzar tamaño elegido.
 	var width = max(res.x, min_width)
 	var height = max(res.y, min_height)
 	
@@ -96,4 +93,8 @@ func _on_fps_slider_changed(fps_value:float) -> void:
 	Engine.max_fps = int(fps_value)
 	# Mostrar el texto.
 	fps_label.text = str(int(fps_value))
-	print(Engine.get_frames_per_second())
+	print(str(Engine.get_frames_per_second()) + " fps actuales.")
+
+
+func _on_btn_test_pressed() -> void:
+	$ButtonSound.play()
