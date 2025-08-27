@@ -1,33 +1,51 @@
 extends Control
 
-@onready var left = $izda
-@onready var select = $elecc
-@onready var right = $dcha
+@onready var select_d = $elecc
+@onready var select_t = $elecc2
 
-var options = ["Fácil", "Normal", "Difícil"]
-var index = 0
+var op_d: Array[String] = ["Fácil", "Normal", "Difícil"]
+var op_t: Array[int] = [10, 15, 20, 25, 30]
+var index_d = 0
+var index_t = 0
 
 func _ready() -> void:
 	$MenuChill.play(Global.music)
-	update_text()
+	update_difficulty()
+	update_turns()
 
-func _on_left_pressed() -> void:
+func _on_left_d_pressed() -> void:
 	$ButtonSound.play()
 	await $ButtonSound.finished
-	index = (index - 1 + options.size()) % options.size()
-	print(index)
-	update_text()
-	
+	index_d = (index_d - 1 + op_d.size()) % op_d.size()
+	print("ID:" + str(index_d) + " " + op_d[index_d])
+	update_difficulty()
 
-func update_text() -> void:
-	select.text = options[index]
-
-func _on_right_pressed() -> void:
+func _on_left_t_pressed() -> void:
 	$ButtonSound.play()
 	await $ButtonSound.finished
-	index = (index + 1) % options.size()
-	print(index)
-	update_text()
+	index_t = (index_t - 1 + op_t.size()) % op_t.size()
+	print("ID:" + str(index_t) + " turns:" + str(op_t[index_t]))
+	update_turns()
+
+func update_difficulty() -> void:
+	select_d.text = op_d[index_d]
+
+func update_turns() -> void:
+	select_t.text = str(op_t[index_t])
+
+func _on_right_d_pressed() -> void:
+	$ButtonSound.play()
+	await $ButtonSound.finished
+	index_d = (index_d + 1) % op_d.size()
+	print("ID:" + str(index_d) + " " + op_d[index_d])
+	update_difficulty()
+
+func _on_right_t_pressed() -> void:
+	$ButtonSound.play()
+	await $ButtonSound.finished
+	index_t = (index_t + 1) % op_t.size()
+	print("ID:" + str(index_t) + " turns:" + str(op_t[index_t]))
+	update_turns()
 
 
 func _on_volver_pressed() -> void:
