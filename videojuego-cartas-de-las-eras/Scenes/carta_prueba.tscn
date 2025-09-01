@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://cjcutonmopkg1"]
+
+[ext_resource type="Script" uid="uid://clynm05ecaf0r" path="res://Scripts/carta_prueba.gd" id="1_2kus5"]
+[ext_resource type="Texture2D" uid="uid://q2oro1lhk423" path="res://Images/test/baseball-card.png" id="2_es3wn"]
+
+[node name="Carta" type="Panel"]
+custom_minimum_size = Vector2(100, 120)
+offset_right = 40.0
+offset_bottom = 40.0
+pivot_offset = Vector2(50, 120)
+script = ExtResource("1_2kus5")
+
+[node name="Baseball-card" type="Sprite2D" parent="."]
+position = Vector2(50, 60)
+scale = Vector2(2, 2)
+texture = ExtResource("2_es3wn")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 55.0
+offset_right = 86.0
+offset_bottom = 83.0
+theme_override_font_sizes/font_size = 20
+text = "Carta 1"

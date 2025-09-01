@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c0dkyrojapx8d"]
+
+[node name="tablero" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(512, 301)

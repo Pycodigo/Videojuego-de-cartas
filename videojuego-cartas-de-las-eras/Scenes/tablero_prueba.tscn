@@ -1,0 +1,67 @@
+[gd_scene load_steps=2 format=3 uid="uid://bifkscb2c6e87"]
+
+[ext_resource type="Script" uid="uid://obmvpfmne8h2" path="res://Scripts/tablero_prueba.gd" id="1_5trg7"]
+
+[node name="tablero" type="Node2D"]
+script = ExtResource("1_5trg7")
+
+[node name="mano" type="Node2D" parent="."]
+position = Vector2(480, 520)
+
+[node name="campo" type="Node2D" parent="."]
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -2.0
+offset_top = 1.0
+offset_right = 1026.0
+offset_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="pone" type="Button" parent="UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.181
+anchor_top = 0.508
+anchor_right = 0.181
+anchor_bottom = 0.508
+offset_left = -64.068
+offset_top = -18.292
+offset_right = 63.932
+offset_bottom = 17.708
+theme_override_font_sizes/font_size = 20
+text = "Añadir carta"
+
+[node name="descarta" type="Button" parent="UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.838
+anchor_top = 0.511
+anchor_right = 0.838
+anchor_bottom = 0.511
+offset_left = -64.4641
+offset_top = -18.089
+offset_right = 63.5359
+offset_bottom = 17.911
+theme_override_font_sizes/font_size = 20
+text = "Descartar carta"
+
+[node name="reinicia" type="Button" parent="UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.507
+anchor_top = 0.506
+anchor_right = 0.507
+anchor_bottom = 0.506
+offset_left = -64.196
+offset_top = -18.094
+offset_right = 63.804
+offset_bottom = 17.906
+theme_override_font_sizes/font_size = 20
+text = "Reiniciar"
+
+[connection signal="pressed" from="UI/pone" to="." method="_on_btn_add_pressed"]
+[connection signal="pressed" from="UI/descarta" to="." method="_on_btn_remove_pressed"]
+[connection signal="pressed" from="UI/reinicia" to="." method="_on_btn_reset_pressed"]

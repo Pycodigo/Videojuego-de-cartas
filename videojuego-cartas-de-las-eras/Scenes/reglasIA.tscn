@@ -1,11 +1,17 @@
-[gd_scene load_steps=7 format=3 uid="uid://bndn1sx8yhjxw"]
+[gd_scene load_steps=9 format=3 uid="uid://bndn1sx8yhjxw"]
 
-[ext_resource type="Script" uid="uid://bvlmftvqligpu" path="res://Scripts/reglas.gd" id="1_4iifx"]
-[ext_resource type="Texture2D" uid="uid://xn0ew4nddwmo" path="res://Images/test/flecha.png" id="1_h813v"]
-[ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/test/volver.png" id="3_77idx"]
-[ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/btn_menu.gd" id="4_77idx"]
-[ext_resource type="AudioStream" uid="uid://kf1c3t0v75k0" path="res://Music/Test/menu_chill.wav" id="5_08qrv"]
-[ext_resource type="AudioStream" uid="uid://bmthy11a5bnsc" path="res://Sound effects/Test/button sound.wav" id="6_sgipc"]
+[ext_resource type="Script" uid="uid://bvlmftvqligpu" path="res://Scripts/reglas.gd" id="1_ht4ys"]
+[ext_resource type="Texture2D" uid="uid://xn0ew4nddwmo" path="res://Images/test/flecha.png" id="2_ab607"]
+[ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/btn_menu.gd" id="3_bdjx7"]
+[ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/test/volver.png" id="4_hjbmg"]
+[ext_resource type="AudioStream" uid="uid://kf1c3t0v75k0" path="res://Music/Test/menu_chill.wav" id="5_heryo"]
+[ext_resource type="AudioStream" uid="uid://bmthy11a5bnsc" path="res://Sound effects/Test/button sound.wav" id="6_chvkp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_08qrv"]
+bg_color = Color(3.36915e-07, 0.519728, 0.139152, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sgipc"]
+bg_color = Color(0.607355, 0.151997, 0.036359, 1)
 
 [node name="reglas" type="Control"]
 layout_mode = 3
@@ -14,7 +20,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_4iifx")
+script = ExtResource("1_ht4ys")
 
 [node name="titulo" type="Label" parent="."]
 layout_mode = 1
@@ -70,7 +76,7 @@ offset_right = 29.64
 offset_bottom = 29.8
 size_flags_horizontal = 6
 size_flags_vertical = 4
-icon = ExtResource("1_h813v")
+icon = ExtResource("2_ab607")
 expand_icon = true
 
 [node name="elecc" type="Label" parent="."]
@@ -99,7 +105,7 @@ offset_top = 29.6
 offset_right = 88.408
 offset_bottom = 88.6
 rotation = -3.14159
-icon = ExtResource("1_h813v")
+icon = ExtResource("2_ab607")
 expand_icon = true
 
 [node name="turnos" type="Label" parent="."]
@@ -129,7 +135,7 @@ offset_right = 29.64
 offset_bottom = 29.6
 size_flags_horizontal = 6
 size_flags_vertical = 4
-icon = ExtResource("1_h813v")
+icon = ExtResource("2_ab607")
 expand_icon = true
 
 [node name="elecc2" type="Label" parent="."]
@@ -158,8 +164,25 @@ offset_top = 29.4
 offset_right = 88.408
 offset_bottom = 88.4
 rotation = -3.14159
-icon = ExtResource("1_h813v")
+icon = ExtResource("2_ab607")
 expand_icon = true
+
+[node name="jugar" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.46
+anchor_top = 0.854
+anchor_right = 0.46
+anchor_bottom = 0.854
+offset_left = -132.04
+offset_top = -31.4
+offset_right = 131.96
+offset_bottom = 31.6
+theme_override_font_sizes/font_size = 40
+theme_override_styles/pressed = SubResource("StyleBoxFlat_08qrv")
+theme_override_styles/normal = SubResource("StyleBoxFlat_sgipc")
+text = "Jugar"
+script = ExtResource("3_bdjx7")
 
 [node name="volver" type="Button" parent="."]
 layout_mode = 1
@@ -172,16 +195,16 @@ offset_left = -46.272
 offset_top = -48.0
 offset_right = 45.728
 offset_bottom = 48.0
-icon = ExtResource("3_77idx")
+icon = ExtResource("4_hjbmg")
 expand_icon = true
-script = ExtResource("4_77idx")
+script = ExtResource("3_bdjx7")
 
 [node name="MenuChill" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("5_08qrv")
+stream = ExtResource("5_heryo")
 bus = &"Music"
 
 [node name="ButtonSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("6_sgipc")
+stream = ExtResource("6_chvkp")
 volume_db = 15.0
 bus = &"Sound effects"
 
