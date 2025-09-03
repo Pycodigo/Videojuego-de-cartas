@@ -10,4 +10,4 @@ script = ExtResource("1_ch2ui")
 position = Vector2(480, 520)
 
 [node name="baraja" parent="." instance=ExtResource("2_80l1r")]
-position = Vector2(800, 311)
+position = Vector2(848, 332)
