@@ -21,7 +21,7 @@
 <h3>⚒️<u>Modos de juego</u>🛠️</h3>
 <hr/>
 <ul>
-  <li>Duelo rápido contra IA.</li>
+  <li>Duelo rápido contra IA y/o jugador online.</li>
 <li>Campaña de Eras corta (3-4 niveles).</li>
 <li>Modo desafío con 1 o 2 reglas locas.</li>
   <li>Editor de mazos.</li>
@@ -34,7 +34,7 @@
 <h3><u>Tecnologías usadas</u></h3>
 <hr/>
 <ul>
-  <li>Godot Engine, de versión 4 en adelante: Ideal para el 2D, aunque use un poco de 3D. Escenas reutilizables, lo que ahorra trabajo innecesario.</li>
+  <li>Godot Engine, de versión 4 en adelante: Ideal para el 2D. Escenas reutilizables, lo que ahorra trabajo innecesario.</li>
   <li>Django, con Python: manejo de usuarios. Ideal para crear partidas en línea.</li>
   <li>SQLite (local, durante desarrollo): rápido y sin configuración. PostgreSQL (producción): más robusto para multijugador y datos persistentes: para base de datos.</li>
 </ul>
