@@ -40,7 +40,6 @@ func draw_card() -> Node:
 
 # Ver cuántas cartas quedan.
 func cards_left() -> int:
-	print("Quedan " + str(cards.size))
 	return cards.size()
 
 # Actualizar contador y efecto visual.
@@ -48,8 +47,3 @@ func update_count():
 	if label_deck_count:
 		# Mostrar las cartas que quedan.
 		label_deck_count.text = str(cards.size()) + "/" + str(max_cards)
-	
-	# Efecto visual: reducir ligeramente el sprite según cartas restantes
-	if deck_sprite:
-		var scale_factor = 0.5 + 0.5 * (cards.size() / max_cards)
-		deck_sprite.scale = Vector2(scale_factor, scale_factor)
