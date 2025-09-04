@@ -3,7 +3,10 @@ extends Node2D
 @onready var deck_sprite = $reverso
 @onready var label_deck_count = $contador
 
-var card_scene: PackedScene = preload("res://Scenes/carta_prueba.tscn")
+var card_scenes: Array = [
+	preload("res://Scenes/carta_prueba.tscn"),
+	preload("res://Scenes/carta_prueba2.tscn")
+]
 var cards: Array = []           # Cartas del mazo.
 var visual_cards: Array = []    # Sprites que se apilan en el mazo.
 var max_cards: int = 60
@@ -18,7 +21,9 @@ func _ready():
 func build_deck():
 	cards.clear()
 	for i in range(max_cards):
-		var card = card_scene.instantiate()
+		# Seleccionar tipo de carta
+		var scene = card_scenes[randi() % card_scenes.size()]
+		var card = scene.instantiate()
 		card.text = "Carta " + str(i + 1)
 		cards.append(card)
 
@@ -34,6 +39,7 @@ func draw_card() -> Node:
 	var card = cards.pop_front()
 	update_count()
 	draw_visual_card()  # Animar visual.
+	update_deck_visual()
 	return card
 
 # Animación de la carta visual.
@@ -49,7 +55,7 @@ func draw_visual_card():
 	# Ajustar la pila restante.
 	for i in range(visual_cards.size()):
 		var tween2 = create_tween()
-		tween2.tween_property(visual_cards[i], "position:y", -i * 1.1, 0.2)
+		tween2.tween_property(visual_cards[i], "position:y", -i * 1.2, 0.2)
 
 # Ver cuántas quedan
 func cards_left() -> int:
@@ -66,12 +72,23 @@ func update_deck_visual():
 	for child in deck_sprite.get_children():
 		child.queue_free()
 	visual_cards.clear()
-
-	# Representar visual cantidad de cartas en el mazo.
-	var thickness = min(cards.size(), max_cards)
+	
+	# Máximo de mazo visual (evita que se vea gigante).
+	var max_visuals = 20
+	
+	if cards.size() == 0:
+		# Ocultar el mazo.
+		deck_sprite.visible = false
+		return
+	else:
+		deck_sprite.visible = true
+	
+	#Cantidad que se va a dibujar.
+	var thickness = int(remap(cards.size(), 0, max_cards, 0, max_visuals))
+	
 	for i in range(thickness):
 		var back = Sprite2D.new()
 		back.texture = preload("res://Images/test/baseball-card.png")
-		back.position = Vector2(0, -i * 1.1)
+		back.position = Vector2(0, -i * 1.2)
 		deck_sprite.add_child(back)
 		visual_cards.append(back)
