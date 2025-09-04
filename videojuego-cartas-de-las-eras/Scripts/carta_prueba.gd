@@ -12,12 +12,13 @@ var dragging = false
 var offset = Vector2.ZERO
 # Guardar rotación original de la carta.
 var original_rotation: float = 0.0
-# Guardar posición.
-var original_position: Vector2
+# Posición original global (para volver a la mano).
+var original_position_global: Vector2
 # Para no afectar a las demás cartas.
 var is_dragged: bool = false
 
-var board : Node = null  # Referencia al tablero.
+# Saber en qué slot está.
+var current_slot = null
 
 func _ready() -> void:
 	card_label.text = text
@@ -33,12 +34,7 @@ func _input(event: InputEvent) -> void:
 			elif not event.pressed:
 				# Soltar
 				dragging = false
-				restore_rotation()
-				# Avisar al tablero
-				if board:
-					var placed = board.try_place_card(self)
-					if not placed:
-						board.organize_hand()
+				snap_to_slot()
 
 	# Mover mientras arrastramos.
 	if event is InputEventMouseMotion and dragging:
@@ -59,3 +55,39 @@ func restore_rotation(duration: float = 0.3):
 		is_dragged = false
 		var tween = create_tween()
 		tween.tween_property(self, "rotation_degrees", original_rotation, duration)
+
+# Encajar carta en el slot más cercano disponible.
+func snap_to_slot():
+	var board = get_tree().current_scene
+	if not board or not "card_slots" in board:
+		return
+	
+	# Liberar slot anterior si la carta se mueve
+	if current_slot:
+		current_slot.occupied = false
+		current_slot = null
+
+	var closest_slot = null
+	var closest_dist = 50.0  # Distancia máxima para encajar.
+
+	for slot in board.card_slots:
+		if slot.occupied:
+			continue
+		var dist = global_position.distance_to(slot.global_position)
+		if dist < closest_dist:
+			closest_slot = slot
+			closest_dist = dist
+
+	if closest_slot:
+		closest_slot.occupied = true
+		current_slot = closest_slot
+		var tween = create_tween()
+		tween.tween_property(self, "global_position", closest_slot.global_position, 0.2)
+		tween.tween_property(self, "rotation_degrees", 0, 0.2)
+		straighten()
+	else:
+		# No encajó en ningún slot → volver a la mano
+		var tween = create_tween()
+		tween.tween_property(self, "global_position", original_position_global, 0.2)
+		# Si no encaja en ningún slot, restaurar la rotación original.
+		restore_rotation()
