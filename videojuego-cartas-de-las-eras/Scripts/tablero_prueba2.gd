@@ -22,7 +22,7 @@ func draw_starting_hand(n: int):
 			var start_pos = deck.global_position
 			player_hand.add_child(card)
 			card.global_position = start_pos  # Colocar sobre la baraja.
-			card.original_position_global = card.position # Guardar posición.
+			card.original_position_global = card.global_position # Guardar posición.
 			
 			# Poner la mano en abanico.
 			organize_hand()
@@ -77,16 +77,18 @@ func organize_hand(animated: bool=true):
 		if total > 1:
 			rot = (t - 0.5) * 2 * max_angle  # Solo si hay varias cartas.
 		
-		# Rotación suave de cartas.
+		var local_pos = Vector2(x, y)
+		var global_pos = player_hand.to_global(local_pos)
+		
 		if animated:
 			var tween = create_tween()
-			tween.tween_property(card, "position", Vector2(x, y), 0.3)
+			tween.tween_property(card, "global_position", global_pos, 0.3)
 			tween.tween_property(card, "rotation_degrees", rot, 0.3)
-			card.original_position_global = card.global_position
+			card.original_position_global = global_pos
 		else:
-			card.position = Vector2(x, y)
+			card.global_position = global_pos
 			card.rotation_degrees = rot
-			card.original_position_global = card.global_position
+			card.original_position_global = global_pos
 
 
 	# Guardar ángulo usado para mantener consistencia.
