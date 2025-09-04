@@ -12,8 +12,12 @@ var dragging = false
 var offset = Vector2.ZERO
 # Guardar rotación original de la carta.
 var original_rotation: float = 0.0
+# Guardar posición.
+var original_position: Vector2
 # Para no afectar a las demás cartas.
 var is_dragged: bool = false
+
+var board : Node = null  # Referencia al tablero.
 
 func _ready() -> void:
 	card_label.text = text
@@ -30,6 +34,11 @@ func _input(event: InputEvent) -> void:
 				# Soltar
 				dragging = false
 				restore_rotation()
+				# Avisar al tablero
+				if board:
+					var placed = board.try_place_card(self)
+					if not placed:
+						board.organize_hand()
 
 	# Mover mientras arrastramos.
 	if event is InputEventMouseMotion and dragging:

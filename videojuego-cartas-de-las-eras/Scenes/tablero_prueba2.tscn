@@ -1,10 +1,45 @@
-[gd_scene load_steps=3 format=3 uid="uid://b7g1pg8t8mhbp"]
+[gd_scene load_steps=4 format=3 uid="uid://b7g1pg8t8mhbp"]
 
 [ext_resource type="Script" uid="uid://ca1rcww6wr3ti" path="res://Scripts/tablero_prueba2.gd" id="1_ch2ui"]
 [ext_resource type="PackedScene" uid="uid://bp228yrtgiwtq" path="res://Scenes/baraja_prueba.tscn" id="2_80l1r"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_80l1r"]
+bg_color = Color(0.233925, 0.233925, 0.233925, 1)
+
 [node name="tablero" type="Node2D"]
 script = ExtResource("1_ch2ui")
+
+[node name="huecos" type="Node2D" parent="."]
+
+[node name="hueco" type="Marker2D" parent="huecos"]
+position = Vector2(249, 393)
+
+[node name="Panel" type="Panel" parent="huecos"]
+offset_left = 201.0
+offset_top = 334.0
+offset_right = 298.0
+offset_bottom = 455.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_80l1r")
+
+[node name="hueco2" type="Marker2D" parent="huecos"]
+position = Vector2(519, 278)
+
+[node name="Panel2" type="Panel" parent="huecos"]
+offset_left = 470.0
+offset_top = 221.0
+offset_right = 567.0
+offset_bottom = 342.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_80l1r")
+
+[node name="hueco3" type="Marker2D" parent="huecos"]
+position = Vector2(723, 370)
+
+[node name="Panel3" type="Panel" parent="huecos"]
+offset_left = 675.0
+offset_top = 306.0
+offset_right = 772.0
+offset_bottom = 427.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_80l1r")
 
 [node name="mano" type="Node2D" parent="."]
 position = Vector2(480, 520)

@@ -2,6 +2,7 @@ extends Node2D
 
 @onready var player_hand = $mano
 @onready var deck = $baraja
+@onready var slots = [$huecos/hueco, $huecos/hueco2, $huecos/hueco3]
 
 var last_total_angle: float = 0.0
 var start_draw: int = 7
@@ -20,6 +21,8 @@ func draw_starting_hand(n: int):
 			var start_pos = deck.global_position
 			player_hand.add_child(card)
 			card.global_position = start_pos  # Colocar sobre la baraja.
+			card.original_position = card.position # Guardar posición.
+			card.board = self  # Pasar referencia.
 			
 			# Poner la mano en abanico.
 			organize_hand()
@@ -86,3 +89,23 @@ func organize_hand(animated: bool=true):
 
 	# Guardar ángulo usado para mantener consistencia.
 	last_total_angle = total_angle
+
+func try_place_card(card) -> bool:
+	var closest_slot = null
+	var min_dist = 999999
+	var threshold = 50.0
+
+	for slot in slots:
+		var dist = card.global_position.distance_to(slot.global_position)
+		if dist < min_dist:
+			min_dist = dist
+			closest_slot = slot
+
+	if closest_slot and min_dist <= threshold:
+		var tween = create_tween()
+		tween.tween_property(card, "global_position", closest_slot.global_position, 0.3)
+		card.dragging = false
+		card.is_dragged = true
+		return true
+
+	return false
