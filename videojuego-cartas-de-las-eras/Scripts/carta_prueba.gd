@@ -27,11 +27,8 @@ func _ready():
 	original_position_global = global_position
 
 func _input(event):
-	#if not in_hand:
-		#return
-	
-	if card_dragged and card_dragged != self:
-		# Otra carta ya está siendo arrastrada.
+	# Otra carta ya está siendo arrastrada.
+	if not in_hand or (card_dragged and card_dragged != self):
 		return
 	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:

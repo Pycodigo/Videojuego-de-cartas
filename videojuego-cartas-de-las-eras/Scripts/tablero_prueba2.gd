@@ -7,7 +7,7 @@ extends Node2D
 
 
 var last_total_angle: float = 0.0
-var start_draw: int = 30
+var start_draw: int = 3
 
 func _ready() -> void:
 	# Esperar un frame para asegurar que todo esté cargado.
@@ -35,6 +35,7 @@ func draw_starting_hand(n: int):
 func organize_hand(animated: bool=true):
 	var total = player_hand.get_child_count()
 	if total == 0:
+		print("Mano vacía.")
 		return
 
 	var base_spacing = 80.0
