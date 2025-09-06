@@ -59,7 +59,7 @@ func organize_hand(animated: bool=true):
 		var global_pos = player_hand.to_global(Vector2(x,y))
 
 		var local_pos = Vector2(x, y)
-		card.original_position_local = local_pos
+		#card.original_position_local = local_pos
 		if animated:
 			var tween = create_tween()
 			tween.tween_property(card, "position", local_pos, 0.3)
