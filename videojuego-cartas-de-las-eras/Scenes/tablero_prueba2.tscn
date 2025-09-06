@@ -23,3 +23,5 @@ position = Vector2(480, 520)
 
 [node name="baraja" parent="." instance=ExtResource("2_80l1r")]
 position = Vector2(848, 332)
+
+[node name="cartas_en_juego" type="Node2D" parent="."]
