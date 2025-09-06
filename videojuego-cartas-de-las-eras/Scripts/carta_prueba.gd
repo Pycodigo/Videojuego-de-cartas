@@ -18,6 +18,9 @@ var is_dragged: bool = false
 var in_hand: bool = true
 var current_slot = null
 
+# Variable estática para controlar arrastre único
+static var card_dragged: Panel = null
+
 func _ready():
 	card_label.text = text
 	# Guardar la posición inicial global de la carta.
@@ -27,13 +30,19 @@ func _input(event):
 	#if not in_hand:
 		#return
 	
+	if card_dragged and card_dragged != self:
+		# Otra carta ya está siendo arrastrada.
+		return
+	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed and get_global_rect().has_point(get_global_mouse_position()):
 			dragging = true
+			card_dragged = self
 			offset = global_position - get_global_mouse_position()
 			straighten()
 		elif not event.pressed and dragging:
 			dragging = false
+			card_dragged = null
 			# Intentar colocar la carta en el slot más cercano.
 			snap_to_slot()
 	elif event is InputEventMouseMotion and dragging:

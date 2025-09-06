@@ -7,7 +7,7 @@ extends Node2D
 
 
 var last_total_angle: float = 0.0
-var start_draw: int = 7
+var start_draw: int = 30
 
 func _ready() -> void:
 	# Esperar un frame para asegurar que todo esté cargado.
