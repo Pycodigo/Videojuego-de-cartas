@@ -50,7 +50,7 @@ func organize_hand(animated: bool=true):
 	for i in range(total):
 		var card = player_hand.get_child(i)
 		if not card.in_hand:
-			continue  # Solo ajustar cartas que siguen en la mano
+			continue  # Solo ajustar cartas que siguen en la mano.
 
 		var t = 0.5 if total==1 else float(i)/float(total-1)
 		var x = (i-(total-1)/2.0) * spacing
@@ -59,7 +59,6 @@ func organize_hand(animated: bool=true):
 		var global_pos = player_hand.to_global(Vector2(x,y))
 
 		var local_pos = Vector2(x, y)
-		#card.original_position_local = local_pos
 		if animated:
 			var tween = create_tween()
 			tween.tween_property(card, "position", local_pos, 0.3)

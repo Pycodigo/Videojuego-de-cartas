@@ -24,6 +24,9 @@ func _ready():
 	original_position_global = global_position
 
 func _input(event):
+	#if not in_hand:
+		#return
+	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed and get_global_rect().has_point(get_global_mouse_position()):
 			dragging = true
@@ -90,13 +93,13 @@ func _move_to_board():
 	global_position = current_slot.global_position
 	rotation_degrees = 0
 	board.organize_hand()
-	
+
+func return_to_hand():
 	# Liberar slot anterior si estaba en uno.
 	if current_slot:
 		current_slot.occupied = false
 		current_slot = null
-
-func return_to_hand():
+	
 	in_hand = true
 	var board = get_tree().current_scene
 	if get_parent() != board.player_hand:
