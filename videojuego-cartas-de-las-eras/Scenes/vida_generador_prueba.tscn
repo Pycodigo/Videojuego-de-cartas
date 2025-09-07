@@ -21,6 +21,7 @@ rounded = true
 fill_mode = 5
 texture_under = ExtResource("1_mbqse")
 texture_progress = ExtResource("2_i1imr")
+tint_over = Color(0.743875, 0.0169892, 0.0194866, 1)
 
 [node name="circ" type="Sprite2D" parent="."]
 position = Vector2(62.5, 62.9812)
@@ -41,11 +42,26 @@ texture = ExtResource("2_7w7kp")
 centered = false
 offset = Vector2(-60, -170)
 
-[node name="Label" type="Label" parent="."]
-offset_left = 120.0
-offset_top = 27.0
-offset_right = 160.0
-offset_bottom = 102.0
-text = "1000
-    /
-1000"
+[node name="vida_actual" type="Label" parent="."]
+offset_left = 127.0
+offset_top = 55.0
+offset_right = 167.0
+offset_bottom = 78.0
+text = "1000"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="."]
+offset_left = 125.0
+offset_top = 74.0
+offset_right = 168.0
+offset_bottom = 97.0
+text = "/"
+horizontal_alignment = 1
+
+[node name="vida_max" type="Label" parent="."]
+offset_left = 127.0
+offset_top = 94.0
+offset_right = 166.0
+offset_bottom = 117.0
+text = "1000"
+horizontal_alignment = 1

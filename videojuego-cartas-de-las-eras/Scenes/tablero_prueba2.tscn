@@ -27,5 +27,5 @@ position = Vector2(851, 281)
 
 [node name="cartas_en_juego" type="Node2D" parent="."]
 
-[node name="vida_generador_prueba" parent="." instance=ExtResource("4_5mc81")]
+[node name="vida_generador" parent="." instance=ExtResource("4_5mc81")]
 position = Vector2(859, 472)
