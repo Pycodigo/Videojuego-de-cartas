@@ -17,9 +17,9 @@ scale = Vector2(2, 2)
 texture = ExtResource("3_me4l5")
 
 [node name="contador" type="Label" parent="."]
-offset_left = 11.0
-offset_top = 148.0
-offset_right = 91.0
-offset_bottom = 190.0
+offset_left = 12.0
+offset_top = 123.0
+offset_right = 92.0
+offset_bottom = 165.0
 theme_override_font_sizes/font_size = 30
 text = "60/60"

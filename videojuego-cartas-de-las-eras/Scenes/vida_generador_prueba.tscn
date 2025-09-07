@@ -1,0 +1,51 @@
+[gd_scene load_steps=6 format=3 uid="uid://dscs1twp8se67"]
+
+[ext_resource type="Texture2D" uid="uid://cd5ekix0xn2mm" path="res://Images/test/circulo sin fondo.png" id="1_33jjj"]
+[ext_resource type="Script" uid="uid://cmwap76ry3ggw" path="res://Scripts/vida_generador_prueba.gd" id="1_i1imr"]
+[ext_resource type="Texture2D" uid="uid://hfduhierp8ap" path="res://Images/test/circulo gris 130.png" id="1_mbqse"]
+[ext_resource type="Texture2D" uid="uid://does2cfy2kqgo" path="res://Images/test/flecha-linea.png" id="2_7w7kp"]
+[ext_resource type="Texture2D" uid="uid://ugdb10atkxmn" path="res://Images/test/circulo azul 130.png" id="2_i1imr"]
+
+[node name="vida_generador_prueba" type="Node2D"]
+script = ExtResource("1_i1imr")
+
+[node name="vida" type="TextureProgressBar" parent="."]
+offset_left = 11.0
+offset_top = 11.0
+offset_right = 195.0
+offset_bottom = 207.0
+scale = Vector2(0.8, 0.8)
+max_value = 1000.0
+value = 1000.0
+rounded = true
+fill_mode = 5
+texture_under = ExtResource("1_mbqse")
+texture_progress = ExtResource("2_i1imr")
+
+[node name="circ" type="Sprite2D" parent="."]
+position = Vector2(62.5, 62.9812)
+scale = Vector2(0.546667, 0.551278)
+texture = ExtResource("1_33jjj")
+
+[node name="agujaM" type="Sprite2D" parent="."]
+position = Vector2(63, 35)
+rotation = -1.5708
+scale = Vector2(0.125894, 0.122737)
+texture = ExtResource("2_7w7kp")
+
+[node name="agujaP" type="Sprite2D" parent="."]
+position = Vector2(62, 62.1026)
+rotation = -1.5708
+scale = Vector2(0.0789565, 0.1)
+texture = ExtResource("2_7w7kp")
+centered = false
+offset = Vector2(-60, -170)
+
+[node name="Label" type="Label" parent="."]
+offset_left = 120.0
+offset_top = 27.0
+offset_right = 160.0
+offset_bottom = 102.0
+text = "1000
+    /
+1000"
