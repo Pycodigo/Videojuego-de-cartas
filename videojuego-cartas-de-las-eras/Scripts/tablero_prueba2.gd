@@ -3,6 +3,7 @@ extends Node2D
 @onready var player_hand = $mano
 @onready var deck = $baraja
 @onready var card_slots = [$ranuras/ranura_prueba, $ranuras/ranura_prueba2, $ranuras/ranura_prueba3]
+@onready var discard_slot = $ranura_descarte
 @onready var board_play = $cartas_en_juego
 
 
