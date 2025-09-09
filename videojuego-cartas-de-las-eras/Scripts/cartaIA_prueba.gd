@@ -3,6 +3,8 @@ extends Panel
 @export var text: String
 @onready var card_label = $Label
 @onready var health_label = $vida
+@onready var front_sprite = $"Baseball-card"
+@onready var hidden_sprite = $oculto
 
 # Arrastra carta.
 var dragging = false
@@ -20,6 +22,8 @@ var in_hand: bool = true
 var current_slot = null
 # Variable de descarte.
 var discarded: bool = false
+# Ocultar la carta.
+var is_hidden: bool
 
 # Variable estática para controlar arrastre único
 static var card_dragged: Panel = null
@@ -33,6 +37,8 @@ var health_animation: Tween = null
 
 
 func _ready():
+	hide_card()
+	
 	current_health = max_health
 	health_label.text = str(current_health) + "/" + str(max_health)
 	
@@ -112,25 +118,20 @@ func discard():
 	in_hand = false
 
 	var board = get_tree().current_scene
-	var discard_slot = board.player_discard_slot
+	var discard_slot = board.AIdiscard_slot
 	if not discard_slot:
 		return
 
-	# Guardar la posición global actual de la carta.
-	var start_global_pos = global_position
-	# Posición global del slot.
-	var target_global_pos = discard_slot.global_position
-
-	# Tween desde la posición actual hacia la del slot.
+	# Tween hacia la posición global del slot.
 	var tween = create_tween()
-	tween.tween_property(self, "global_position", target_global_pos, 0.4)\
-	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(self, "rotation_degrees", 0, 0.4)
+	tween.tween_property(self, "global_position", discard_slot.global_position, 0.4)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(self, "rotation_degrees", 180, 0.4)
 	tween.connect("finished", Callable(self, "_move_to_discard"))
 
 func _move_to_discard():
 	var board = get_tree().current_scene
-	var discard_slot = board.player_discard_slot
+	var discard_slot = board.AIdiscard_slot
 	if get_parent() != discard_slot:
 		get_parent().remove_child(self)
 		discard_slot.add_child(self)
@@ -138,6 +139,7 @@ func _move_to_discard():
 	# Posición local exacta dentro del slot.
 	position = Vector2.ZERO
 	rotation_degrees = 0
+	show_card()
 
 
 # Intentar colocar la carta en el slot.
@@ -161,6 +163,7 @@ func snap_to_slot():
 		in_hand = false
 		current_slot = closest_slot
 		closest_slot.occupied = true
+		show_card()
 
 		# Animar a posición global y rotación cero grados.
 		var tween = create_tween()
@@ -180,7 +183,8 @@ func _move_to_board():
 		board.board_play.add_child(self)
 	global_position = current_slot.global_position
 	rotation_degrees = 0
-	board.organize_hand()
+	board.organize_hand_AI()
+	show_card()
 
 func return_to_hand():
 	# Liberar slot anterior si estaba en uno.
@@ -190,8 +194,30 @@ func return_to_hand():
 	
 	in_hand = true
 	var board = get_tree().current_scene
-	if get_parent() != board.player_hand:
+	if get_parent() != board.AIhand:
 		get_parent().remove_child(self)
-		board.player_hand.add_child(self)
+		board.AIhand.add_child(self)
 	in_hand = true
-	board.organize_hand()
+	board.organize_hand_AI()
+	hide_card()
+
+func show_card():
+	is_hidden = false
+	update_card_visible()
+
+func hide_card():
+	is_hidden = true
+	update_card_visible()
+
+func update_card_visible():
+	# Comprobar si está oculta.
+	if is_hidden:
+		front_sprite.visible = false
+		hidden_sprite.visible = true
+		health_label.visible = false
+		card_label.visible = false
+	else:
+		front_sprite.visible = true
+		hidden_sprite.visible = false
+		health_label.visible = true
+		card_label.visible = true
