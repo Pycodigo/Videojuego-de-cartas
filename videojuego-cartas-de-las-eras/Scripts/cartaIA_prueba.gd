@@ -6,8 +6,6 @@ extends Panel
 @onready var front_sprite = $"Baseball-card"
 @onready var hidden_sprite = $oculto
 
-# Arrastra carta.
-var dragging = false
 # Diferencia entre el ratón y la posición de la carta al iniciar el arrastre.
 var offset = Vector2.ZERO
 var original_rotation: float = 0.0
@@ -16,17 +14,12 @@ var original_rotation: float = 0.0
 var original_position_global: Vector2
 var original_position_local: Vector2
 
-# Marcar si la carta está en estado “arrastrado” para controlar animaciones.
-var is_dragged: bool = false
 var in_hand: bool = true
 var current_slot = null
 # Variable de descarte.
 var discarded: bool = false
 # Ocultar la carta.
 var is_hidden: bool
-
-# Variable estática para controlar arrastre único
-static var card_dragged: Panel = null
 
 # Estadísticas.
 @export var max_health: int = 100
@@ -47,47 +40,25 @@ func _ready():
 	original_position_global = global_position
 	
 	# Test automático: cada segundo pierde 5 de vida.
-	var timer = Timer.new()
-	timer.wait_time = 1
-	timer.one_shot = false
-	timer.autostart = true
-	add_child(timer)
-	timer.connect("timeout", Callable(self, "_test_damage"))
+	if randi() % 7 < 2:
+		var timer = Timer.new()
+		timer.wait_time = 1
+		timer.one_shot = false
+		timer.autostart = true
+		add_child(timer)
+		timer.connect("timeout", Callable(self, "_test_damage"))
 	
 func _test_damage():
 	take_damage(40)
 
-func _input(event):
-	# Otra carta ya está siendo arrastrada.
-	if not in_hand or (card_dragged and card_dragged != self) or discarded:
-		return
-	
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed and get_global_rect().has_point(get_global_mouse_position()):
-			dragging = true
-			card_dragged = self
-			offset = global_position - get_global_mouse_position()
-			straighten()
-		elif not event.pressed and dragging:
-			dragging = false
-			card_dragged = null
-			# Intentar colocar la carta en el slot más cercano.
-			snap_to_slot()
-	elif event is InputEventMouseMotion and dragging:
-		global_position = get_global_mouse_position() + offset
-
 # Animar la carta a cero grados de rotación cuando se arrastra.
 func straighten(duration: float = 0.2):
-	if not is_dragged:
-		is_dragged = true
-		original_rotation = rotation_degrees
-		create_tween().tween_property(self, "rotation_degrees", 0, duration)
+	original_rotation = rotation_degrees
+	create_tween().tween_property(self, "rotation_degrees", 0, duration)
 
 # Volver a la rotación original.
 func restore_rotation(duration: float = 0.2):
-	if is_dragged:
-		is_dragged = false
-		create_tween().tween_property(self, "rotation_degrees", original_rotation, duration)
+	create_tween().tween_property(self, "rotation_degrees", original_rotation, duration)
 
 func take_damage(amount: int):
 	if discarded:
@@ -149,6 +120,7 @@ func _move_to_discard():
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	appear_tween.tween_property(self, "modulate:a", 1.0, 0.4)
 	
+	board.organize_hand_AI()
 	show_card()
 
 

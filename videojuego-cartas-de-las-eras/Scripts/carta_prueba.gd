@@ -41,12 +41,13 @@ func _ready():
 	original_position_global = global_position
 	
 	# Test automático: cada segundo pierde 5 de vida.
-	var timer = Timer.new()
-	timer.wait_time = 1
-	timer.one_shot = false
-	timer.autostart = true
-	add_child(timer)
-	timer.connect("timeout", Callable(self, "_test_damage"))
+	if randi() % 7 < 2:
+		var timer = Timer.new()
+		timer.wait_time = 1
+		timer.one_shot = false
+		timer.autostart = true
+		add_child(timer)
+		timer.connect("timeout", Callable(self, "_test_damage"))
 	
 func _test_damage():
 	take_damage(40)
@@ -147,18 +148,20 @@ func _move_to_discard():
 	appear_tween.tween_property(self, "scale", Vector2.ONE, 0.4) \
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	appear_tween.tween_property(self, "modulate:a", 1.0, 0.4)
+	
+	board.organize_hand()
 
 
 # Intentar colocar la carta en el slot.
 func snap_to_slot():
 	var board = get_tree().current_scene
-	if not board or not "card_slots" in board:
+	if not board or not "player_card_slots" in board:
 		return
 
 	# Buscar slot cercano.
 	var closest_slot = null
 	var closest_dist = 100.0
-	for slot in board.card_slots:
+	for slot in board.player_card_slots:
 		if slot.occupied:
 			continue
 		var dist = global_position.distance_to(slot.global_position)
