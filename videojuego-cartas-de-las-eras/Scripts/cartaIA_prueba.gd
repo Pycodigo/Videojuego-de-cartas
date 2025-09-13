@@ -96,14 +96,14 @@ func take_damage(amount: int):
 	var old_health = current_health
 	current_health = clamp(current_health - amount, 0, max_health)
 
-	# Tween de número
+	# Animación de daño.
 	if health_animation and health_animation.is_running():
 		health_animation.kill()
 
 	health_animation = create_tween()
 	health_animation.tween_method(
 		func(v): health_label.text = str(int(v)) + "/" + str(max_health),
-		old_health, current_health, 0.6
+		old_health, current_health, 0.5
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 	if current_health <= 0:
@@ -122,12 +122,15 @@ func discard():
 	if not discard_slot:
 		return
 
-	# Tween hacia la posición global del slot.
-	var tween = create_tween()
-	tween.tween_property(self, "global_position", discard_slot.global_position, 0.4)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(self, "rotation_degrees", 180, 0.4)
-	tween.connect("finished", Callable(self, "_move_to_discard"))
+	# Hacer que la carta se encoja y desaparezca.
+	var discard_tween = create_tween()
+	discard_tween.tween_property(self, "scale", Vector2(0.1, 0.1), 0.4)\
+	.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	discard_tween.tween_property(self, "modulate:a", 0, 0.4) # Se desvanece.
+	
+	# Esperar a que termine la animación.
+	await discard_tween.finished
+	_move_to_discard()
 
 func _move_to_discard():
 	var board = get_tree().current_scene
@@ -136,9 +139,16 @@ func _move_to_discard():
 		get_parent().remove_child(self)
 		discard_slot.add_child(self)
 
-	# Posición local exacta dentro del slot.
+	# Colocarlo en el centro del slot.
 	position = Vector2.ZERO
 	rotation_degrees = 0
+	
+	# Hacer animación inversa para que aparezca.
+	var appear_tween = create_tween()
+	appear_tween.tween_property(self, "scale", Vector2.ONE, 0.4) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	appear_tween.tween_property(self, "modulate:a", 1.0, 0.4)
+	
 	show_card()
 
 

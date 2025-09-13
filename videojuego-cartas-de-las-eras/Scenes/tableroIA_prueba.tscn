@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://di6qr43s278h3"]
 
-[ext_resource type="Script" uid="uid://dnnairapqhgu" path="res://Scripts/tableroIA_prueba.gd" id="1_xrydx"]
+[ext_resource type="Script" path="res://Scripts/tableroIA_prueba.gd" id="1_xrydx"]
 [ext_resource type="PackedScene" uid="uid://6hmvo400iucc" path="res://Scenes/ranura_prueba.tscn" id="2_6xhbu"]
 [ext_resource type="PackedScene" uid="uid://bp228yrtgiwtq" path="res://Scenes/baraja_prueba.tscn" id="3_dp72h"]
 [ext_resource type="PackedScene" uid="uid://w4viae8bs1b7" path="res://Scenes/barajaIA_prueba.tscn" id="4_6xhbu"]
