@@ -14,7 +14,7 @@
 <br/>
 <h3>Descripción del proyecto</h3>
 <hr/>
-<p>Este proyecto consiste en un uego de cartas por turnos donde los jugadores usan cartas de distintas épocas de la historia para dominar la línea temporal y expulsar/derrotar al oponente.</p>
+<p>Este proyecto consiste en un juego de cartas por turnos donde los jugadores usan cartas de distintas épocas de la historia para dominar la línea temporal y expulsar/derrotar al oponente.</p>
 <p>Se está llevando a cabo con el objetivo de aprender campos que no domino muy bien, como el backend.</p>
 <p>El nombre del proyecto no es definitivo. Se cambiará en un futuro.</p>
 <br/>
