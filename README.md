@@ -4,7 +4,7 @@
 <h3><u>Índice</u></h3>
 
 - [Descripción del proyecto](#descripción-del-proyecto)  
-- [Modos de juego](#modosdejuego)  
+- [Modos de juego](#modos-de-juego)  
 - [Descargar, descomprimir y ejecutar el proyecto](#descargar-descomprimir-y-ejecutar-el-proyecto)  
 - [Tecnologías usadas](#tecnologías-usadas)
 - [Tareas](#tareas)
