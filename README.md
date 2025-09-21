@@ -3,14 +3,14 @@
 
 <h3><u>Índice</u></h3>
 
-<ul>
-  <li>Descripción.</li>
-  <li>Modos de juego.</li>
-  <li>Descargar, descomprimir y ejecutar el proyecto.</li>
-  <li>Tecnologías usadas.</li>
-  <li>Desarrollador del Proyecto.</li>
-  <li>Licencia.</li>
-</ul>
+- [Descripción del proyecto](#descripción-del-proyecto)  
+- [Modos de juego](#modosdejuego)  
+- [Descargar, descomprimir y ejecutar el proyecto](#descargar-descomprimir-y-ejecutar-el-proyecto)  
+- [Tecnologías usadas](#tecnologías-usadas)
+- [Tareas](#tareas)
+- [Desarrollador del Proyecto](#desarrollador-del-proyecto)  
+- [Licencia](#licencia)  
+
 <br/>
 <h3>Descripción del proyecto</h3>
 <hr/>
@@ -35,9 +35,33 @@
 <hr/>
 <ul>
   <li>Godot Engine, de versión 4 en adelante: Ideal para el 2D. Escenas reutilizables, lo que ahorra trabajo innecesario.</li>
-  <li>Django, con Python: manejo de usuarios. Ideal para crear partidas en línea.</li>
-  <li>SQLite (local, durante desarrollo): rápido y sin configuración. PostgreSQL (producción): más robusto para multijugador y datos persistentes: para base de datos.</li>
+  <li>Resto de tecnologías por ahora no se usarán hasta que pase al backend.</li>
 </ul>
+<br/>
+<h3><u>Tareas</u></h3>
+<hr/>
+<p><b>Básicas:</b></p>
+
+- [x] Crear menú de inicio.
+- [x] Crear botón de carta animado.
+- [x] Crear menú de modos de juego (solo el 1vs1 contra la IA es accesible).
+- [x] Crear configuración.
+- [x] Añadir algunas reglas contra la IA.
+- [x] Crear mesa de juego con baraja y cartas en abanico.
+- [x] Arrastrar cartas y posicionar sus ángulos.
+- [x] Ponerlas en slots fijos para ellas.
+- [x] Hacer que no se puedan mover de los slots.
+- [x] Poner barra de vida de ambos generadores.
+- [x] Poner barra de vida a las cartas.
+- [x] Hacer que las cartas se descarten.
+- [x] Crear oponente IA básica.
+- [ ] Poner sistema básico de turnos.
+- [ ] Hacer que cartas de ataque quiten vida.
+- [ ] Hacer bocetos de cartas funcionales.
+- [ ] Crear pantalla de victoria.
+- [ ] Crear pantalla de derrota.
+
+
 <br/>
 <h3>🤵<u>Desarrollador</u></h3>
 <hr/>
@@ -45,4 +69,7 @@
 <br/>
 <h3><u>Licencia</u></h3>
 <hr/>
-<p>Videojuego de cartas is <a href="https://opensource.org/license/mit/">MIT license.</a></p>
+<p>Este proyecto está licenciado bajo Creative Commons 
+Atribución-NoComercial 4.0 Internacional (CC BY-NC 4.0).
+https://creativecommons.org/licenses/by-nc/4.0/
+</p>
