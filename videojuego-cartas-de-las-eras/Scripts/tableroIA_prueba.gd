@@ -20,7 +20,10 @@ extends Node2D
 @onready var AIdiscard_slot = $IA/ranura_descarte
 @onready var board_play = $IA/cartas_en_juego
 
+#Botón para terminar turno.
+@onready var finish_turn_btn = $Finaliza
 
+var deployment_phase: bool = true  # Fase inicial de colocar cartas.
 var last_total_angle: float = 0.0
 var start_draw: int = 7
 
@@ -28,6 +31,8 @@ func _ready() -> void:
 	# Esperar un frame para asegurar que todo esté cargado.
 	await get_tree().process_frame
 	draw_starting_hand(start_draw)
+	#Inicialmente, al no tener cartas en slots, el botón de finalizar turno está deshabilitado.
+	update_finish_turn_btn()
 
 # Repartir n cartas desde la baraja.
 func draw_starting_hand(n: int):
@@ -136,6 +141,16 @@ func organize_hand_AI(animated: bool = true):
 			AIcard.position = local_pos
 			AIcard.rotation_degrees = rot + 180
 
-# Llamar esta función cada vez que se quita o coloca una carta.
-func update_hand():
-	organize_hand()
+func update_finish_turn_btn():
+	# Habilitar solo si al menos un slot tiene carta.
+	var can_finish = false
+	for slot in player_card_slots:
+		if slot.occupied:
+			can_finish = true
+			break
+	finish_turn_btn.disabled = not can_finish
+
+func _on_finish_turn_btn_pressed() -> void:
+	var board = get_tree().current_scene
+	if board.deployment_phase:
+		board.deployment_phase = false

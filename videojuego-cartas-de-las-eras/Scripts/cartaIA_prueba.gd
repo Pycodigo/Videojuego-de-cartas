@@ -39,17 +39,19 @@ func _ready():
 	# Guardar la posición inicial global de la carta.
 	original_position_global = global_position
 	
-	# Test automático: cada segundo pierde 5 de vida.
-	if randi() % 7 < 2:
-		var timer = Timer.new()
-		timer.wait_time = 1
-		timer.one_shot = false
-		timer.autostart = true
-		add_child(timer)
-		timer.connect("timeout", Callable(self, "_test_damage"))
+	deploy_AI_cards()
 	
-func _test_damage():
-	take_damage(40)
+	# Test automático: cada segundo pierde 5 de vida.
+	#if randi() % 7 < 2:
+		#var timer = Timer.new()
+		#timer.wait_time = 1
+		#timer.one_shot = false
+		#timer.autostart = true
+		#add_child(timer)
+		#timer.connect("timeout", Callable(self, "_test_damage"))
+	#
+#func _test_damage():
+	#take_damage(40)
 
 # Animar la carta a cero grados de rotación cuando se arrastra.
 func straighten(duration: float = 0.2):
@@ -123,46 +125,25 @@ func _move_to_discard():
 	board.organize_hand_AI()
 	show_card()
 
-
-# Intentar colocar la carta en el slot.
-func snap_to_slot():
-	var board = get_tree().current_scene
-	if not board or not "card_slots" in board:
-		return
-
-	# Buscar slot cercano.
-	var closest_slot = null
-	var closest_dist = 100.0
-	for slot in board.card_slots:
-		if slot.occupied:
-			continue
-		var dist = global_position.distance_to(slot.global_position)
-		if dist < closest_dist:
-			closest_slot = slot
-			closest_dist = dist
-
-	if closest_slot:
-		in_hand = false
-		current_slot = closest_slot
-		closest_slot.occupied = true
-		show_card()
-
-		# Animar a posición global y rotación cero grados.
-		var tween = create_tween()
-		tween.tween_property(self, "global_position", closest_slot.global_position, 0.2)
-		tween.tween_property(self, "rotation_degrees", 0, 0.2)
-		tween.connect("finished", Callable(self, "_move_to_board"))
-	else:
-		# Vuelve a la mano.
-		in_hand = true
-		restore_rotation()
-		return_to_hand()
-
 func _move_to_board():
 	var board = get_tree().current_scene
 	if get_parent() != board.board_play:
+		var old_global = global_position
 		get_parent().remove_child(self)
 		board.board_play.add_child(self)
+		global_position = old_global
+	
+	# Animación de movimiento hacia el slot y rotación 0º
+	var tween = create_tween()
+	tween.tween_property(self, "global_position", current_slot.global_position, 0.4) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+	# Hacer que gire desde 180º hasta 0º (se voltea boca arriba)
+	tween.parallel().tween_property(self, "rotation_degrees", 0, 0.4) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		
+	# Una vez finalice, nos aseguramos de que quede exactamente en el slot
+	await tween.finished
 	global_position = current_slot.global_position
 	rotation_degrees = 0
 	board.organize_hand_AI()
@@ -182,6 +163,45 @@ func return_to_hand():
 	in_hand = true
 	board.organize_hand_AI()
 	hide_card()
+
+# Colocación automática de la IA.
+func deploy_AI_cards():
+	var board = get_tree().current_scene
+	
+	# Esperar a que la mano termine de organizarse
+	board.organize_hand_AI(true)
+	await get_tree().create_timer(1.2).timeout
+
+	
+	for card in board.AIhand.get_children():
+		if card.in_hand:
+			var slot = get_random_free_AI_slot()
+			if slot:
+				card.in_hand = false
+				card.current_slot = slot
+				slot.occupied = true
+				
+				# Animar carta al slot.
+				var tween = create_tween()
+				tween.tween_property(card, "global_position", slot.global_position, 0.3)
+				tween.tween_property(card, "rotation_degrees", 0, 0.3)
+				tween.connect("finished", Callable(card, "_move_to_board"))
+				
+				# Esperar un poco antes de colocar la siguiente carta.
+				await get_tree().create_timer(0.4).timeout
+
+# Devuelve un slot aleatorio disponible para la IA.
+func get_random_free_AI_slot():
+	var board = get_tree().current_scene
+	
+	# Buscar un slot libre para la IA.
+	var free_slots = []
+	for slot in board.AIcard_slots:
+		if not slot.occupied:
+			free_slots.append(slot)
+	if free_slots.size() == 0:
+		return null # No quedan slots libres.
+	return free_slots[randi() % free_slots.size()]
 
 func show_card():
 	is_hidden = false

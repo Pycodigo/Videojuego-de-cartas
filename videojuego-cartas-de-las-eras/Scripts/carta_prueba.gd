@@ -41,20 +41,28 @@ func _ready():
 	original_position_global = global_position
 	
 	# Test automático: cada segundo pierde 5 de vida.
-	if randi() % 7 < 2:
-		var timer = Timer.new()
-		timer.wait_time = 1
-		timer.one_shot = false
-		timer.autostart = true
-		add_child(timer)
-		timer.connect("timeout", Callable(self, "_test_damage"))
-	
-func _test_damage():
-	take_damage(40)
+	#if randi() % 7 < 2:
+		#var timer = Timer.new()
+		#timer.wait_time = 1
+		#timer.one_shot = false
+		#timer.autostart = true
+		#add_child(timer)
+		#timer.connect("timeout", Callable(self, "_test_damage"))
+	#
+#func _test_damage():
+	#take_damage(40)
 
 func _input(event):
-	# Otra carta ya está siendo arrastrada.
-	if not in_hand or (card_dragged and card_dragged != self) or discarded:
+	var board = get_tree().current_scene
+	
+	# Bloquear arrastre si la carta está descartada.
+	if discarded:
+		return
+	# Bloquear arrastre de cartas del jugador si no es fase de despliegue.
+	if not board.deployment_phase and in_hand:
+		return
+	# Permitir arrastre normal si está en la mano o en fase de despliegue.
+	if card_dragged and card_dragged != self:
 		return
 	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -63,6 +71,12 @@ func _input(event):
 			card_dragged = self
 			offset = global_position - get_global_mouse_position()
 			straighten()
+			# Liberar slot actual si la carta estaba en uno.
+			if current_slot:
+				current_slot.occupied = false
+				current_slot = null
+				in_hand = true
+				board.update_finish_turn_btn()
 		elif not event.pressed and dragging:
 			dragging = false
 			card_dragged = null
@@ -157,7 +171,7 @@ func snap_to_slot():
 	var board = get_tree().current_scene
 	if not board or not "player_card_slots" in board:
 		return
-
+	
 	# Buscar slot cercano.
 	var closest_slot = null
 	var closest_dist = 100.0
@@ -170,6 +184,7 @@ func snap_to_slot():
 			closest_dist = dist
 
 	if closest_slot:
+		# Colocar carta en el slot encontrado.
 		in_hand = false
 		current_slot = closest_slot
 		closest_slot.occupied = true
@@ -184,6 +199,9 @@ func snap_to_slot():
 		in_hand = true
 		restore_rotation()
 		return_to_hand()
+	
+	# Actualizar botón.
+	board.update_finish_turn_btn()
 
 func _move_to_board():
 	var board = get_tree().current_scene
@@ -200,10 +218,15 @@ func return_to_hand():
 		current_slot.occupied = false
 		current_slot = null
 	
+	# Asegurarse de que la carta se considera en la mano
 	in_hand = true
+	dragging = false
+	
 	var board = get_tree().current_scene
 	if get_parent() != board.player_hand:
 		get_parent().remove_child(self)
 		board.player_hand.add_child(self)
-	in_hand = true
 	board.organize_hand()
+
+	# Actualizar botón.
+	board.update_finish_turn_btn()
