@@ -8,7 +8,7 @@
 - [Descargar, descomprimir y ejecutar el proyecto](#descargar-descomprimir-y-ejecutar-el-proyecto)  
 - [Tecnologías usadas](#tecnologías-usadas)
 - [Tareas](#tareas)
-- [Desarrollador del Proyecto](#desarrollador-del-proyecto)  
+- [Desarrollador del Proyecto](#desarrollador)  
 - [Licencia](#licencia)  
 
 <br/>
