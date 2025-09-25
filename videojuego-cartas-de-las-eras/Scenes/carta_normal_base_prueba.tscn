@@ -1,0 +1,138 @@
+[gd_scene load_steps=3 format=3 uid="uid://bk3ifesmxvwou"]
+
+[ext_resource type="Script" uid="uid://csr72bv3tmrye" path="res://Scripts/carta_normal_base_prueba.gd" id="1_6rqu2"]
+[ext_resource type="Texture2D" uid="uid://q2oro1lhk423" path="res://Images/test/baseball-card.png" id="2_kr8xf"]
+
+[node name="Carta" type="Panel"]
+custom_minimum_size = Vector2(100, 120)
+offset_right = 40.0
+offset_bottom = 40.0
+pivot_offset = Vector2(50, 120)
+script = ExtResource("1_6rqu2")
+
+[node name="sprite_carta" type="Sprite2D" parent="."]
+position = Vector2(50, 60)
+scale = Vector2(2, 2)
+texture = ExtResource("2_kr8xf")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 38.0
+offset_right = 90.0
+offset_bottom = 73.0
+theme_override_colors/font_color = Color(0.917007, 0.273113, 0.350052, 1)
+theme_override_font_sizes/font_size = 25
+text = "Carta 1"
+
+[node name="vida" type="Label" parent="."]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 2.0
+offset_right = 96.0
+offset_bottom = 37.0
+theme_override_colors/font_color = Color(0.917007, 0.273113, 0.350052, 1)
+theme_override_font_sizes/font_size = 20
+text = "100"
+horizontal_alignment = 2
+
+[node name="energia" type="Label" parent="."]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 92.0
+offset_right = 17.0
+offset_bottom = 127.0
+theme_override_colors/font_color = Color(0.917007, 0.273113, 0.350052, 1)
+theme_override_font_sizes/font_size = 20
+text = "4"
+horizontal_alignment = 2
+
+[node name="muestra" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.9
+anchor_top = -1.358
+anchor_right = 0.9
+anchor_bottom = -1.358
+offset_left = -155.0
+offset_top = -129.04
+offset_right = 155.0
+offset_bottom = 128.96
+
+[node name="nombre" type="Label" parent="muestra"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.181
+anchor_top = 0.184
+anchor_right = 0.181
+anchor_bottom = 0.184
+offset_left = -32.11
+offset_top = -11.472
+offset_right = 31.89
+offset_bottom = 11.528
+text = "Nombre"
+
+[node name="vida_completa" type="Label" parent="muestra"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.252
+anchor_top = 0.324
+anchor_right = 0.252
+anchor_bottom = 0.324
+offset_left = -52.12
+offset_top = -11.592
+offset_right = 51.88
+offset_bottom = 11.408
+text = "Vida: /"
+
+[node name="coste" type="Label" parent="muestra"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.81
+anchor_top = 0.324
+anchor_right = 0.81
+anchor_bottom = 0.324
+offset_left = -52.1
+offset_top = -11.592
+offset_right = 51.9
+offset_bottom = 11.408
+text = "Coste: "
+
+[node name="ataque" type="Label" parent="muestra"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.252
+anchor_top = 0.545
+anchor_right = 0.255
+anchor_bottom = 0.545
+offset_left = -55.12
+offset_top = -26.61
+offset_right = 47.95
+offset_bottom = -3.61
+text = "Ataque: "
+
+[node name="defensa" type="Label" parent="muestra"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.758
+anchor_top = 0.483
+anchor_right = 0.758
+anchor_bottom = 0.483
+offset_left = -51.98
+offset_top = -11.614
+offset_right = 52.02
+offset_bottom = 11.386
+text = "Defensa: "
+
+[node name="habilidad" type="Label" parent="muestra"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.232
+anchor_top = 0.672
+anchor_right = 0.232
+anchor_bottom = 0.672
+offset_left = -51.92
+offset_top = -11.376
+offset_right = 52.08
+offset_bottom = 11.624
+text = "Habilidad:"

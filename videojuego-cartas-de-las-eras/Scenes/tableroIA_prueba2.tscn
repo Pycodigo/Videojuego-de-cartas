@@ -1,0 +1,81 @@
+[gd_scene load_steps=5 format=3 uid="uid://duds483qi1hav"]
+
+[ext_resource type="Script" uid="uid://dx7qgv8rx5d8u" path="res://Scripts/tableroIA_prueba_2.gd" id="1_65fe3"]
+[ext_resource type="PackedScene" uid="uid://6hmvo400iucc" path="res://Scenes/ranura_prueba.tscn" id="2_jyylg"]
+[ext_resource type="PackedScene" uid="uid://bp228yrtgiwtq" path="res://Scenes/baraja_prueba.tscn" id="3_v56j7"]
+[ext_resource type="PackedScene" uid="uid://w4viae8bs1b7" path="res://Scenes/barajaIA_prueba.tscn" id="4_3h5yd"]
+
+[node name="tablero" type="Node2D"]
+script = ExtResource("1_65fe3")
+
+[node name="jugador" type="Node2D" parent="."]
+
+[node name="ranuras" type="Node2D" parent="jugador"]
+
+[node name="ranura_prueba" parent="jugador/ranuras" instance=ExtResource("2_jyylg")]
+position = Vector2(256, 337)
+
+[node name="ranura_prueba2" parent="jugador/ranuras" instance=ExtResource("2_jyylg")]
+position = Vector2(453, 301)
+
+[node name="ranura_prueba3" parent="jugador/ranuras" instance=ExtResource("2_jyylg")]
+position = Vector2(651, 337)
+
+[node name="ranura_descarte" parent="jugador" instance=ExtResource("2_jyylg")]
+position = Vector2(808, 85)
+
+[node name="mano" type="Node2D" parent="jugador"]
+position = Vector2(480, 520)
+
+[node name="baraja" parent="jugador" instance=ExtResource("3_v56j7")]
+position = Vector2(851, 281)
+
+[node name="cartas_en_juego" type="Node2D" parent="jugador"]
+
+[node name="Panel" type="Panel" parent="jugador"]
+offset_left = 808.0
+offset_top = 84.0
+offset_right = 906.0
+offset_bottom = 207.0
+metadata/_edit_use_anchors_ = true
+
+[node name="IA" type="Node2D" parent="."]
+
+[node name="ranuras" type="Node2D" parent="IA"]
+
+[node name="ranura_prueba" parent="IA/ranuras" instance=ExtResource("2_jyylg")]
+position = Vector2(252, 91)
+
+[node name="ranura_prueba2" parent="IA/ranuras" instance=ExtResource("2_jyylg")]
+position = Vector2(451, 134)
+
+[node name="ranura_prueba3" parent="IA/ranuras" instance=ExtResource("2_jyylg")]
+position = Vector2(652, 92)
+
+[node name="ranura_descarte" parent="IA" instance=ExtResource("2_jyylg")]
+position = Vector2(110, 395)
+
+[node name="mano" type="Node2D" parent="IA"]
+position = Vector2(506, 32)
+
+[node name="barajaIA" parent="IA" instance=ExtResource("4_3h5yd")]
+position = Vector2(93, 132)
+
+[node name="cartas_en_juego" type="Node2D" parent="IA"]
+
+[node name="Panel" type="Panel" parent="IA"]
+offset_left = 110.0
+offset_top = 395.0
+offset_right = 208.0
+offset_bottom = 518.0
+metadata/_edit_use_anchors_ = true
+
+[node name="Finaliza" type="Button" parent="."]
+offset_left = 856.0
+offset_top = 550.0
+offset_right = 1005.0
+offset_bottom = 586.0
+theme_override_font_sizes/font_size = 20
+text = "Finalizar turno"
+
+[connection signal="pressed" from="Finaliza" to="." method="_on_finish_turn_btn_pressed"]
