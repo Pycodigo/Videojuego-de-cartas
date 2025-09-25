@@ -55,7 +55,8 @@
 - [x] Poner barra de vida a las cartas.
 - [x] Hacer que las cartas se descarten.
 - [x] Crear oponente IA básica.
-- [ ] Poner sistema básico de turnos.
+- [x] Obligar a poner mínimo una carta en el slot.
+- [ ] Poner sistema básico de ataque y turnos.
 - [ ] Hacer que cartas de ataque quiten vida.
 - [ ] Hacer bocetos de cartas funcionales.
 - [ ] Crear pantalla de victoria.
