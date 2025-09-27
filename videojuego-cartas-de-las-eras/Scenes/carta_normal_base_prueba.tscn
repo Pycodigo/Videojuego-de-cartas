@@ -4,13 +4,14 @@
 [ext_resource type="Texture2D" uid="uid://q2oro1lhk423" path="res://Images/test/baseball-card.png" id="2_kr8xf"]
 
 [node name="Carta" type="Panel"]
-custom_minimum_size = Vector2(100, 120)
+custom_minimum_size = Vector2(120, 180)
 offset_right = 40.0
 offset_bottom = 40.0
 pivot_offset = Vector2(50, 120)
 script = ExtResource("1_6rqu2")
 
 [node name="textura_carta" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(140, 180)
 layout_mode = 0
 offset_left = -15.0
 offset_right = 120.0
@@ -21,14 +22,14 @@ expand_mode = 3
 [node name="Label" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.185
-anchor_top = 0.367
-anchor_right = 0.185
-anchor_bottom = 0.367
-offset_left = -4.5
-offset_top = -11.04
-offset_right = 4.5
-offset_bottom = 10.96
+anchor_left = 1.195
+anchor_top = 0.4
+anchor_right = 1.195
+anchor_bottom = 0.4
+offset_left = -4.50001
+offset_top = -11.0
+offset_right = 4.49999
+offset_bottom = 11.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 15
 text = "1"
@@ -36,14 +37,14 @@ text = "1"
 [node name="nombre" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.27
-anchor_top = 0.083
-anchor_right = 0.27
-anchor_bottom = 0.083
-offset_left = -24.0
-offset_top = -11.96
-offset_right = 36.0
-offset_bottom = 10.04
+anchor_left = 0.5
+anchor_top = 0.25
+anchor_right = 0.5
+anchor_bottom = 0.25
+offset_left = -40.0
+offset_top = -11.0
+offset_right = 20.0
+offset_bottom = 11.0
 theme_override_colors/font_color = Color(0.776641, 0.449548, 0.0605862, 1)
 theme_override_colors/font_shadow_color = Color(0.410155, 0.238639, 0.309087, 1)
 theme_override_font_sizes/font_size = 15
@@ -66,10 +67,10 @@ text = "Habilidad"
 
 [node name="vida" type="Label" parent="."]
 layout_mode = 0
-offset_left = 5.0
-offset_top = 18.0
-offset_right = 96.0
-offset_bottom = 40.0
+offset_left = 51.0
+offset_top = 1.0
+offset_right = 142.0
+offset_bottom = 23.0
 theme_override_colors/font_color = Color(0.962661, 0.138642, 0.432479, 1)
 theme_override_colors/font_shadow_color = Color(0.408329, 0.408329, 0.408329, 1)
 theme_override_font_sizes/font_size = 15
@@ -77,11 +78,16 @@ text = "100PS"
 horizontal_alignment = 2
 
 [node name="energia" type="Label" parent="."]
-layout_mode = 0
-offset_left = 5.0
-offset_top = 92.0
-offset_right = 17.0
-offset_bottom = 127.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.08
+anchor_top = 0.112
+anchor_right = 0.08
+anchor_bottom = 0.112
+offset_left = -2.0
+offset_top = -15.44
+offset_right = 10.0
+offset_bottom = 12.56
 theme_override_colors/font_color = Color(0, 0.653731, 0.22001, 1)
 theme_override_colors/font_shadow_color = Color(0.0460029, 0.283837, 1, 1)
 theme_override_font_sizes/font_size = 20
@@ -89,10 +95,10 @@ text = "4"
 
 [node name="ataque" type="Label" parent="."]
 layout_mode = 0
-offset_left = 53.0
-offset_top = 97.0
-offset_right = 73.0
-offset_bottom = 121.0
+offset_left = 6.0
+offset_top = 152.0
+offset_right = 26.0
+offset_bottom = 176.0
 theme_override_colors/font_color = Color(0.917007, 0.273113, 0.350052, 1)
 theme_override_font_sizes/font_size = 17
 text = "10"
@@ -100,10 +106,10 @@ horizontal_alignment = 2
 
 [node name="defensa" type="Label" parent="."]
 layout_mode = 0
-offset_left = 77.0
-offset_top = 98.0
-offset_right = 97.0
-offset_bottom = 133.0
+offset_left = 119.0
+offset_top = 151.0
+offset_right = 139.0
+offset_bottom = 186.0
 theme_override_colors/font_color = Color(0.917007, 0.273113, 0.350052, 1)
 theme_override_font_sizes/font_size = 17
 text = "10"
@@ -112,14 +118,15 @@ horizontal_alignment = 2
 [node name="info" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.9
-anchor_top = -1.358
-anchor_right = 0.9
-anchor_bottom = -1.358
-offset_left = -155.0
-offset_top = -129.04
-offset_right = 155.0
-offset_bottom = 128.96
+anchor_left = 2.082
+anchor_top = 0.381
+anchor_right = 2.082
+anchor_bottom = 0.381
+offset_left = -123.48
+offset_top = -98.58
+offset_right = 123.52
+offset_bottom = 98.42
+mouse_filter = 2
 
 [node name="NombreInfo" type="Label" parent="info"]
 layout_mode = 1
@@ -128,10 +135,10 @@ anchor_left = 0.5
 anchor_top = 0.184
 anchor_right = 0.5
 anchor_bottom = 0.184
-offset_left = -131.0
-offset_top = -11.472
-offset_right = 138.0
-offset_bottom = 11.528
+offset_left = -116.5
+offset_top = -31.248
+offset_right = 152.5
+offset_bottom = -8.248
 text = "Nombre"
 
 [node name="VidaInfo" type="Label" parent="info"]
@@ -141,23 +148,23 @@ anchor_left = 0.252
 anchor_top = 0.331
 anchor_right = 0.252
 anchor_bottom = 0.331
-offset_left = -52.12
-offset_top = -11.398
-offset_right = 51.88
-offset_bottom = 11.602
+offset_left = -50.244
+offset_top = -34.207
+offset_right = 53.756
+offset_bottom = -11.207
 text = "Vida: /"
 
 [node name="CosteInfo" type="Label" parent="info"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.81
-anchor_top = 0.324
-anchor_right = 0.81
-anchor_bottom = 0.324
-offset_left = -52.1
-offset_top = -11.592
-offset_right = 51.9
-offset_bottom = 11.408
+anchor_left = 0.846
+anchor_top = 0.327
+anchor_right = 0.846
+anchor_bottom = 0.327
+offset_left = -51.962
+offset_top = -33.419
+offset_right = 52.038
+offset_bottom = -10.419
 text = "Coste: "
 
 [node name="AtaqueInfo" type="Label" parent="info"]
@@ -167,36 +174,36 @@ anchor_left = 0.242
 anchor_top = 0.5
 anchor_right = 0.242
 anchor_bottom = 0.5
-offset_left = -52.02
-offset_top = -15.0
-offset_right = 51.98
-offset_bottom = 8.0
+offset_left = -50.774
+offset_top = -44.5
+offset_right = 53.226
+offset_bottom = -21.5
 text = "Ataque: "
 
 [node name="DefensaInfo" type="Label" parent="info"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.758
-anchor_top = 0.483
+anchor_top = 0.343
 anchor_right = 0.758
-anchor_bottom = 0.483
-offset_left = -51.98
-offset_top = -11.614
-offset_right = 52.02
-offset_bottom = 11.386
-text = "Defensa: "
+anchor_bottom = 0.343
+offset_left = -28.226
+offset_top = -12.571
+offset_right = 75.774
+offset_bottom = 10.429
+text = "Def: "
 
 [node name="HabilidadInfo" type="Label" parent="info"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.797
-anchor_right = 0.5
-anchor_bottom = 0.797
-offset_left = -135.0
-offset_top = -43.626
-offset_right = 137.0
-offset_bottom = 43.374
+anchor_left = 0.591
+anchor_top = 0.668
+anchor_right = 0.591
+anchor_bottom = 0.668
+offset_left = -135.977
+offset_top = -43.596
+offset_right = 136.023
+offset_bottom = 43.404
 text = "Habilidad:"
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

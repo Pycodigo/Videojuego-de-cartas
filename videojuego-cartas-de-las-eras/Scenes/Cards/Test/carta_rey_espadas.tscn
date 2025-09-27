@@ -1,72 +1,74 @@
-[gd_scene load_steps=3 format=3 uid="uid://csnhe7ut66wer"]
+[gd_scene load_steps=4 format=3 uid="uid://fabkfcdpmg13"]
 
 [ext_resource type="PackedScene" uid="uid://bk3ifesmxvwou" path="res://Scenes/carta_normal_base_prueba.tscn" id="1_hhnrv"]
 [ext_resource type="Script" uid="uid://bwjx4jbny3dqu" path="res://Scripts/Cards/Test/carta_rey_espadas.gd" id="2_ndrco"]
+[ext_resource type="Texture2D" uid="uid://dnexbu5djg0lc" path="res://Images/test/rey.jpg" id="3_5ooqq"]
 
 [node name="Carta" instance=ExtResource("1_hhnrv")]
 script = ExtResource("2_ndrco")
 
 [node name="textura_carta" parent="." index="0"]
-custom_minimum_size = Vector2(140, 180)
+texture = ExtResource("3_5ooqq")
 
 [node name="Label" parent="." index="1"]
-anchor_left = 0.31
-anchor_top = 0.542
-anchor_right = 0.31
-anchor_bottom = 0.542
-offset_left = -9.0
-offset_right = 9.0
-text = "10"
+anchor_top = 0.115
+offset_left = -48.4
+offset_top = 5.3
+offset_right = -39.4
+offset_bottom = -24.0
 
 [node name="nombre" parent="." index="2"]
-anchor_left = 0.35
-anchor_top = 0.133
-anchor_right = 0.35
-anchor_bottom = 0.133
-offset_left = -30.0
-offset_top = -10.96
-offset_right = 100.0
-offset_bottom = 11.04
+anchor_left = 0.308
+anchor_top = 0.261
+anchor_right = 0.308
+anchor_bottom = 0.261
+offset_left = -46.96
+offset_top = -12.98
+offset_right = 13.04
+offset_bottom = 9.02
 
 [node name="habilidad" parent="." index="3"]
-anchor_left = 0.47
-anchor_top = 0.825
-anchor_right = 0.47
-anchor_bottom = 0.825
-offset_right = 35.0
-theme_override_colors/font_color = Color(0.631373, 0.854902, 0.247059, 1)
-theme_override_colors/font_shadow_color = Color(0.52344, 0.373768, 0.289576, 1)
+anchor_left = 0.367
+anchor_top = 0.489
+anchor_right = 0.367
+anchor_bottom = 0.489
+offset_left = -35.04
+offset_top = -11.02
+offset_right = 34.96
+offset_bottom = 10.98
+theme_override_colors/font_color = Color(0.0235386, 0.623778, 0.586434, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0.878431, 1)
 
 [node name="vida" parent="." index="4"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.74
-anchor_top = 0.342
-anchor_right = 0.74
-anchor_bottom = 0.342
-offset_left = -72.0
-offset_top = -11.04
-offset_right = 50.0
-offset_bottom = 10.96
+offset_left = 32.0
+offset_top = 4.0
+offset_right = 123.0
+offset_bottom = 26.0
 
 [node name="energia" parent="." index="5"]
-offset_left = 12.0
-offset_top = 142.0
-offset_right = 24.0
-offset_bottom = 177.0
+offset_left = -19.6
+offset_top = -17.16
+offset_right = -7.6
+offset_bottom = 10.84
 
 [node name="ataque" parent="." index="6"]
-offset_left = 72.0
-offset_top = 147.0
-offset_right = 92.0
-offset_bottom = 171.0
-theme_override_colors/font_color = Color(0.441632, 0.478499, 0.960681, 1)
-theme_override_colors/font_shadow_color = Color(0.67451, 0, 0, 1)
+offset_left = -9.0
+offset_top = 154.0
+offset_right = 11.0
+offset_bottom = 178.0
 
 [node name="defensa" parent="." index="7"]
-offset_left = 97.0
-offset_top = 147.0
-offset_right = 117.0
-offset_bottom = 182.0
-theme_override_colors/font_color = Color(0.871017, 0.164214, 0.790645, 1)
-theme_override_colors/font_shadow_color = Color(0.579506, 0.435823, 0.638772, 1)
+offset_left = 100.0
+offset_top = 155.0
+offset_right = 120.0
+offset_bottom = 190.0
+
+[node name="info" parent="." index="8"]
+anchor_left = 2.587
+anchor_top = 0.335
+anchor_right = 2.587
+anchor_bottom = 0.335
+offset_left = -123.44
+offset_top = -107.3
+offset_right = 123.56
+offset_bottom = 89.7

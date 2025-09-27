@@ -1,7 +1,70 @@
-[gd_scene load_steps=3 format=3 uid="uid://b8bwcivfhd8ix"]
+[gd_scene load_steps=4 format=3 uid="uid://c78vlo68xlt5u"]
 
 [ext_resource type="PackedScene" uid="uid://bk3ifesmxvwou" path="res://Scenes/carta_normal_base_prueba.tscn" id="1_cap67"]
 [ext_resource type="Script" uid="uid://jfvqcy8cl1v2" path="res://Scripts/Cards/Test/carta_caballo_espadas.gd" id="2_38tig"]
+[ext_resource type="Texture2D" uid="uid://c2tnrk0xg86ox" path="res://Images/test/caballo.jpg" id="3_6hpdp"]
 
 [node name="Carta" instance=ExtResource("1_cap67")]
 script = ExtResource("2_38tig")
+
+[node name="textura_carta" parent="." index="0"]
+texture = ExtResource("3_6hpdp")
+
+[node name="Label" parent="." index="1"]
+anchor_left = 0.704
+anchor_top = 0.172
+anchor_right = 0.704
+anchor_bottom = 0.172
+offset_left = -4.48
+offset_top = -10.96
+offset_right = 4.52
+offset_bottom = 11.04
+
+[node name="nombre" parent="." index="2"]
+anchor_left = 0.158
+anchor_top = 0.267
+anchor_right = 0.158
+anchor_bottom = 0.267
+offset_left = -29.96
+offset_top = -11.06
+offset_right = 30.04
+offset_bottom = 10.94
+
+[node name="habilidad" parent="." index="3"]
+theme_override_colors/font_color = Color(0.142476, 0.631612, 0.471748, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0.87451, 1)
+
+[node name="vida" parent="." index="4"]
+offset_left = 31.0
+offset_top = 3.0
+offset_right = 122.0
+offset_bottom = 25.0
+
+[node name="energia" parent="." index="5"]
+anchor_left = -0.017
+anchor_top = 0.083
+anchor_right = -0.017
+anchor_bottom = 0.083
+offset_left = -5.96
+offset_top = -13.94
+offset_right = 6.04
+offset_bottom = 14.06
+
+[node name="ataque" parent="." index="6"]
+offset_left = -13.0
+offset_top = 155.0
+offset_right = 7.0
+offset_bottom = 179.0
+horizontal_alignment = 0
+
+[node name="defensa" parent="." index="7"]
+offset_left = 103.0
+offset_top = 155.0
+offset_right = 123.0
+offset_bottom = 190.0
+
+[node name="info" parent="." index="8"]
+offset_left = -113.84
+offset_top = -107.58
+offset_right = 133.16
+offset_bottom = 89.42

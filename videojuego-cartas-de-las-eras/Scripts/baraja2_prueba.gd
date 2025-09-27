@@ -4,8 +4,8 @@ extends Node2D
 @onready var label_deck_count = $contador
 
 var card_scenes: Array = [
-	preload("res://Scenes/carta_prueba.tscn"),
-	preload("res://Scenes/cartaIA_prueba2.tscn")
+	preload("res://Scenes/Cards/Test/carta_rey_espadas.tscn"),
+	preload("res://Scenes/Cards/Test/carta_caballo_espadas.tscn")
 ]
 var cards: Array = []           # Cartas del mazo.
 var visual_cards: Array = []    # Sprites que se apilan en el mazo.

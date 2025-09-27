@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvtjofq7sewju"]
+
+[ext_resource type="Script" uid="uid://dc4vu57okg0u3" path="res://Scripts/baraja2_prueba.gd" id="1_c4gj3"]
+[ext_resource type="Texture2D" uid="uid://q2oro1lhk423" path="res://Images/test/baseball-card.png" id="2_ihpi2"]
+
+[node name="baraja" type="Node2D"]
+script = ExtResource("1_c4gj3")
+
+[node name="fondo" type="ColorRect" parent="."]
+offset_right = 98.0
+offset_bottom = 120.0
+color = Color(0.154876, 0.154876, 0.154876, 1)
+
+[node name="reverso" type="Sprite2D" parent="."]
+position = Vector2(50, 60)
+scale = Vector2(2, 2)
+texture = ExtResource("2_ihpi2")
+
+[node name="contador" type="Label" parent="."]
+offset_left = 12.0
+offset_top = 123.0
+offset_right = 92.0
+offset_bottom = 165.0
+theme_override_font_sizes/font_size = 30
+text = "60/60"

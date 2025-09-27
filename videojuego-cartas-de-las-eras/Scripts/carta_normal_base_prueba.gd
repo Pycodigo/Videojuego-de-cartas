@@ -22,7 +22,7 @@ extends Panel
 @onready var ability_label = $habilidad
 
 # Panel de información detallada.
-@onready var info_hover = $info_hover
+@onready var info_hover = $info
 @onready var name_hover = $info/NombreInfo
 @onready var health_hover = $info/VidaInfo
 @onready var cost_hover = $info/CosteInfo
@@ -80,12 +80,14 @@ func init_card():
 	health_hover.text = "Vida: " + str(current_health) + "/" + str(max_health)
 	cost_hover.text = "Coste: " + str(cost)
 	attack_hover.text = "Ataque: " + str(attack)
-	defense_hover.text = "Defensa: " + str(defense)
-	ability_hover.text = ability_detailed
+	defense_hover.text = "Def: " + str(defense)
+	ability_hover.text = ability + ":\n" + ability_detailed
 	
 	card_label.text = text
 	# Guardar la posición inicial global de la carta.
 	original_position_global = global_position
+	
+	info_hover.visible = false
 
 func _input(event):
 	var board = get_tree().current_scene
@@ -268,11 +270,42 @@ func return_to_hand():
 
 # Mostrar y ocultar el panel detallado.
 func _on_mouse_entered() -> void:
-	if discarded:
+	if discarded or info_hover.visible:
 		return
 	info_hover.visible = true
+	info_hover.z_index = 100
 	info_hover.modulate.a = 0
 	create_tween().tween_property(info_hover, "modulate:a", 1.0, 0.2)
+	adjust_hover_position()
 
 func _on_mouse_exited() -> void:
-	create_tween().tween_property(info_hover, "modulate:a", 0, 0.2).connect("finished", Callable(info_hover, "hide"))
+	var t = create_tween()
+	t.tween_property(info_hover, "modulate:a", 0, 0.2)
+	await t.finished
+	info_hover.visible = false
+
+func adjust_hover_position():
+	if info_hover == null:
+		return
+	
+	var viewport_size = get_viewport_rect().size
+	var global_pos = get_global_mouse_position()
+	var hover_size = info_hover.size
+	
+	# Posición base: a la derecha del ratón.
+	var new_pos = global_pos + Vector2(20, 0)
+	
+	# Evitar que se salga por la derecha.
+	if new_pos.x + hover_size.x > viewport_size.x:
+		new_pos.x = global_pos.x - hover_size.x - 20
+	
+	# Evitar que se salga por abajo.
+	if new_pos.y + hover_size.y > viewport_size.y:
+		new_pos.y = viewport_size.y - hover_size.y - 10
+	
+	# Evitar que se salga por arriba.
+	if new_pos.y < 0:
+		new_pos.y = 10
+	
+	# Asignar posición en coordenadas globales.
+	info_hover.global_position = new_pos

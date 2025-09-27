@@ -8,6 +8,6 @@ func _ready() -> void:
 	attack = 10
 	defense = 5
 	ability = "Espíritu de Rey"
-	ability_detailed = "El rey ofrece +20% de ataque a sus aliados"
+	ability_detailed = "El rey ofrece +20% de ataque\na sus aliados"
 	
 	init_card()

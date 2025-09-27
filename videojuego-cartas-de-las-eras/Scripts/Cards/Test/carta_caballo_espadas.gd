@@ -8,6 +8,6 @@ func _ready() -> void:
 	attack = 9
 	defense = 9
 	ability = "Por el pueblo"
-	ability_detailed = "Durante el próximo turno, si recibe daño directo, +10% su defensa"
+	ability_detailed = "Durante el próximo turno, si\nrecibe daño directo,\n+10% de defensa"
 	
 	init_card()
