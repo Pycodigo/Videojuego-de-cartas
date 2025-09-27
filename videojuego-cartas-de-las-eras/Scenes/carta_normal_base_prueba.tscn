@@ -10,30 +10,70 @@ offset_bottom = 40.0
 pivot_offset = Vector2(50, 120)
 script = ExtResource("1_6rqu2")
 
-[node name="sprite_carta" type="Sprite2D" parent="."]
-position = Vector2(50, 60)
-scale = Vector2(2, 2)
+[node name="textura_carta" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -15.0
+offset_right = 120.0
+offset_bottom = 120.0
 texture = ExtResource("2_kr8xf")
+expand_mode = 3
 
 [node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_left = 4.0
-offset_top = 38.0
-offset_right = 90.0
-offset_bottom = 73.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.185
+anchor_top = 0.367
+anchor_right = 0.185
+anchor_bottom = 0.367
+offset_left = -4.5
+offset_top = -11.04
+offset_right = 4.5
+offset_bottom = 10.96
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 15
+text = "1"
+
+[node name="nombre" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.27
+anchor_top = 0.083
+anchor_right = 0.27
+anchor_bottom = 0.083
+offset_left = -24.0
+offset_top = -11.96
+offset_right = 36.0
+offset_bottom = 10.04
+theme_override_colors/font_color = Color(0.776641, 0.449548, 0.0605862, 1)
+theme_override_colors/font_shadow_color = Color(0.410155, 0.238639, 0.309087, 1)
+theme_override_font_sizes/font_size = 15
+text = "Nombre"
+
+[node name="habilidad" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4
+anchor_top = 0.5
+anchor_right = 0.4
+anchor_bottom = 0.5
+offset_left = -35.0
+offset_top = -11.0
+offset_right = 25.0
+offset_bottom = 11.0
 theme_override_colors/font_color = Color(0.917007, 0.273113, 0.350052, 1)
-theme_override_font_sizes/font_size = 25
-text = "Carta 1"
+theme_override_font_sizes/font_size = 15
+text = "Habilidad"
 
 [node name="vida" type="Label" parent="."]
 layout_mode = 0
 offset_left = 5.0
-offset_top = 2.0
+offset_top = 18.0
 offset_right = 96.0
-offset_bottom = 37.0
-theme_override_colors/font_color = Color(0.917007, 0.273113, 0.350052, 1)
-theme_override_font_sizes/font_size = 20
-text = "100"
+offset_bottom = 40.0
+theme_override_colors/font_color = Color(0.962661, 0.138642, 0.432479, 1)
+theme_override_colors/font_shadow_color = Color(0.408329, 0.408329, 0.408329, 1)
+theme_override_font_sizes/font_size = 15
+text = "100PS"
 horizontal_alignment = 2
 
 [node name="energia" type="Label" parent="."]
@@ -42,12 +82,34 @@ offset_left = 5.0
 offset_top = 92.0
 offset_right = 17.0
 offset_bottom = 127.0
-theme_override_colors/font_color = Color(0.917007, 0.273113, 0.350052, 1)
+theme_override_colors/font_color = Color(0, 0.653731, 0.22001, 1)
+theme_override_colors/font_shadow_color = Color(0.0460029, 0.283837, 1, 1)
 theme_override_font_sizes/font_size = 20
 text = "4"
+
+[node name="ataque" type="Label" parent="."]
+layout_mode = 0
+offset_left = 53.0
+offset_top = 97.0
+offset_right = 73.0
+offset_bottom = 121.0
+theme_override_colors/font_color = Color(0.917007, 0.273113, 0.350052, 1)
+theme_override_font_sizes/font_size = 17
+text = "10"
 horizontal_alignment = 2
 
-[node name="muestra" type="Panel" parent="."]
+[node name="defensa" type="Label" parent="."]
+layout_mode = 0
+offset_left = 77.0
+offset_top = 98.0
+offset_right = 97.0
+offset_bottom = 133.0
+theme_override_colors/font_color = Color(0.917007, 0.273113, 0.350052, 1)
+theme_override_font_sizes/font_size = 17
+text = "10"
+horizontal_alignment = 2
+
+[node name="info" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.9
@@ -59,33 +121,33 @@ offset_top = -129.04
 offset_right = 155.0
 offset_bottom = 128.96
 
-[node name="nombre" type="Label" parent="muestra"]
+[node name="NombreInfo" type="Label" parent="info"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.181
+anchor_left = 0.5
 anchor_top = 0.184
-anchor_right = 0.181
+anchor_right = 0.5
 anchor_bottom = 0.184
-offset_left = -32.11
+offset_left = -131.0
 offset_top = -11.472
-offset_right = 31.89
+offset_right = 138.0
 offset_bottom = 11.528
 text = "Nombre"
 
-[node name="vida_completa" type="Label" parent="muestra"]
+[node name="VidaInfo" type="Label" parent="info"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.252
-anchor_top = 0.324
+anchor_top = 0.331
 anchor_right = 0.252
-anchor_bottom = 0.324
+anchor_bottom = 0.331
 offset_left = -52.12
-offset_top = -11.592
+offset_top = -11.398
 offset_right = 51.88
-offset_bottom = 11.408
+offset_bottom = 11.602
 text = "Vida: /"
 
-[node name="coste" type="Label" parent="muestra"]
+[node name="CosteInfo" type="Label" parent="info"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.81
@@ -98,20 +160,20 @@ offset_right = 51.9
 offset_bottom = 11.408
 text = "Coste: "
 
-[node name="ataque" type="Label" parent="muestra"]
+[node name="AtaqueInfo" type="Label" parent="info"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.252
-anchor_top = 0.545
-anchor_right = 0.255
-anchor_bottom = 0.545
-offset_left = -55.12
-offset_top = -26.61
-offset_right = 47.95
-offset_bottom = -3.61
+anchor_left = 0.242
+anchor_top = 0.5
+anchor_right = 0.242
+anchor_bottom = 0.5
+offset_left = -52.02
+offset_top = -15.0
+offset_right = 51.98
+offset_bottom = 8.0
 text = "Ataque: "
 
-[node name="defensa" type="Label" parent="muestra"]
+[node name="DefensaInfo" type="Label" parent="info"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.758
@@ -124,15 +186,18 @@ offset_right = 52.02
 offset_bottom = 11.386
 text = "Defensa: "
 
-[node name="habilidad" type="Label" parent="muestra"]
+[node name="HabilidadInfo" type="Label" parent="info"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.232
-anchor_top = 0.672
-anchor_right = 0.232
-anchor_bottom = 0.672
-offset_left = -51.92
-offset_top = -11.376
-offset_right = 52.08
-offset_bottom = 11.624
+anchor_left = 0.5
+anchor_top = 0.797
+anchor_right = 0.5
+anchor_bottom = 0.797
+offset_left = -135.0
+offset_top = -43.626
+offset_right = 137.0
+offset_bottom = 43.374
 text = "Habilidad:"
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

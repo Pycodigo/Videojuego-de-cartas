@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://b8bwcivfhd8ix"]
+
+[ext_resource type="PackedScene" uid="uid://bk3ifesmxvwou" path="res://Scenes/carta_normal_base_prueba.tscn" id="1_cap67"]
+[ext_resource type="Script" uid="uid://jfvqcy8cl1v2" path="res://Scripts/Cards/Test/carta_caballo_espadas.gd" id="2_38tig"]
+
+[node name="Carta" instance=ExtResource("1_cap67")]
+script = ExtResource("2_38tig")

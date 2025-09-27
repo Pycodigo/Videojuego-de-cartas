@@ -1,17 +1,42 @@
 extends Panel
 
+# Atributos de la carta.
 @export var text: String
-@export var card_name = "Sin nombre"
+@export var card_name: String
+@export var texture: Texture2D
+@export var max_health: int
+@export var cost: int
+@export var attack: int
+@export var defense: int
+@export var ability: String
+@export var ability_detailed: String
 
-
+# Nodos.
+@onready var front_texture = $textura_carta
 @onready var card_label = $Label
+@onready var name_label = $nombre
 @onready var health_label = $vida
+@onready var cost_label = $energia
+@onready var attack_label = $ataque
+@onready var defense_label = $defensa
+@onready var ability_label = $habilidad
+
+# Panel de información detallada.
+@onready var info_hover = $info_hover
+@onready var name_hover = $info/NombreInfo
+@onready var health_hover = $info/VidaInfo
+@onready var cost_hover = $info/CosteInfo
+@onready var attack_hover = $info/AtaqueInfo
+@onready var defense_hover = $info/DefensaInfo
+@onready var ability_hover = $info/HabilidadInfo
 
 # Arrastra carta.
 var dragging = false
 # Diferencia entre el ratón y la posición de la carta al iniciar el arrastre.
 var offset = Vector2.ZERO
 var original_rotation: float = 0.0
+#Definir tamaño fijo para sprites.
+var rect_size = Vector2(140, 180)
 
 # Guardar posiciones.
 var original_position_global: Vector2
@@ -28,7 +53,6 @@ var discarded: bool = false
 static var card_dragged: Panel = null
 
 # Estadísticas.
-@export var max_health: int = 100
 var current_health: int
 
 # Animación de la vida.
@@ -36,24 +60,32 @@ var health_animation: Tween = null
 
 
 func _ready():
+	init_card()
+
+func init_card():
+	if texture:
+		front_texture.texture = texture
+		front_texture.size = rect_size
+		front_texture.stretch_mode = TextureRect.STRETCH_SCALE
+	name_label.text = card_name
 	current_health = max_health
-	health_label.text = str(current_health) + "/" + str(max_health)
+	health_label.text = str(current_health) + " PS"
+	cost_label.text = str(cost)
+	attack_label.text = str(attack)
+	defense_label.text = str(defense)
+	ability_label.text = ability
+	
+	# Panel de info detallada
+	name_hover.text = card_name
+	health_hover.text = "Vida: " + str(current_health) + "/" + str(max_health)
+	cost_hover.text = "Coste: " + str(cost)
+	attack_hover.text = "Ataque: " + str(attack)
+	defense_hover.text = "Defensa: " + str(defense)
+	ability_hover.text = ability_detailed
 	
 	card_label.text = text
 	# Guardar la posición inicial global de la carta.
 	original_position_global = global_position
-	
-	# Test automático: cada segundo pierde 5 de vida.
-	#if randi() % 7 < 2:
-		#var timer = Timer.new()
-		#timer.wait_time = 1
-		#timer.one_shot = false
-		#timer.autostart = true
-		#add_child(timer)
-		#timer.connect("timeout", Callable(self, "_test_damage"))
-	#
-#func _test_damage():
-	#take_damage(40)
 
 func _input(event):
 	var board = get_tree().current_scene
@@ -233,3 +265,14 @@ func return_to_hand():
 
 	# Actualizar botón.
 	board.update_finish_turn_btn()
+
+# Mostrar y ocultar el panel detallado.
+func _on_mouse_entered() -> void:
+	if discarded:
+		return
+	info_hover.visible = true
+	info_hover.modulate.a = 0
+	create_tween().tween_property(info_hover, "modulate:a", 1.0, 0.2)
+
+func _on_mouse_exited() -> void:
+	create_tween().tween_property(info_hover, "modulate:a", 0, 0.2).connect("finished", Callable(info_hover, "hide"))

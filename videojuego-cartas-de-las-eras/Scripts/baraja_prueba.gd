@@ -24,7 +24,7 @@ func build_deck():
 		# Seleccionar tipo de carta
 		var scene = card_scenes[randi() % card_scenes.size()]
 		var card = scene.instantiate()
-		card.text = "Carta " + str(i + 1)
+		card.text = str(i + 1)
 		cards.append(card)
 
 # Barajar el mazo.
