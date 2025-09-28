@@ -1,0 +1,60 @@
+[gd_scene load_steps=4 format=3 uid="uid://csj07anhfvanj"]
+
+[ext_resource type="PackedScene" uid="uid://bn1wbxc4pdsal" path="res://Scenes/cartaIA_normal_base_prueba.tscn" id="1_svvds"]
+[ext_resource type="Texture2D" uid="uid://c2tnrk0xg86ox" path="res://Images/test/caballo.jpg" id="2_5i574"]
+[ext_resource type="Script" uid="uid://bc1dvhpdoaedp" path="res://Scripts/Cards/Test/cartaIA_caballo_espadas.gd" id="2_mynlh"]
+
+[node name="Carta" instance=ExtResource("1_svvds")]
+script = ExtResource("2_mynlh")
+
+[node name="textura_carta" parent="." index="0"]
+offset_left = 1.0
+offset_right = 119.0
+texture = ExtResource("2_5i574")
+
+[node name="oculto" parent="." index="1"]
+visible = false
+offset_left = 0.0
+offset_right = 140.0
+
+[node name="Label" parent="." index="2"]
+offset_left = -41.4
+offset_top = -50.0
+offset_right = -32.4
+offset_bottom = -28.0
+
+[node name="nombre" parent="." index="3"]
+offset_left = -46.0
+offset_top = 0.0
+offset_right = 14.0
+offset_bottom = 22.0
+
+[node name="habilidad" parent="." index="4"]
+offset_left = -34.0
+offset_top = 0.0
+offset_right = 36.0
+offset_bottom = 22.0
+
+[node name="vida" parent="." index="5"]
+offset_left = 47.0
+offset_top = 2.0
+offset_right = 138.0
+offset_bottom = 24.0
+
+[node name="energia" parent="." index="6"]
+offset_left = 0.0
+offset_top = -16.68
+offset_right = 12.0
+offset_bottom = 11.32
+
+[node name="ataque" parent="." index="7"]
+offset_left = 2.0
+offset_top = 155.0
+offset_right = 22.0
+offset_bottom = 179.0
+
+[node name="defensa" parent="." index="8"]
+offset_left = 118.0
+offset_top = 153.0
+offset_right = 138.0
+offset_bottom = 188.0

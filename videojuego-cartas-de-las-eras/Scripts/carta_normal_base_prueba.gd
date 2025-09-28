@@ -49,6 +49,9 @@ var current_slot = null
 # Variable de descarte.
 var discarded: bool = false
 
+# Mostrar la carta.
+var is_hidden: bool = false  
+
 # Variable estática para controlar arrastre único
 static var card_dragged: Panel = null
 

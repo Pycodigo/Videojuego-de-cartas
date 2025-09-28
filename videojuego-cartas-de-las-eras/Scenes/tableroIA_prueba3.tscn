@@ -13,13 +13,13 @@ script = ExtResource("1_uyneq")
 [node name="ranuras" type="Node2D" parent="jugador"]
 
 [node name="ranura_prueba" parent="jugador/ranuras" instance=ExtResource("2_71r00")]
-position = Vector2(256, 337)
+position = Vector2(251, 355)
 
 [node name="ranura_prueba2" parent="jugador/ranuras" instance=ExtResource("2_71r00")]
-position = Vector2(453, 301)
+position = Vector2(445, 352)
 
 [node name="ranura_prueba3" parent="jugador/ranuras" instance=ExtResource("2_71r00")]
-position = Vector2(651, 337)
+position = Vector2(634, 349)
 
 [node name="ranura_descarte" parent="jugador" instance=ExtResource("2_71r00")]
 position = Vector2(808, 85)
@@ -47,10 +47,10 @@ metadata/_edit_use_anchors_ = true
 position = Vector2(252, 91)
 
 [node name="ranura_prueba2" parent="IA/ranuras" instance=ExtResource("2_71r00")]
-position = Vector2(451, 134)
+position = Vector2(445, 90)
 
 [node name="ranura_prueba3" parent="IA/ranuras" instance=ExtResource("2_71r00")]
-position = Vector2(652, 92)
+position = Vector2(634, 80)
 
 [node name="ranura_descarte" parent="IA" instance=ExtResource("2_71r00")]
 position = Vector2(110, 395)

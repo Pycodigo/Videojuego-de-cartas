@@ -29,7 +29,7 @@ extends Node2D
 
 # Variables de turno.
 var turn: int = 1
-var is_player_turn: bool
+var is_player_turn: bool = true
 
 var deployment_phase: bool = true  # Fase inicial de colocar cartas.
 var last_total_angle: float = 0.0
@@ -165,14 +165,11 @@ func update_finish_turn_btn():
 
 func _on_finish_turn_btn_pressed() -> void:
 	var board = get_tree().current_scene
-	if board.deployment_phase:
-		board.deployment_phase = false
+	board.deployment_phase = is_player_turn
 	
 	show_next_turn()
 
 func show_next_turn(duration: float = 1.5) -> void:
-	var board = get_tree().current_scene
-	
 	var owner: String
 	if is_player_turn:
 		owner = "Vas tú"
@@ -225,6 +222,3 @@ func show_next_turn(duration: float = 1.5) -> void:
 	finish_turn_btn.disabled = false
 	label_tween.kill()
 	owner_tween.kill()
-	
-	if board.deployment_phase == false and is_player_turn == true:
-		board.deployment_phase = true

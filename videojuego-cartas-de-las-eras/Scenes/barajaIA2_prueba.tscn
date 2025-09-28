@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cno44aedfwjf5"]
 
-[ext_resource type="Script" path="res://Scripts/barajaIA_prueba.gd" id="1_bjr3s"]
+[ext_resource type="Script" uid="uid://c1saaj3362g2n" path="res://Scripts/baraja_IA2_prueba.gd" id="1_bjr3s"]
 [ext_resource type="Texture2D" uid="uid://q2oro1lhk423" path="res://Images/test/baseball-card.png" id="2_mhyo7"]
 
 [node name="barajaIA" type="Node2D"]
