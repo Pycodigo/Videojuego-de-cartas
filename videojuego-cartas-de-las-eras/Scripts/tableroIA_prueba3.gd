@@ -25,8 +25,12 @@ extends Node2D
 
 # Texto de turnos.
 @onready var turn_label = $turnos
+@onready var turn_owner = $"dueño"
 
+# Variables de turno.
 var turn: int = 1
+var is_player_turn: bool
+
 var deployment_phase: bool = true  # Fase inicial de colocar cartas.
 var last_total_angle: float = 0.0
 var start_draw: int = 7
@@ -37,8 +41,11 @@ func _ready() -> void:
 	draw_starting_hand(start_draw)
 	#Inicialmente, al no tener cartas en slots, el botón de finalizar turno está deshabilitado.
 	update_finish_turn_btn()
-	
 	turn_label.visible = false
+	turn_owner.visible = false
+	
+	# Solo en el primer turno: decidir al azar quién empieza.
+	is_player_turn = randi() % 2 == 0
 
 # Repartir n cartas desde la baraja.
 func draw_starting_hand(n: int):
@@ -164,30 +171,60 @@ func _on_finish_turn_btn_pressed() -> void:
 	show_next_turn()
 
 func show_next_turn(duration: float = 1.5) -> void:
+	var board = get_tree().current_scene
+	
+	var owner: String
+	if is_player_turn:
+		owner = "Vas tú"
+	else:
+		owner = "Va tu oponente"
 	turn_label.text = "Turno " + str(turn)
+	turn_owner.text = owner
 	turn_label.visible = true
+	turn_owner.visible = true
 	finish_turn_btn.disabled = true
 
-	# Posición y tamaño inicial
+	# Posición y tamaño inicial.
 	turn_label.modulate.a = 0
-	turn_label.scale = Vector2(1.5, 1.5)  # Comienza más grande
+	turn_label.scale = Vector2(1.5, 1.5)  # Comienza más grande.
 	turn_label.position = Vector2(361, 224)
+	turn_owner.modulate.a = 0
+	turn_owner.scale = Vector2(1.5, 1.5)  # Comienza más grande.
+	turn_owner.position = Vector2(445, 311)
 
-	var tween = create_tween()
+	var label_tween = create_tween()
+	var owner_tween = create_tween()
 
 	# Aparece con zoom a escala normal.
-	tween.tween_property(turn_label, "modulate:a", 1.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property(turn_label, "scale", Vector2(1, 1), 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-
-	# Mantener visible durante duration
-	tween.tween_interval(duration)
+	label_tween.tween_property(turn_label, "modulate:a", 1.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	label_tween.tween_property(turn_label, "scale", Vector2(1, 1), 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	owner_tween.tween_property(turn_owner, "modulate:a", 1.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	owner_tween.tween_property(turn_owner, "scale", Vector2(1, 1), 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	
+	# Mantener visible durante la duración.
+	label_tween.tween_interval(duration)
+	owner_tween.tween_interval(duration)
 
 	# Desaparece con fade-out y ligero desplazamiento hacia arriba.
-	tween.tween_property(turn_label, "modulate:a", 0.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.tween_property(turn_label, "position:y", turn_label.position.y - 20, 0.3)
+	label_tween.tween_property(turn_label, "modulate:a", 0.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	label_tween.tween_property(turn_label, "position:y", turn_label.position.y - 20, 0.3)
+	owner_tween.tween_property(turn_owner, "modulate:a", 0.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	owner_tween.tween_property(turn_owner, "position:y", turn_label.position.y - 20, 0.3)
 	
 	turn += 1
-	await tween.finished
+	# Hacer que el siguiente turno sea del contrario.
+	if is_player_turn:
+		is_player_turn = false
+	else:
+		is_player_turn = true
+	await label_tween.finished
+	await owner_tween.finished
+	
 	turn_label.visible = false
+	turn_owner.visible = false
 	finish_turn_btn.disabled = false
-	tween.kill()
+	label_tween.kill()
+	owner_tween.kill()
+	
+	if board.deployment_phase == false and is_player_turn == true:
+		board.deployment_phase = true

@@ -88,4 +88,14 @@ theme_override_colors/font_shadow_color = Color(0.854902, 0.231373, 0.184314, 1)
 theme_override_font_sizes/font_size = 80
 text = "Turno x"
 
+[node name="dueño" type="Label" parent="."]
+offset_left = 378.0
+offset_top = 311.0
+offset_right = 658.0
+offset_bottom = 366.0
+theme_override_colors/font_color = Color(0.587191, 0.102029, 0.907531, 1)
+theme_override_colors/font_shadow_color = Color(0.854902, 0.231373, 0.184314, 1)
+theme_override_font_sizes/font_size = 40
+text = "Jugador"
+
 [connection signal="pressed" from="Finaliza" to="." method="_on_finish_turn_btn_pressed"]
