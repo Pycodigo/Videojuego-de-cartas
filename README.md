@@ -29,7 +29,14 @@
 <br/>
 <h3>📁<u>Descargar, descomprimir y ejecutar el proyecto</u>📂</h3>
 <hr/>
-<p>Disponible cuando el proyecto sea mínimamente jugable (o con una demo).</p>
+<p>Por ahora, como no hay ningún ejecutable, al estar en fase de pruebas, se puede hacer esto en su lugar:</p>
+<ol>
+  <li>Ve a 'code', dale a donde pone 'Download ZIP' y se te descargará.</li>
+  <li>Descomprime el archivo dándole clic derecho a 'Extraer todo'.</li>
+  <li>Descarga Godot, específicamente la versión 4.4.1 estable: https://godotengine.org/download/archive/</li>
+  <li>Abre el motor e importa el proyecto.</li>
+</ol>
+
 <br/>
 <h3><u>Tecnologías usadas</u></h3>
 <hr/>
@@ -56,9 +63,12 @@
 - [x] Hacer que las cartas se descarten.
 - [x] Crear oponente IA básica.
 - [x] Obligar a poner mínimo una carta en el slot.
-- [ ] Poner sistema básico de ataque y turnos.
-- [ ] Hacer que cartas de ataque quiten vida.
-- [ ] Hacer bocetos de cartas funcionales.
+- [x] Crear carta base.
+- [x] Hacer bocetos de cartas funcionales normales, con estadísticas básicas.
+- [x] Poner sistema básico de turnos.
+- [ ] Hacer que ataquen.
+- [ ] Hacer que cartas usen habilidades básicas.
+- [ ] Crear generador de vida y energía.
 - [ ] Crear pantalla de victoria.
 - [ ] Crear pantalla de derrota.
 
