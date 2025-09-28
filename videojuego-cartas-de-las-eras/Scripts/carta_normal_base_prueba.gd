@@ -104,6 +104,9 @@ func _input(event):
 	# Permitir arrastre normal si está en la mano o en fase de despliegue.
 	if card_dragged and card_dragged != self:
 		return
+	# Bloquear arrastre de cartas en slots durante el primer turno del jugador.
+	if not board.first_player_turn_done and not in_hand:
+		return
 	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed and get_global_rect().has_point(get_global_mouse_position()):

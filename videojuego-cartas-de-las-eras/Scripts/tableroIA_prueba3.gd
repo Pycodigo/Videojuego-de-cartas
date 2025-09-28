@@ -30,6 +30,7 @@ extends Node2D
 # Variables de turno.
 var turn: int = 1
 var is_player_turn: bool = true
+var first_player_turn_done: bool
 
 var deployment_phase: bool = true  # Fase inicial de colocar cartas.
 var last_total_angle: float = 0.0
@@ -209,11 +210,7 @@ func show_next_turn(duration: float = 1.5) -> void:
 	owner_tween.tween_property(turn_owner, "position:y", turn_label.position.y - 20, 0.3)
 	
 	turn += 1
-	# Hacer que el siguiente turno sea del contrario.
-	if is_player_turn:
-		is_player_turn = false
-	else:
-		is_player_turn = true
+	
 	await label_tween.finished
 	await owner_tween.finished
 	
@@ -222,3 +219,30 @@ func show_next_turn(duration: float = 1.5) -> void:
 	finish_turn_btn.disabled = false
 	label_tween.kill()
 	owner_tween.kill()
+	
+	draw_card_per_turn()
+	
+	# Hacer que el siguiente turno sea del contrario.
+	is_player_turn = not is_player_turn
+
+func draw_card_per_turn():
+	# Lógica de robo.
+	if is_player_turn:
+		var new_card = player_deck.draw_card()
+		if new_card:
+			player_hand.add_child(new_card)
+			new_card.global_position = player_deck.global_position  # Colocar sobre la baraja.
+			new_card.original_position_global = new_card.global_position # Guardar posición.
+			
+			# Poner la mano en abanico.
+			organize_hand()
+	else:
+		var new_cardAI = AIdeck.draw_card()
+		if new_cardAI:
+			new_cardAI.is_hidden = true
+			AIhand.add_child(new_cardAI)
+			new_cardAI.global_position = AIdeck.global_position  # Colocar sobre la baraja.
+			new_cardAI.original_position_global = new_cardAI.global_position # Guardar posición.
+			
+			# Poner la mano en abanico.
+			organize_hand_AI()
