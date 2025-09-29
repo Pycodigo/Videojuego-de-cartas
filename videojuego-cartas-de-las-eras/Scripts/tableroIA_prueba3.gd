@@ -27,6 +27,8 @@ extends Node2D
 @onready var turn_label = $turnos
 @onready var turn_owner = $"dueño"
 
+@onready var reset_btn = $reinicio
+
 # Variables de turno.
 var turn: int = 1
 var is_player_turn: bool = true
@@ -44,6 +46,9 @@ func _ready() -> void:
 	update_finish_turn_btn()
 	turn_label.visible = false
 	turn_owner.visible = false
+	
+	# Mostrar botón de reset solo si hay cartas en los slots y estamos en preparación.
+	reset_btn.visible = turn == 1 and not first_player_turn_done and has_cards_in_slots()
 	
 	# Solo en el primer turno: decidir al azar quién empieza.
 	is_player_turn = randi() % 2 == 0
@@ -111,12 +116,15 @@ func organize_hand(animated: bool=true):
 			var tween = create_tween()
 			tween.tween_property(card, "position", local_pos, 0.3)
 			tween.tween_property(card, "rotation_degrees", rot, 0.3)
+			tween.connect("finished", Callable(card, "set_ready_for_drag"))
 		else:
 			card.position = local_pos
 			card.rotation_degrees = rot
+			card.set_ready_for_drag()
 
 
 	last_total_angle = total_angle
+	return Tween
 
 func organize_hand_AI(animated: bool = true):
 	var total = AIhand.get_child_count()
@@ -155,6 +163,12 @@ func organize_hand_AI(animated: bool = true):
 			AIcard.position = local_pos
 			AIcard.rotation_degrees = rot + 180
 
+func has_cards_in_slots() -> bool:
+	for slot in player_card_slots:
+		if slot.get_child_count() > 0:
+			return true
+	return false
+
 func update_finish_turn_btn():
 	# Habilitar solo si al menos un slot tiene carta.
 	var can_finish = false
@@ -167,6 +181,7 @@ func update_finish_turn_btn():
 func _on_finish_turn_btn_pressed() -> void:
 	var board = get_tree().current_scene
 	board.deployment_phase = is_player_turn
+	reset_btn.visible = false
 	
 	show_next_turn()
 
@@ -246,3 +261,54 @@ func draw_card_per_turn():
 			
 			# Poner la mano en abanico.
 			organize_hand_AI()
+
+func reset_slots_to_hand():
+	print("\n=== RESET DEBUG ===")
+	var moved := false
+	
+	# Solo permitir reset antes del primer turno.
+	if turn > 1 or first_player_turn_done:
+		print("Reseteo deshabilitado: ya pasó la fase de preparación.")
+		reset_btn.visible = false
+		return
+
+	# Recorrer todas las cartas que puedan estar en slots.
+	var all_cards = board_play.get_children() + player_hand.get_children()
+	for card in all_cards:
+		# Solo cartas que realmente tienen un slot asignado y no están ya en la mano.
+		if card is Card and card.current_slot != null and not card.in_hand:
+			print("Devolviendo carta: ", card.name, " del slot: ", card.current_slot.name)
+			# Paso 1: lógica interna coherente
+			card.return_to_hand()
+
+			# Paso 2: animación (se hace después de return_to_hand)
+			var target_pos = player_hand.to_local(card.global_position)
+			var tween = create_tween()
+			tween.tween_property(card, "position", target_pos, 0.3)
+			tween.tween_property(card, "rotation_degrees", 0, 0.3)
+
+			moved = true
+
+			# Mover carta a la mano.
+			#var target_pos = player_hand.to_local(card.global_position)
+			#if card.get_parent():
+				#card.get_parent().remove_child(card)
+			#player_hand.add_child(card)
+#
+			## Animación de regreso a la mano.
+			#var tween = create_tween()
+			#tween.tween_property(card, "position", target_pos, 0.3)
+			#tween.tween_property(card, "rotation_degrees", 0, 0.3)
+
+	if moved:
+		organize_hand()            # Reorganizar la mano con animación.
+		update_finish_turn_btn()   # Actualizar el botón de finalizar turno.
+		print("Reseteo: cartas devueltas a la mano.")
+		reset_btn.visible = has_cards_in_slots()
+	else:
+		print("Reseteo: no encontró ninguna carta para devolver.")
+
+
+
+func _on_reset_btn_pressed() -> void:
+	reset_slots_to_hand()

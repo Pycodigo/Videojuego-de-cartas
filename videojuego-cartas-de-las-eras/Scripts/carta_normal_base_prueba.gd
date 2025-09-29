@@ -1,4 +1,5 @@
 extends Panel
+class_name Card
 
 # Atributos de la carta.
 @export var text: String
@@ -32,6 +33,7 @@ extends Panel
 
 # Arrastra carta.
 var dragging = false
+var ready_for_drag = false
 # Diferencia entre el ratón y la posición de la carta al iniciar el arrastre.
 var offset = Vector2.ZERO
 var original_rotation: float = 0.0
@@ -63,6 +65,8 @@ var health_animation: Tween = null
 
 
 func _ready():
+	# Añadir a grupo.
+	add_to_group("cartas")
 	init_card()
 
 func init_card():
@@ -128,8 +132,13 @@ func _input(event):
 	elif event is InputEventMouseMotion and dragging:
 		global_position = get_global_mouse_position() + offset
 
+func set_ready_for_drag():
+	ready_for_drag = true
+
 # Animar la carta a cero grados de rotación cuando se arrastra.
 func straighten(duration: float = 0.2):
+	if not ready_for_drag:
+		return
 	if not is_dragged:
 		is_dragged = true
 		original_rotation = rotation_degrees
@@ -264,13 +273,15 @@ func return_to_hand():
 	# Asegurarse de que la carta se considera en la mano
 	in_hand = true
 	dragging = false
+	is_dragged = false
+	ready_for_drag = false   # Se activará al terminar el tween en organize_hand.
 	
 	var board = get_tree().current_scene
 	if get_parent() != board.player_hand:
 		get_parent().remove_child(self)
 		board.player_hand.add_child(self)
 	board.organize_hand()
-
+	
 	# Actualizar botón.
 	board.update_finish_turn_btn()
 
