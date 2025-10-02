@@ -1,0 +1,133 @@
+[gd_scene load_steps=4 format=3 uid="uid://bn1wbxc4pdsal"]
+
+[ext_resource type="Script" uid="uid://wjuu2q72cx7c" path="res://Scripts/cartaIA_normal_base_prueba.gd" id="1_bsawk"]
+[ext_resource type="Texture2D" uid="uid://q2oro1lhk423" path="res://Images/test/baseball-card.png" id="2_3rgpu"]
+[ext_resource type="Texture2D" uid="uid://dya1dyuvlsp1w" path="res://Images/test/Carta reversa.png" id="2_bsawk"]
+
+[node name="Carta" type="Panel"]
+custom_minimum_size = Vector2(140, 180)
+offset_right = 140.0
+offset_bottom = 180.0
+pivot_offset = Vector2(50, 120)
+script = ExtResource("1_bsawk")
+text = null
+card_name = null
+max_health = null
+cost = null
+attack = null
+defense = null
+ability = null
+
+[node name="textura_carta" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(140, 180)
+layout_mode = 0
+offset_right = 180.0
+offset_bottom = 180.0
+texture = ExtResource("2_3rgpu")
+expand_mode = 3
+
+[node name="oculto" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(140, 180)
+layout_mode = 0
+offset_left = 1.0
+offset_right = 141.0
+offset_bottom = 180.0
+texture = ExtResource("2_bsawk")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.195
+anchor_top = 0.4
+anchor_right = 1.195
+anchor_bottom = 0.4
+offset_left = -4.50002
+offset_top = -11.0
+offset_right = 4.49998
+offset_bottom = 11.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 15
+text = "1"
+
+[node name="nombre" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.25
+anchor_right = 0.5
+anchor_bottom = 0.25
+offset_left = -40.0
+offset_top = -11.0
+offset_right = 20.0
+offset_bottom = 11.0
+theme_override_colors/font_color = Color(0.776641, 0.449548, 0.0605862, 1)
+theme_override_colors/font_shadow_color = Color(0.410155, 0.238639, 0.309087, 1)
+theme_override_font_sizes/font_size = 15
+text = "Nombre"
+
+[node name="habilidad" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4
+anchor_top = 0.5
+anchor_right = 0.4
+anchor_bottom = 0.5
+offset_left = -35.0
+offset_top = -11.0
+offset_right = 25.0
+offset_bottom = 11.0
+theme_override_colors/font_color = Color(0.230066, 0.641555, 0.182509, 1)
+theme_override_colors/font_shadow_color = Color(0.0923208, 0.248723, 0.712308, 1)
+theme_override_font_sizes/font_size = 15
+text = "Habilidad"
+
+[node name="vida" type="Label" parent="."]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 1.0
+offset_right = 124.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(0.962661, 0.138642, 0.432479, 1)
+theme_override_colors/font_shadow_color = Color(0.408329, 0.408329, 0.408329, 1)
+theme_override_font_sizes/font_size = 15
+text = "100PS"
+horizontal_alignment = 2
+
+[node name="energia" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.08
+anchor_top = 0.112
+anchor_right = 0.08
+anchor_bottom = 0.112
+offset_left = -4.0
+offset_top = -20.68
+offset_right = 8.0
+offset_bottom = 7.32
+theme_override_colors/font_color = Color(0, 0.653731, 0.22001, 1)
+theme_override_colors/font_shadow_color = Color(0.0460029, 0.283837, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "4"
+
+[node name="ataque" type="Label" parent="."]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 112.0
+offset_right = 28.0
+offset_bottom = 136.0
+theme_override_colors/font_color = Color(0.917007, 0.273113, 0.350052, 1)
+theme_override_font_sizes/font_size = 17
+text = "10"
+horizontal_alignment = 2
+
+[node name="defensa" type="Label" parent="."]
+layout_mode = 0
+offset_left = 101.0
+offset_top = 110.0
+offset_right = 121.0
+offset_bottom = 145.0
+theme_override_colors/font_color = Color(0.917007, 0.273113, 0.350052, 1)
+theme_override_font_sizes/font_size = 17
+text = "10"
+horizontal_alignment = 2

@@ -116,17 +116,71 @@ theme_override_font_sizes/font_size = 17
 text = "10"
 horizontal_alignment = 2
 
+[node name="opc" type="Panel" parent="."]
+custom_minimum_size = Vector2(140, 180)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.2
+anchor_top = 1.6
+anchor_right = 1.2
+anchor_bottom = 1.6
+offset_left = -70.0
+offset_top = -90.0
+offset_right = 70.0
+offset_bottom = 90.0
+
+[node name="ataque" type="Button" parent="opc"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.496
+anchor_top = 0.292
+anchor_right = 0.496
+anchor_bottom = 0.292
+offset_left = -69.44
+offset_top = -15.56
+offset_right = 69.56
+offset_bottom = 15.44
+text = "Atacar"
+
+[node name="habilidad" type="Button" parent="opc"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.504
+anchor_top = 0.614
+anchor_right = 0.504
+anchor_bottom = 0.614
+offset_left = -69.56
+offset_top = -15.52
+offset_right = 69.44
+offset_bottom = 15.48
+text = "Usar habilidad"
+
+[node name="cancelar" type="Button" parent="opc"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.738
+anchor_top = 0.914
+anchor_right = 0.738
+anchor_bottom = 0.914
+offset_left = 17.68
+offset_top = -15.52
+offset_right = 34.68
+offset_bottom = 15.48
+theme_override_colors/font_color = Color(0.882353, 0, 0, 1)
+text = "x"
+alignment = 2
+
 [node name="info" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 2.082
-anchor_top = 0.381
-anchor_right = 2.082
-anchor_bottom = 0.381
+anchor_left = 3.054
+anchor_top = 0.5
+anchor_right = 3.054
+anchor_bottom = 0.5
 offset_left = -123.48
-offset_top = -98.58
+offset_top = -101.0
 offset_right = 123.52
-offset_bottom = 98.42
+offset_bottom = 96.0
 mouse_filter = 2
 
 [node name="NombreInfo" type="Label" parent="info"]
@@ -209,3 +263,5 @@ text = "Habilidad:"
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="pressed" from="opc/ataque" to="." method="_on_attack_btn_pressed"]
+[connection signal="pressed" from="opc/cancelar" to="." method="_on_cancel_btn_pressed"]

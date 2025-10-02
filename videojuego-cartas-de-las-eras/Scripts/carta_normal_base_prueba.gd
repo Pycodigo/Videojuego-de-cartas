@@ -31,9 +31,17 @@ class_name Card
 @onready var defense_hover = $info/DefensaInfo
 @onready var ability_hover = $info/HabilidadInfo
 
+# Opciones.
+@onready var options = $opc
+@onready var attack_option = $opc/ataque
+@onready var ability_option = $opc/habilidad
+@onready var cancel_option = $opc/cancelar
+
 # Arrastra carta.
 var dragging = false
+var click_started = false
 var ready_for_drag = false
+var block_drag: bool
 # Diferencia entre el ratón y la posición de la carta al iniciar el arrastre.
 var offset = Vector2.ZERO
 var original_rotation: float = 0.0
@@ -95,42 +103,74 @@ func init_card():
 	original_position_global = global_position
 	
 	info_hover.visible = false
+	options.visible = false
 
-func _input(event):
-	var board = get_tree().current_scene
-	
-	# Bloquear arrastre si la carta está descartada.
+
+func _gui_input(event):
 	if discarded:
 		return
-	# Bloquear arrastre de cartas del jugador si no es fase de despliegue.
-	if not board.deployment_phase and in_hand:
+
+	var board = get_tree().current_scene
+
+	#print("is_player_turn:", board.is_player_turn, " first_player_turn_done:", board.first_player_turn_done)
+	if not board.is_player_turn and not board.deployment_phase:
 		return
-	# Permitir arrastre normal si está en la mano o en fase de despliegue.
-	if card_dragged and card_dragged != self:
-		return
-	# Bloquear arrastre de cartas en slots durante el primer turno del jugador.
-	if not board.first_player_turn_done and not in_hand:
-		return
-	
+
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed and get_global_rect().has_point(get_global_mouse_position()):
-			dragging = true
-			card_dragged = self
+		if event.pressed:
+			click_started = true
+			dragging = false
 			offset = global_position - get_global_mouse_position()
 			straighten()
-			# Liberar slot actual si la carta estaba en uno.
-			if current_slot:
-				current_slot.occupied = false
-				current_slot = null
-				in_hand = true
-				board.update_finish_turn_btn()
-		elif not event.pressed and dragging:
+		else: # botón soltado
+			if dragging:
+				# Solo permitir mover si está en la mano o fase de preparación
+				if in_hand or board.deployment_phase:
+					snap_to_slot()
+			elif click_started and not dragging:
+				# Abrir panel solo si:
+				# - Carta en slot
+				# - Turno jugador normal
+				# - No en fase de preparación
+				if current_slot != null and not in_hand and not discarded and not board.deployment_phase:
+					show_options_panel()
+				else:
+					options.visible = false
+			click_started = false
 			dragging = false
-			card_dragged = null
-			# Intentar colocar la carta en el slot más cercano.
-			snap_to_slot()
-	elif event is InputEventMouseMotion and dragging:
-		global_position = get_global_mouse_position() + offset
+	elif event is InputEventMouseMotion:
+		# Solo arrastrar si está en la mano o fase de preparación
+		if click_started and (in_hand or board.deployment_phase):
+			global_position = get_global_mouse_position() + offset
+			if not dragging:
+				dragging = true
+				if current_slot:
+					# Liberar slot
+					current_slot.occupied = false
+					current_slot = null
+					in_hand = true
+				options.visible = false
+
+
+
+
+func show_options_panel():
+	if options == null:
+		return
+
+	# Solo mostrar si la carta está en un slot (no en la mano).
+	if in_hand or discarded:
+		options.visible = false
+		return
+
+	options.visible = true
+	options.z_index = 100  # Aparece encima de todo.
+
+	# Posicionar y escalar el panel para que cubra la carta.
+	options.position = Vector2.ZERO  # Dentro del Panel de la carta, coincide con la esquina superior izquierda.
+	options.scale = self.scale   # Ajusta el tamaño del panel de opciones al tamaño de la carta.
+
+
 
 func set_ready_for_drag():
 	ready_for_drag = true
@@ -163,7 +203,7 @@ func take_damage(amount: int):
 
 	health_animation = create_tween()
 	health_animation.tween_method(
-		func(v): health_label.text = str(int(v)) + "/" + str(max_health),
+		func(v): health_label.text = str(int(v)) + "PS",
 		old_health, current_health, 0.5
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
@@ -326,3 +366,14 @@ func adjust_hover_position():
 	
 	# Asignar posición en coordenadas globales.
 	info_hover.global_position = new_pos
+
+
+func _on_attack_btn_pressed() -> void:
+	# Solo si está en juego y lista para atacar.
+	if not in_hand and not discarded:
+		Global.start_attack(self)
+		options.visible = false
+
+
+func _on_cancel_btn_pressed() -> void:
+	options.visible = false

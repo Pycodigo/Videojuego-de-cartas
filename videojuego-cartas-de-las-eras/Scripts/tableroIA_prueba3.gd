@@ -31,7 +31,7 @@ extends Node2D
 
 # Variables de turno.
 var turn: int = 1
-var is_player_turn: bool = true
+var is_player_turn: bool
 var first_player_turn_done: bool
 
 var deployment_phase: bool = true  # Fase inicial de colocar cartas.
@@ -46,6 +46,7 @@ func _ready() -> void:
 	update_finish_turn_btn()
 	turn_label.visible = false
 	turn_owner.visible = false
+	deployment_phase = true
 	
 	# Mostrar botón de reset solo si hay cartas en los slots y estamos en preparación.
 	reset_btn.visible = turn == 1 and not first_player_turn_done and has_cards_in_slots()
@@ -179,18 +180,26 @@ func update_finish_turn_btn():
 	finish_turn_btn.disabled = not can_finish
 
 func _on_finish_turn_btn_pressed() -> void:
-	var board = get_tree().current_scene
-	board.deployment_phase = is_player_turn
+	deployment_phase = false
 	reset_btn.visible = false
+	
+	# Cerrar todos los paneles de opciones de las cartas.
+	for card in get_tree().get_nodes_in_group("cartas"):
+		card.options.visible = false
 	
 	show_next_turn()
 
 func show_next_turn(duration: float = 1.5) -> void:
+	# Hacer que el siguiente turno sea del contrario.
+	is_player_turn = not is_player_turn
+	
 	var owner: String
 	if is_player_turn:
 		owner = "Vas tú"
+		print("Tu turno\nTurno jugador: ", is_player_turn)
 	else:
 		owner = "Va tu oponente"
+		print("Turno IA\nTurno jugador: ", is_player_turn)
 	turn_label.text = "Turno " + str(turn)
 	turn_owner.text = owner
 	turn_label.visible = true
@@ -236,9 +245,6 @@ func show_next_turn(duration: float = 1.5) -> void:
 	owner_tween.kill()
 	
 	draw_card_per_turn()
-	
-	# Hacer que el siguiente turno sea del contrario.
-	is_player_turn = not is_player_turn
 
 func draw_card_per_turn():
 	# Lógica de robo.
@@ -278,27 +284,16 @@ func reset_slots_to_hand():
 		# Solo cartas que realmente tienen un slot asignado y no están ya en la mano.
 		if card is Card and card.current_slot != null and not card.in_hand:
 			print("Devolviendo carta: ", card.name, " del slot: ", card.current_slot.name)
-			# Paso 1: lógica interna coherente
+			# Lógica de devolver a la mano.
 			card.return_to_hand()
 
-			# Paso 2: animación (se hace después de return_to_hand)
+			# Animar a la mano de vuelta.
 			var target_pos = player_hand.to_local(card.global_position)
 			var tween = create_tween()
 			tween.tween_property(card, "position", target_pos, 0.3)
 			tween.tween_property(card, "rotation_degrees", 0, 0.3)
 
 			moved = true
-
-			# Mover carta a la mano.
-			#var target_pos = player_hand.to_local(card.global_position)
-			#if card.get_parent():
-				#card.get_parent().remove_child(card)
-			#player_hand.add_child(card)
-#
-			## Animación de regreso a la mano.
-			#var tween = create_tween()
-			#tween.tween_property(card, "position", target_pos, 0.3)
-			#tween.tween_property(card, "rotation_degrees", 0, 0.3)
 
 	if moved:
 		organize_hand()            # Reorganizar la mano con animación.

@@ -75,6 +75,18 @@ func init_card():
 	
 	deploy_AI_cards()
 
+func _gui_input(event: InputEvent) -> void:
+	if discarded:
+		return
+
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if Global.attack_mode:
+			if Global.attacking_card == self:
+				return
+		print("Seleccionando objetivo: ", card_name)
+		Global.select_attack_target(self)
+
+	
 # Animar la carta a cero grados de rotación cuando se arrastra.
 func straighten(duration: float = 0.2):
 	original_rotation = rotation_degrees
@@ -97,10 +109,23 @@ func take_damage(amount: int):
 
 	health_animation = create_tween()
 	health_animation.tween_method(
-		func(v): health_label.text = str(int(v)) + "/" + str(max_health),
+		func(v): health_label.text = str(int(v)) + "PS",
 		old_health, current_health, 0.5
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-
+	
+	var damage_in_tween = create_tween()
+	damage_in_tween.tween_property(front_texture, "modulate", Color(1,0,0,1), 0.2)
+	await damage_in_tween.finished
+	var damage_out_tween = create_tween()
+	damage_out_tween.tween_property(front_texture, "modulate", Color(1,1,1,1), 0.2)
+	await damage_out_tween.finished
+	var damage_finish_tween = create_tween()
+	damage_finish_tween.tween_property(front_texture, "modulate", Color(1,0,0,1), 0.2)
+	await damage_finish_tween.finished
+	var finish_tween = create_tween()
+	finish_tween.tween_property(front_texture, "modulate", Color(1,1,1,1), 0.2)
+	await finish_tween.finished
+	
 	if current_health <= 0:
 		current_health = 0
 		discard()
