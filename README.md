@@ -66,7 +66,7 @@
 - [x] Crear carta base.
 - [x] Hacer bocetos de cartas funcionales normales, con estadísticas básicas.
 - [x] Poner sistema básico de turnos.
-- [ ] Hacer que ataquen.
+- [x] Hacer que ataquen.
 - [ ] Hacer que cartas usen habilidades básicas.
 - [ ] Crear generador de vida y energía.
 - [ ] Crear pantalla de victoria.
