@@ -9,8 +9,12 @@ class_name Card
 @export var cost: int
 @export var attack: int
 @export var defense: int
-@export var ability: String
+@export var ability: Dictionary = {} #Diccionario que describe la habilidad.
 @export var ability_detailed: String
+
+# Estadísticas modificadas.
+var modified_attack = null
+var modified_defense = null
 
 # Nodos.
 @onready var front_texture = $textura_carta
@@ -88,7 +92,10 @@ func init_card():
 	cost_label.text = str(cost)
 	attack_label.text = str(attack)
 	defense_label.text = str(defense)
-	ability_label.text = ability
+	var ability_name = ""
+	if ability and ability.has("name"):
+		ability_name = ability.name
+	ability_label.text = ability_name
 	
 	# Panel de info detallada
 	name_hover.text = card_name
@@ -96,7 +103,12 @@ func init_card():
 	cost_hover.text = "Coste: " + str(cost)
 	attack_hover.text = "Ataque: " + str(attack)
 	defense_hover.text = "Def: " + str(defense)
-	ability_hover.text = ability + ":\n" + ability_detailed
+	ability_hover.text = ability_name + ":\n" + ability_detailed
+	
+	# Espera un frame para asegurar que la carta está en el tablero.
+	await get_tree().process_frame
+	if ability and ability.activation == "auto" and not in_hand and not discarded:
+		Global.apply_ability(self, ability)
 	
 	card_label.text = text
 	# Guardar la posición inicial global de la carta.
@@ -206,7 +218,11 @@ func take_damage(amount: int):
 		func(v): health_label.text = str(int(v)) + "PS",
 		old_health, current_health, 0.5
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-
+	
+	# Activar habilidad si tiene trigger "on_damage"
+	if ability and ability.activation == "auto" and ability.has("trigger") and ability.trigger == "on_damage":
+		Global.apply_ability(self, ability)
+	
 	if current_health <= 0:
 		current_health = 0
 		discard()
@@ -377,3 +393,12 @@ func _on_attack_btn_pressed() -> void:
 
 func _on_cancel_btn_pressed() -> void:
 	options.visible = false
+
+
+func _on_ability_pressed() -> void:
+	# Solo si está en juego y lista para atacar.
+	if not in_hand and not discarded:
+		if ability and ability.activation == "manual":
+			print("va.")
+			Global.apply_ability(self, ability)
+			options.visible = false

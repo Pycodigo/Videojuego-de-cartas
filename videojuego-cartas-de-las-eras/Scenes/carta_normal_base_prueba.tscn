@@ -264,4 +264,5 @@ text = "Habilidad:"
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
 [connection signal="pressed" from="opc/ataque" to="." method="_on_attack_btn_pressed"]
+[connection signal="pressed" from="opc/habilidad" to="." method="_on_ability_pressed"]
 [connection signal="pressed" from="opc/cancelar" to="." method="_on_cancel_btn_pressed"]

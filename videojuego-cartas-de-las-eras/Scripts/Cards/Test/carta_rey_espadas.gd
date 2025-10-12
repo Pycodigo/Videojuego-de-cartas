@@ -7,7 +7,14 @@ func _ready() -> void:
 	cost = 4
 	attack = 10
 	defense = 5
-	ability = "Espíritu de Rey"
+	ability = {
+		"name": "Espíritu de Rey",
+		"type": "stat_mod",  # Tipo de habilidad.
+		"stat": "defense", # Stat que modifica.
+		"value": 20, # +x%.
+		"target": "allies", # Objetivo.
+		"activation": "manual" # Activación manual.
+	}
 	ability_detailed = "El rey ofrece +20% de ataque\na sus aliados"
 	
 	init_card()

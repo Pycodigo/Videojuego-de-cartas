@@ -10,6 +10,10 @@ extends Panel
 @export var defense: int
 @export var ability: String
 
+# Estadísticas modificadas.
+var modified_attack = null
+var modified_defense = null
+
 # Nodos.
 @onready var front_texture = $textura_carta
 @onready var hidden_texture = $oculto

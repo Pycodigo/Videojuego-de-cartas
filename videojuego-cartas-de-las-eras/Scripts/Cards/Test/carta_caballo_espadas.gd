@@ -7,7 +7,15 @@ func _ready() -> void:
 	cost = 2
 	attack = 9
 	defense = 9
-	ability = "Por el pueblo"
+	ability = {
+		"name": "Por el pueblo",
+		"type": "stat_mod",  # Tipo de habilidad.
+		"stat": "defense", # Stat que modifica.
+		"value": 10, # +x%.
+		"target": "self", # Objetivo.
+		"activation": "auto", # Activación automática.
+		"trigger": "on_damage" # Condición para activarse.
+	}
 	ability_detailed = "Durante el próximo turno, si\nrecibe daño directo,\n+10% de defensa"
 	
 	init_card()
