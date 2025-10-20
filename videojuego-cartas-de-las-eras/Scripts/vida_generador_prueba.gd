@@ -1,9 +1,8 @@
-extends Node2D
+extends Panel
 
 @onready var health_bar = $vida
 @onready var needle = $agujaP
 @onready var current_health_label = $vida_actual
-@onready var max_health_label = $vida_max
 
 @export var max_health: int = 1000
 var current_health: int
@@ -15,19 +14,45 @@ var health_animation: Tween = null
 func _ready() -> void:
 	current_health = max_health
 	current_health_label.text = str(current_health)
-	max_health_label.text = str(max_health)
 	update_health_bar()
-	
-	# Test automático: cada segundo pierde 100 de vida
-	var timer = Timer.new()
-	timer.wait_time = 1
-	timer.one_shot = false
-	timer.autostart = true
-	add_child(timer)
-	timer.connect("timeout", Callable(self, "_test_damage"))
-	
-func _test_damage():
-	take_damage(100)
+
+func has_AIcards_in_slots() -> bool:
+	var board = get_tree().current_scene
+
+	# Revisar todas las cartas en el grupo
+	for card in get_tree().get_nodes_in_group("cartas"):
+		# Solo cartas que no estén en la mano ni descartadas
+		if card.in_hand or card.discarded:
+			continue
+		# Verificar si su slot actual es de la IA
+		if card.current_slot in board.AIcard_slots:
+			print("Carta en slot IA encontrada:", card.name)
+			return true
+	return false
+
+
+# Función recursiva para buscar nodos Card dentro de cualquier hijo.
+func _contains_card(node: Node) -> bool:
+	if node is Card and not node.discarded and not node.in_hand:
+		return true
+	for child in node.get_children():
+		if _contains_card(child):
+			return true
+	return false
+
+func _gui_input(event):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		var board = get_tree().current_scene
+		if not board.is_player_turn or board.deployment_phase:
+			return
+
+		if not has_AIcards_in_slots():
+			print("Puedes atacar el generador.")
+			Global.select_attack_target(self)
+		else:
+			print("Hay cartas en juego.")
+
+
 
 func take_damage(amount: int):
 	current_health = clamp(current_health - amount, 0, max_health)
@@ -71,3 +96,12 @@ func update_health_bar():
 		func(v): current_health_label.text = str(int(v)),
 		start_value, current_health, 0.6
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
+	# Revisar si el generador muere
+	if current_health <= 0:
+		current_health = 0
+		destroy_generator()
+
+func destroy_generator():
+	print("Generador destruído. Fin del juego.")
+	hide()

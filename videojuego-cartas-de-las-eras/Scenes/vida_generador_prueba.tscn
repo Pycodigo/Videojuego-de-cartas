@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dscs1twp8se67"]
+[gd_scene load_steps=6 format=3 uid="uid://gh77jmcl3jn3"]
 
 [ext_resource type="Texture2D" uid="uid://cd5ekix0xn2mm" path="res://Images/test/circulo sin fondo.png" id="1_33jjj"]
 [ext_resource type="Script" uid="uid://cmwap76ry3ggw" path="res://Scripts/vida_generador_prueba.gd" id="1_i1imr"]
@@ -6,7 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://does2cfy2kqgo" path="res://Images/test/flecha-linea.png" id="2_7w7kp"]
 [ext_resource type="Texture2D" uid="uid://ugdb10atkxmn" path="res://Images/test/circulo azul 130.png" id="2_i1imr"]
 
-[node name="vida_generador_prueba" type="Node2D"]
+[node name="Panel" type="Panel"]
+offset_right = 40.0
+offset_bottom = 40.0
 script = ExtResource("1_i1imr")
 
 [node name="vida" type="TextureProgressBar" parent="."]
@@ -43,25 +45,9 @@ centered = false
 offset = Vector2(-60, -170)
 
 [node name="vida_actual" type="Label" parent="."]
-offset_left = 127.0
-offset_top = 55.0
-offset_right = 167.0
-offset_bottom = 78.0
-text = "1000"
-horizontal_alignment = 1
-
-[node name="Label2" type="Label" parent="."]
-offset_left = 125.0
-offset_top = 74.0
-offset_right = 168.0
-offset_bottom = 97.0
-text = "/"
-horizontal_alignment = 1
-
-[node name="vida_max" type="Label" parent="."]
-offset_left = 127.0
-offset_top = 94.0
-offset_right = 166.0
-offset_bottom = 117.0
+offset_left = 44.0
+offset_top = 80.0
+offset_right = 84.0
+offset_bottom = 103.0
 text = "1000"
 horizontal_alignment = 1

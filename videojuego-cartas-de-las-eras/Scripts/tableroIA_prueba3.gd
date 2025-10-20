@@ -9,6 +9,7 @@ extends Node2D
 	 $jugador/ranuras/ranura_prueba3]
 @onready var player_discard_slot = $jugador/ranura_descarte
 @onready var player_board_play = $jugador/cartas_en_juego
+@onready var player_generator = $jugador/generador
 
 # Oponente IA.
 @onready var AIhand = $IA/mano
@@ -19,6 +20,7 @@ extends Node2D
 	 $IA/ranuras/ranura_prueba3]
 @onready var AIdiscard_slot = $IA/ranura_descarte
 @onready var board_play = $IA/cartas_en_juego
+@onready var AIgenerator = $IA/generadorIA
 
 # Botón para terminar turno.
 @onready var finish_turn_btn = $Finaliza

@@ -390,7 +390,6 @@ func _on_attack_btn_pressed() -> void:
 		Global.start_attack(self)
 		options.visible = false
 
-
 func _on_cancel_btn_pressed() -> void:
 	options.visible = false
 
@@ -399,6 +398,6 @@ func _on_ability_pressed() -> void:
 	# Solo si está en juego y lista para atacar.
 	if not in_hand and not discarded:
 		if ability and ability.activation == "manual":
-			print("va.")
+			print("Manual.")
 			Global.apply_ability(self, ability)
 			options.visible = false
