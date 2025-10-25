@@ -134,6 +134,13 @@ func take_damage(amount: int):
 		current_health = 0
 		discard()
 
+func find_parent_slot() -> Node:
+	var board = get_tree().current_scene
+	for slot in board.AIcard_slots:
+		if self in slot.get_children() or slot.get_node_or_null(name) != null:
+			return slot
+	return null
+
 func discard():
 	if discarded:
 		return
@@ -142,17 +149,20 @@ func discard():
 	in_hand = false
 
 	var board = get_tree().current_scene
-	var discard_slot = board.AIdiscard_slot
-	if not discard_slot:
-		return
 
-	# Hacer que la carta se encoja y desaparezca.
+	var slot = current_slot if current_slot else find_parent_slot()
+	if slot:
+		slot.card_slot_cnt = max(slot.card_slot_cnt - 1, 0)
+		if slot.card_slot_cnt == 0:
+			slot.occupied = false
+		print("Actualizado slot:", slot.name, " -> cartas:", slot.card_slot_cnt)
+		current_slot = null
+
+	# Animación y mover a descarte
 	var discard_tween = create_tween()
-	discard_tween.tween_property(self, "scale", Vector2(0.1, 0.1), 0.4)\
-	.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
-	discard_tween.tween_property(self, "modulate:a", 0, 0.4) # Se desvanece.
-	
-	# Esperar a que termine la animación.
+	discard_tween.tween_property(self, "scale", Vector2(0.1,0.1), 0.4)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	discard_tween.tween_property(self, "modulate:a", 0, 0.4)
 	await discard_tween.finished
 	_move_to_discard()
 
@@ -192,6 +202,11 @@ func _move_to_board():
 	# Hacer que gire desde 180º hasta 0º (se voltea boca arriba)
 	tween.parallel().tween_property(self, "rotation_degrees", 0, 0.4) \
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
+	# Incrementar contador del slot.
+	if current_slot:
+		current_slot.card_slot_cnt += 1
+		current_slot.occupied = true
 		
 	# Una vez finalice, nos aseguramos de que quede exactamente en el slot
 	await tween.finished

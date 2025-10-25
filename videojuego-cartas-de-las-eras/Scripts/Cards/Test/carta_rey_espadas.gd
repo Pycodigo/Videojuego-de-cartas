@@ -5,7 +5,7 @@ func _ready() -> void:
 	texture = preload("res://Images/test/rey.jpg")
 	max_health = 150
 	cost = 4
-	attack = 2000
+	attack = 500
 	defense = 5
 	ability = {
 		"name": "Espíritu de Rey",

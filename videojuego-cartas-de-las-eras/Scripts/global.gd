@@ -16,39 +16,17 @@ func start_attack(card: Panel):
 	tween.tween_property(card.front_texture, "modulate", Color(1,0,0.5,1), 1.0)
 	await tween.finished
 
-# Determinar si se puede atacar al generador de la IA.
-func can_attack_AIgenerator() -> bool:
-	var board = get_tree().current_scene
-	for slot in board.AIcard_slots:
-		if slot.occupied:
-			return false  # Hay cartas enemigas, no se puede atacar el generador.
-	return true  # No hay cartas enemigas, se puede atacar el generador.
-
-func select_attack_target(target_card: Panel):
+func select_attack_target(target: Node):
+	print(">>> select_attack_target() llamado con: ", target.name)
+	print("Modo de ataque: ", attack_mode)
+	
 	if not attack_mode:
+		print("No estás en modo ataque, se ignora la selección.")
 		return
 	
-	var board = get_tree().current_scene
-	var enemy_has_cards = false
-	
-	# Revisar si hay cartas en los slots enemigos.
-	for slot in board.AIcard_slots:
-		if slot.get_child_count() > 0:
-			enemy_has_cards = true
-			break
-	
-	# Decidir objetivo.
-	if enemy_has_cards:
-		attack_target = target_card  # Solo se puede atacar a cartas.
-	else:
-		attack_target = board.AIgenerator  # Si no hay cartas, atacar generador.
-	
-	#_show_attack_indicator(attacking_card, attack_target)
-	# Aplicar ataque.
-	_execute_attack()
+	attack_target = target
 
-func _show_attack_indicator(attacker: Panel, target: Panel):
-	print(attacker.card_name, " ataca a ", target.card_name, " oponente.")
+	_execute_attack()
 
 func _execute_attack():
 	if not attacking_card or not attack_target:

@@ -1,6 +1,8 @@
 extends Node2D
 
 var occupied: bool = false
+var card_slot_cnt: int = 0
+
 func can_accept_card() -> bool:
 	return not occupied
 

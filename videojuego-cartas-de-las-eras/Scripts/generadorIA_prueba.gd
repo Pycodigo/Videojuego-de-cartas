@@ -16,29 +16,15 @@ func _ready() -> void:
 	current_health_label.text = str(current_health)
 	update_health_bar()
 
-func has_AIcards_in_slots() -> bool:
+func can_attack_AIgenerator() -> bool:
 	var board = get_tree().current_scene
+	# Devuelve true solo si todos los slots tienen card_slot_cnt == 0.
+	var all_clear = board.AIcard_slots.all(func(slot):
+		return slot.card_slot_cnt == 0
+	)
 
-	# Revisar todas las cartas en el grupo
-	for card in get_tree().get_nodes_in_group("cartas"):
-		# Solo cartas que no estén en la mano ni descartadas
-		if card.in_hand or card.discarded:
-			continue
-		# Verificar si su slot actual es de la IA
-		if card.current_slot in board.AIcard_slots:
-			print("Carta en slot IA encontrada:", card.name)
-			return true
-	return false
-
-
-# Función recursiva para buscar nodos Card dentro de cualquier hijo.
-func _contains_card(node: Node) -> bool:
-	if node is Card and not node.discarded and not node.in_hand:
-		return true
-	for child in node.get_children():
-		if _contains_card(child):
-			return true
-	return false
+	print("Todos los slots vacíos: ", all_clear)
+	return all_clear
 
 func _gui_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
@@ -46,15 +32,12 @@ func _gui_input(event):
 		if not board.is_player_turn or board.deployment_phase:
 			return
 
-		if not has_AIcards_in_slots():
-			print("Puedes atacar el generador.")
-			Global.select_attack_target(self)
-		else:
-			print("Hay cartas en juego.")
-
-
-
 func take_damage(amount: int):
+	# Si la IA aún tiene cartas en juego, el generador no puede ser dañado.
+	if not can_attack_AIgenerator():
+		print("El generador está protegido por las cartas del enemigo.")
+		return
+	
 	current_health = clamp(current_health - amount, 0, max_health)
 	update_health_bar()
 
@@ -103,5 +86,5 @@ func update_health_bar():
 		destroy_generator()
 
 func destroy_generator():
-	print("Generador destruído. Fin del juego.")
+	print("Generador IA destruído. Fin del juego.")
 	hide()

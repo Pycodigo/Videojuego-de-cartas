@@ -9,7 +9,7 @@ extends Node2D
 	 $jugador/ranuras/ranura_prueba3]
 @onready var player_discard_slot = $jugador/ranura_descarte
 @onready var player_board_play = $jugador/cartas_en_juego
-@onready var player_generator = $jugador/generador
+#@onready var player_generator = $jugador/generador
 
 # Oponente IA.
 @onready var AIhand = $IA/mano
@@ -21,6 +21,7 @@ extends Node2D
 @onready var AIdiscard_slot = $IA/ranura_descarte
 @onready var board_play = $IA/cartas_en_juego
 @onready var AIgenerator = $IA/generadorIA
+@onready var AIgeneratorbtn = $IA/Button
 
 # Botón para terminar turno.
 @onready var finish_turn_btn = $Finaliza
@@ -309,3 +310,22 @@ func reset_slots_to_hand():
 
 func _on_reset_btn_pressed() -> void:
 	reset_slots_to_hand()
+
+# Devuelve true si la IA tiene alguna carta activa en el tablero.
+func has_AI_cards_on_board() -> bool:
+	if not board_play:
+		return false
+
+	for card in board_play.get_children():
+		# Asegúrate de que las cartas IA tengan una propiedad "discarded" o "muerta"
+		if card.is_inside_tree() and not card.discarded:
+			return true
+	return false
+
+func _on_AIgenerator_pressed():
+	print("Generador presionado -> Llamando a select_attack_target")
+	if not Global.attack_mode:
+		print("No estás en modo ataque.")
+		return
+	
+	Global.select_attack_target(AIgenerator)

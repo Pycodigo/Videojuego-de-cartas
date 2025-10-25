@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://6hmvo400iucc" path="res://Scenes/ranura_prueba.tscn" id="2_71r00"]
 [ext_resource type="PackedScene" uid="uid://bvtjofq7sewju" path="res://Scenes/baraja2_prueba.tscn" id="3_uyneq"]
 [ext_resource type="PackedScene" uid="uid://cno44aedfwjf5" path="res://Scenes/barajaIA2_prueba.tscn" id="4_71r00"]
-[ext_resource type="PackedScene" uid="uid://gh77jmcl3jn3" path="res://Scenes/vida_generador_prueba.tscn" id="4_f4eja"]
+[ext_resource type="PackedScene" uid="uid://gh77jmcl3jn3" path="res://Scenes/generadorIA_prueba.tscn" id="5_71r00"]
 
 [node name="tablero" type="Node2D"]
 script = ExtResource("1_uyneq")
@@ -40,12 +40,6 @@ offset_right = 906.0
 offset_bottom = 207.0
 metadata/_edit_use_anchors_ = true
 
-[node name="generador" parent="jugador" instance=ExtResource("4_f4eja")]
-offset_left = 741.0
-offset_top = 402.0
-offset_right = 781.0
-offset_bottom = 442.0
-
 [node name="IA" type="Node2D" parent="."]
 
 [node name="ranuras" type="Node2D" parent="IA"]
@@ -77,11 +71,17 @@ offset_right = 208.0
 offset_bottom = 518.0
 metadata/_edit_use_anchors_ = true
 
-[node name="generadorIA" parent="IA" instance=ExtResource("4_f4eja")]
-offset_left = 149.0
-offset_top = 36.0
-offset_right = 189.0
-offset_bottom = 76.0
+[node name="generadorIA" parent="IA" instance=ExtResource("5_71r00")]
+offset_left = 147.0
+offset_top = 94.0
+offset_right = 187.0
+offset_bottom = 134.0
+
+[node name="Button" type="Button" parent="IA"]
+offset_left = 148.0
+offset_top = 97.0
+offset_right = 277.0
+offset_bottom = 220.0
 
 [node name="Finaliza" type="Button" parent="."]
 offset_left = 856.0
@@ -119,5 +119,6 @@ offset_bottom = 331.0
 theme_override_font_sizes/font_size = 20
 text = "Reiniciar cartas"
 
+[connection signal="pressed" from="IA/Button" to="." method="_on_AIgenerator_pressed"]
 [connection signal="pressed" from="Finaliza" to="." method="_on_finish_turn_btn_pressed"]
 [connection signal="pressed" from="reinicio" to="." method="_on_reset_btn_pressed"]
