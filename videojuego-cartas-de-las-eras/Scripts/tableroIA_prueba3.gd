@@ -9,7 +9,8 @@ extends Node2D
 	 $jugador/ranuras/ranura_prueba3]
 @onready var player_discard_slot = $jugador/ranura_descarte
 @onready var player_board_play = $jugador/cartas_en_juego
-#@onready var player_generator = $jugador/generador
+@onready var player_generator = $jugador/generador
+@onready var player_energy_bar = $jugador/Energia
 
 # Oponente IA.
 @onready var AIhand = $IA/mano
@@ -200,6 +201,8 @@ func show_next_turn(duration: float = 1.5) -> void:
 	if is_player_turn:
 		owner = "Vas tú"
 		print("Tu turno\nTurno jugador: ", is_player_turn)
+		# Recuperar energía.
+		player_energy_bar.recover_energy(5)
 	else:
 		owner = "Va tu oponente"
 		print("Turno IA\nTurno jugador: ", is_player_turn)

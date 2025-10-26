@@ -5,12 +5,12 @@ func _ready() -> void:
 	texture = preload("res://Images/test/rey.jpg")
 	max_health = 150
 	cost = 4
-	attack = 500
+	attack = 10
 	defense = 5
 	ability = {
 		"name": "Espíritu de Rey",
 		"type": "stat_mod",  # Tipo de habilidad.
-		"stat": "defense", # Stat que modifica.
+		"stat": "attack", # Stat que modifica.
 		"value": 20, # +x%.
 		"target": "allies", # Objetivo.
 		"activation": "manual" # Activación manual.

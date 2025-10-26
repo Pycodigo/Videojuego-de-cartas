@@ -31,7 +31,16 @@ func select_attack_target(target: Node):
 func _execute_attack():
 	if not attacking_card or not attack_target:
 		return
-
+	
+	var board = get_tree().current_scene
+	var energy_cost = attacking_card.cost if "cost" in attacking_card else 0
+	
+	if not board.player_energy_bar:
+		print("No existe energía.")
+	else:
+		board.player_energy_bar.consume_energy(energy_cost)
+		print("Cantidad de energía usada por ", attacking_card.card_name, " en ataque: ", energy_cost)
+	
 	# Determinar ataque
 	var atk = attacking_card.modified_attack if attacking_card.modified_attack != null else attacking_card.attack
 
@@ -63,8 +72,20 @@ func apply_ability(card: Card, ability: Dictionary):
 		print("La carta ", card.card_name, " no tiene habilidad.")
 		return
 	
-	if ability.type == "stat_mod":
-		_apply_stat_mod(card, ability)
+	var board = get_tree().current_scene
+	var energy_cost = card.cost if "cost" in card else 0
+	
+	if not board.player_energy_bar:
+		print("No existe energía.")
+	else:
+		board.player_energy_bar.consume_energy(energy_cost)
+		print("Cantidad de energía usada por ", card.card_name, " en habilidad: ", energy_cost)
+	
+	match ability.type:
+		"stat_mod":
+			_apply_stat_mod(card, ability)
+			#break
+		
 
 # Modificación de stats.
 func _apply_stat_mod(card: Panel, ability: Dictionary):
@@ -79,17 +100,20 @@ func _apply_stat_mod(card: Panel, ability: Dictionary):
 			continue
 		if not _is_target_for_ability(card, c, ability):
 			continue
-
-		if ability.stat == "attack":
-			c.modified_attack = int(c.attack * stat_change)
-			if c.attack_hover:  # Evitar errores si no existe.
-				c.attack_hover.text = "Ataque: " + str(c.attack) + " (+" + str(ability.value) + "%)"
-				_show_buff_color(c.attack_hover)
-		elif ability.stat == "defense":
-			c.modified_defense = int(c.defense * stat_change)
-			if c.defense_hover:  # Evitar errores si no existe.
-				c.defense_hover.text = "Def: " + str(c.defense) + " (+" + str(ability.value) + "%)"
-				_show_buff_color(c.defense_hover)
+		
+		match ability.stat:
+			"attack":
+				c.modified_attack = int(c.attack * stat_change)
+				if c.attack_hover:  # Evitar errores si no existe.
+					c.attack_hover.text = "Ataque: " + str(c.attack) + " (+" + str(ability.value) + "%)"
+					_show_buff_color(c.attack_hover)
+				break
+			"defense":
+				c.modified_defense = int(c.defense * stat_change)
+				if c.defense_hover:  # Evitar errores si no existe.
+					c.defense_hover.text = "Def: " + str(c.defense) + " (+" + str(ability.value) + "%)"
+					_show_buff_color(c.defense_hover)
+				break
 		
 		print("%s recibe modificación de %s por %s" % [c.card_name, ability.stat, ability.name])
 

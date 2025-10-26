@@ -1,13 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://gh77jmcl3jn3"]
+[gd_scene load_steps=6 format=3 uid="uid://gy7fak3jv1tm"]
 
-[ext_resource type="Texture2D" uid="uid://cd5ekix0xn2mm" path="res://Images/test/circulo sin fondo.png" id="1_33jjj"]
-[ext_resource type="Script" uid="uid://cmwap76ry3ggw" path="res://Scripts/generadorIA_prueba.gd" id="1_i1imr"]
-[ext_resource type="Texture2D" uid="uid://hfduhierp8ap" path="res://Images/test/circulo gris 130.png" id="1_mbqse"]
-[ext_resource type="Texture2D" uid="uid://does2cfy2kqgo" path="res://Images/test/flecha-linea.png" id="2_7w7kp"]
-[ext_resource type="Texture2D" uid="uid://ugdb10atkxmn" path="res://Images/test/circulo azul 130.png" id="2_i1imr"]
+[ext_resource type="Script" uid="uid://ejt6vy6s222r" path="res://Scripts/generador_prueba.gd" id="1_govtf"]
+[ext_resource type="Texture2D" uid="uid://hfduhierp8ap" path="res://Images/test/circulo gris 130.png" id="2_1pdtn"]
+[ext_resource type="Texture2D" uid="uid://ugdb10atkxmn" path="res://Images/test/circulo azul 130.png" id="3_am6t5"]
+[ext_resource type="Texture2D" uid="uid://cd5ekix0xn2mm" path="res://Images/test/circulo sin fondo.png" id="4_ux6uq"]
+[ext_resource type="Texture2D" uid="uid://does2cfy2kqgo" path="res://Images/test/flecha-linea.png" id="5_w7vkl"]
 
 [node name="Panel" type="Panel"]
-script = ExtResource("1_i1imr")
+script = ExtResource("1_govtf")
 
 [node name="vida" type="TextureProgressBar" parent="."]
 layout_mode = 0
@@ -20,26 +20,26 @@ max_value = 1000.0
 value = 1000.0
 rounded = true
 fill_mode = 5
-texture_under = ExtResource("1_mbqse")
-texture_progress = ExtResource("2_i1imr")
+texture_under = ExtResource("2_1pdtn")
+texture_progress = ExtResource("3_am6t5")
 tint_over = Color(0.743875, 0.0169892, 0.0194866, 1)
 
 [node name="circ" type="Sprite2D" parent="."]
 position = Vector2(62.5, 62.9812)
 scale = Vector2(0.546667, 0.551278)
-texture = ExtResource("1_33jjj")
+texture = ExtResource("4_ux6uq")
 
 [node name="agujaM" type="Sprite2D" parent="."]
 position = Vector2(63, 35)
 rotation = -1.5708
 scale = Vector2(0.125894, 0.122737)
-texture = ExtResource("2_7w7kp")
+texture = ExtResource("5_w7vkl")
 
 [node name="agujaP" type="Sprite2D" parent="."]
 position = Vector2(62, 62.1026)
 rotation = -1.5708
 scale = Vector2(0.0789565, 0.1)
-texture = ExtResource("2_7w7kp")
+texture = ExtResource("5_w7vkl")
 centered = false
 offset = Vector2(-60, -170)
 

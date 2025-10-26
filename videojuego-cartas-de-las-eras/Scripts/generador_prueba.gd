@@ -16,10 +16,10 @@ func _ready() -> void:
 	current_health_label.text = str(current_health)
 	update_health_bar()
 
-func can_attack_AIgenerator() -> bool:
+func can_attack_generator() -> bool:
 	var board = get_tree().current_scene
 	# Devuelve true solo si todos los slots tienen card_slot_cnt == 0.
-	var all_clear = board.AIcard_slots.all(func(slot):
+	var all_clear = board.player_card_slots.all(func(slot):
 		return slot.card_slot_cnt == 0
 	)
 
@@ -34,7 +34,7 @@ func _gui_input(event):
 
 func take_damage(amount: int):
 	# Si la IA aún tiene cartas en juego, el generador no puede ser dañado.
-	if not can_attack_AIgenerator():
+	if not can_attack_generator():
 		print("El generador está protegido por las cartas del enemigo.")
 		return
 	

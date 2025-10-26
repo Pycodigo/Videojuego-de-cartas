@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://ofko1ir57eo5"]
+[gd_scene load_steps=8 format=3 uid="uid://ofko1ir57eo5"]
 
 [ext_resource type="Script" uid="uid://cijetf7r5hvri" path="res://Scripts/tableroIA_prueba3.gd" id="1_uyneq"]
 [ext_resource type="PackedScene" uid="uid://6hmvo400iucc" path="res://Scenes/ranura_prueba.tscn" id="2_71r00"]
 [ext_resource type="PackedScene" uid="uid://bvtjofq7sewju" path="res://Scenes/baraja2_prueba.tscn" id="3_uyneq"]
 [ext_resource type="PackedScene" uid="uid://cno44aedfwjf5" path="res://Scenes/barajaIA2_prueba.tscn" id="4_71r00"]
+[ext_resource type="PackedScene" uid="uid://gy7fak3jv1tm" path="res://Scenes/generador_prueba.tscn" id="4_f4eja"]
 [ext_resource type="PackedScene" uid="uid://gh77jmcl3jn3" path="res://Scenes/generadorIA_prueba.tscn" id="5_71r00"]
+[ext_resource type="PackedScene" uid="uid://cnmwp17nxpirv" path="res://Scenes/energia_prueba.tscn" id="5_l714s"]
 
 [node name="tablero" type="Node2D"]
 script = ExtResource("1_uyneq")
@@ -23,7 +25,7 @@ position = Vector2(445, 352)
 position = Vector2(634, 349)
 
 [node name="ranura_descarte" parent="jugador" instance=ExtResource("2_71r00")]
-position = Vector2(808, 85)
+position = Vector2(819, 49)
 
 [node name="mano" type="Node2D" parent="jugador"]
 position = Vector2(480, 520)
@@ -34,11 +36,23 @@ position = Vector2(865, 316)
 [node name="cartas_en_juego" type="Node2D" parent="jugador"]
 
 [node name="Panel" type="Panel" parent="jugador"]
-offset_left = 808.0
-offset_top = 84.0
-offset_right = 906.0
-offset_bottom = 207.0
+offset_left = 819.0
+offset_top = 48.0
+offset_right = 917.0
+offset_bottom = 171.0
 metadata/_edit_use_anchors_ = true
+
+[node name="generador" parent="jugador" instance=ExtResource("4_f4eja")]
+offset_left = 745.0
+offset_top = 417.0
+offset_right = 745.0
+offset_bottom = 417.0
+
+[node name="Energia" parent="jugador" instance=ExtResource("5_l714s")]
+offset_left = 178.0
+offset_top = 385.0
+offset_right = 178.0
+offset_bottom = 385.0
 
 [node name="IA" type="Node2D" parent="."]
 
@@ -54,7 +68,7 @@ position = Vector2(445, 90)
 position = Vector2(634, 80)
 
 [node name="ranura_descarte" parent="IA" instance=ExtResource("2_71r00")]
-position = Vector2(110, 395)
+position = Vector2(59, 437)
 
 [node name="mano" type="Node2D" parent="IA"]
 position = Vector2(506, 32)
@@ -65,17 +79,17 @@ position = Vector2(66, 40)
 [node name="cartas_en_juego" type="Node2D" parent="IA"]
 
 [node name="Panel" type="Panel" parent="IA"]
-offset_left = 110.0
-offset_top = 395.0
-offset_right = 208.0
-offset_bottom = 518.0
+offset_left = 59.0
+offset_top = 435.0
+offset_right = 157.0
+offset_bottom = 558.0
 metadata/_edit_use_anchors_ = true
 
 [node name="generadorIA" parent="IA" instance=ExtResource("5_71r00")]
 offset_left = 147.0
 offset_top = 94.0
-offset_right = 187.0
-offset_bottom = 134.0
+offset_right = 147.0
+offset_bottom = 94.0
 
 [node name="Button" type="Button" parent="IA"]
 offset_left = 148.0
