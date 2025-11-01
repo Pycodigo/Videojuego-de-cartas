@@ -71,7 +71,7 @@
 - [x] Hacer que cartas usen habilidades básicas.
 - [x] Crear generador de vida y energía.
 - [x] Conectarlo a la lógica de ataque y habilidades.
-- [ ] Poner límite de acciones por turno.
+- [x] Poner límite de acciones por turno.
 - [ ] Crear pantalla de victoria.
 - [ ] Crear pantalla de derrota.
 
