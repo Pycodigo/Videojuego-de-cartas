@@ -51,6 +51,8 @@ var offset = Vector2.ZERO
 var original_rotation: float = 0.0
 #Definir tamaño fijo para sprites.
 var rect_size = Vector2(140, 180)
+# Comprobar si hay algún panel de opciones abierto.
+static var card_with_open_panel: Card = null
 
 # Guardar posiciones.
 var original_position_global: Vector2
@@ -64,7 +66,7 @@ var current_slot = null
 var discarded: bool = false
 
 # Mostrar la carta.
-var is_hidden: bool = false  
+var is_hidden: bool = false 
 
 # Variable estática para controlar arrastre único
 static var card_dragged: Panel = null
@@ -163,9 +165,6 @@ func _gui_input(event):
 					in_hand = true
 				options.visible = false
 
-
-
-
 func show_options_panel():
 	if options == null:
 		return
@@ -175,14 +174,20 @@ func show_options_panel():
 		options.visible = false
 		return
 
+	# Si hay otra carta con el panel abierto, cerrar.
+	if card_with_open_panel and card_with_open_panel != self:
+		print("Cerrando panel anterior de: ", card_with_open_panel.card_name)
+		card_with_open_panel.options.visible = false
+		card_with_open_panel = null
+
+	# Mostrar este panel.
+	print("Abriendo panel de: ", card_name)
 	options.visible = true
+	card_with_open_panel = self
+
 	options.z_index = 100  # Aparece encima de todo.
-
-	# Posicionar y escalar el panel para que cubra la carta.
-	options.position = Vector2.ZERO  # Dentro del Panel de la carta, coincide con la esquina superior izquierda.
-	options.scale = self.scale   # Ajusta el tamaño del panel de opciones al tamaño de la carta.
-
-
+	options.position = Vector2.ZERO  # Dentro del Panel de la carta.
+	options.scale = self.scale       # Escala igual que la carta.
 
 func set_ready_for_drag():
 	ready_for_drag = true
@@ -396,6 +401,11 @@ func adjust_hover_position():
 
 
 func _on_attack_btn_pressed() -> void:
+	var board = get_tree().current_scene
+	if board.cnt_actions > board.max_actions:
+		print("Acciones ya gastadas para atacar. Pasa turno.")
+		return
+	
 	# Solo si está en juego y lista para atacar.
 	if not in_hand and not discarded:
 		Global.start_attack(self)
@@ -406,6 +416,11 @@ func _on_cancel_btn_pressed() -> void:
 
 
 func _on_ability_pressed() -> void:
+	var board = get_tree().current_scene
+	if board.cnt_actions > board.max_actions:
+		print("Acciones ya gastadas para usar habilidad. Pasa turno.")
+		return
+	
 	# Solo si está en juego y lista para atacar.
 	if not in_hand and not discarded:
 		if ability and ability.activation == "manual":

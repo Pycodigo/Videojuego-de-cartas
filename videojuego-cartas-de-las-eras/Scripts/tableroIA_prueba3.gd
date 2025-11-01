@@ -37,6 +37,9 @@ extends Node2D
 var turn: int = 1
 var is_player_turn: bool
 var first_player_turn_done: bool
+# Contador de acciones por turno.
+var cnt_actions: int = 1
+var max_actions: int = 3
 
 var deployment_phase: bool = true  # Fase inicial de colocar cartas.
 var last_total_angle: float = 0.0
@@ -57,6 +60,7 @@ func _ready() -> void:
 	
 	# Solo en el primer turno: decidir al azar quién empieza.
 	is_player_turn = randi() % 2 == 0
+	cnt_actions = 1
 
 # Repartir n cartas desde la baraja.
 func draw_starting_hand(n: int):
@@ -263,6 +267,9 @@ func draw_card_per_turn():
 			
 			# Poner la mano en abanico.
 			organize_hand()
+
+		print("Vuelves a tener las tres acciones.");
+		cnt_actions = 1
 	else:
 		var new_cardAI = AIdeck.draw_card()
 		if new_cardAI:

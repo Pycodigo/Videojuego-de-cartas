@@ -64,6 +64,11 @@ func _execute_attack():
 	attack_mode = false
 	attacking_card = null
 	attack_target = null
+	
+	# Gastar acción.
+	if board.cnt_actions <= board.max_actions:
+		print("Acción gastada. Te quedan ", (board.max_actions - board.cnt_actions), " acciones.")
+		board.cnt_actions += 1
 
 
 # Aplicar habilidad.
@@ -85,7 +90,11 @@ func apply_ability(card: Card, ability: Dictionary):
 		"stat_mod":
 			_apply_stat_mod(card, ability)
 			#break
-		
+	
+	# Gastar acción.
+	if board.cnt_actions <= board.max_actions:
+		print("Acción gastada. Te quedan ", (board.max_actions - board.cnt_actions), " acciones.")
+		board.cnt_actions += 1
 
 # Modificación de stats.
 func _apply_stat_mod(card: Panel, ability: Dictionary):
