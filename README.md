@@ -22,8 +22,9 @@
 <hr/>
 <ul>
   <li>Duelo rápido contra IA y/o jugador online.</li>
-<li>Campaña de Eras corta (3-4 niveles).</li>
-<li>Modo desafío con 1 o 2 reglas locas.</li>
+  <li>Campaña de Eras corta (3-4 niveles).</li>
+  <li>Modo desafío con 1 o 2 reglas locas.</li>
+  <li>Modo alocado</li>li>
   <li>Editor de mazos.</li>
 </ul>
 <br/>
@@ -68,7 +69,9 @@
 - [x] Poner sistema básico de turnos.
 - [x] Hacer que ataquen.
 - [x] Hacer que cartas usen habilidades básicas.
-- [ ] Crear generador de vida y energía.
+- [x] Crear generador de vida y energía.
+- [x] Conectarlo a la lógica de ataque y habilidades.
+- [ ] Poner límite de acciones por turno.
 - [ ] Crear pantalla de victoria.
 - [ ] Crear pantalla de derrota.
 
