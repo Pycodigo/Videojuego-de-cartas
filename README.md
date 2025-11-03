@@ -72,8 +72,26 @@
 - [x] Crear generador de vida y energía.
 - [x] Conectarlo a la lógica de ataque y habilidades.
 - [x] Poner límite de acciones por turno.
-- [ ] Crear pantalla de victoria.
-- [ ] Crear pantalla de derrota.
+- [x] Crear pantalla de victoria.
+- [x] Crear pantalla de derrota.
+
+<p><b>Medias:</b></p>
+
+- [ ] Poner, al menos, dos eras.
+- [ ] Configurar la IA básica.
+- [ ] Poner, al menos, dos efectos cualquiera de algunas cartas.
+- [ ] Poner los efectos de dichas eras.
+- [ ] Hacer otros tipos de cartas.
+- [ ] Crear más habilidades variadas.
+- [ ] Poner beneficios a las cartas correspondientes.
+- [ ] Penalizar al resto.
+- [ ] Crear editor de mazos.
+- [ ] Guardar mazos creados.
+- [ ] Guardar ajustes de la configuración.
+- [ ] Crear buscador de cartas. Filtrar por era, tipo...
+- [ ] Crear cartas con efectos variopintos.
+- [ ] Crear cartas inmunes a las eras.
+- [ ] Poner cronómetro en las partidas.
 
 
 <br/>
