@@ -39,7 +39,8 @@ var is_player_turn: bool
 var first_player_turn_done: bool
 # Contador de acciones por turno.
 var cnt_actions: int = 1
-var max_actions: int = 3
+#var max_actions: int = 3
+var max_actions: int = 999
 
 var deployment_phase: bool = true  # Fase inicial de colocar cartas.
 var last_total_angle: float = 0.0

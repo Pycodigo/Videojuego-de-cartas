@@ -1,0 +1,65 @@
+[gd_scene load_steps=2 format=3 uid="uid://ribw8ueje7nw"]
+
+[ext_resource type="Script" uid="uid://ds5q76sfoutj4" path="res://Scripts/fin_juego_prueba.gd" id="1_m2dss"]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+script = ExtResource("1_m2dss")
+
+[node name="Panel" type="Panel" parent="."]
+modulate = Color(0.00392157, 0.00392157, 0.00392157, 0)
+offset_right = 1024.0
+offset_bottom = 602.0
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = 355.0
+offset_top = 137.0
+offset_right = 673.0
+offset_bottom = 221.0
+color = Color(0.0877813, 0.240894, 1, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+offset_left = 213.0
+offset_top = 270.0
+offset_right = 813.0
+offset_bottom = 348.0
+color = Color(0.0877813, 0.240894, 1, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -413.0
+offset_top = -248.0
+offset_right = 415.0
+offset_bottom = 220.0
+theme_override_constants/separation = 60
+alignment = 1
+
+[node name="mensaje" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "Victoria"
+horizontal_alignment = 1
+
+[node name="submensaje" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Has..."
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 200
+alignment = 1
+
+[node name="registro" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Ver registro"
+
+[node name="salir" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Salir"

@@ -85,3 +85,26 @@ func update_health_bar():
 func destroy_generator():
 	print("Generador IA destruído. Fin del juego.")
 	hide()
+	if not ResourceLoader.exists("res://Scenes/fin_juego_prueba.tscn"):
+		print("ERROR: no existe la escena:", "res://Scenes/fin_juego_prueba.tscn")
+		return
+
+	var victory_scene = preload("res://Scenes/fin_juego_prueba.tscn")
+	var victory_panel = victory_scene.instantiate()
+
+	# Añadir al árbol en la raíz para asegurarnos que se vea por encima.
+	get_tree().get_root().add_child(victory_panel)
+
+	# Llamar a mostrar y conectar la señal.
+	if "show_victory" in victory_panel:
+		victory_panel.show_victory(true)
+	else:
+		print("WARNING: la escena no tiene show_victory()")
+
+	# Conectar la señal (por si quieres reaccionar desde este script)
+	if victory_panel.has_signal("victory_confirmed"):
+		victory_panel.connect("victory_confirmed", Callable(self, "_on_victory_confirmed"))
+
+func _on_victory_confirmed(result: bool) -> void:
+	print("Se recibió victory_confirmed:", result)
+	# aquí paras cualquier loop del juego, guardas puntuación, etc.
