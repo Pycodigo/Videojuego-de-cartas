@@ -11,6 +11,8 @@ class_name Card
 @export var defense: int
 @export var ability: Dictionary = {} #Diccionario que describe la habilidad.
 @export var ability_detailed: String
+@export var era_type: String
+@export var era_name: String
 
 # Estadísticas modificadas.
 var modified_attack = null
@@ -25,6 +27,7 @@ var modified_defense = null
 @onready var attack_label = $ataque
 @onready var defense_label = $defensa
 @onready var ability_label = $habilidad
+@onready var era_label = $tipo_era
 
 # Panel de información detallada.
 @onready var info_hover = $info
@@ -34,6 +37,7 @@ var modified_defense = null
 @onready var attack_hover = $info/AtaqueInfo
 @onready var defense_hover = $info/DefensaInfo
 @onready var ability_hover = $info/HabilidadInfo
+@onready var era_hover = $info/EraInfo
 
 # Opciones.
 @onready var options = $opc
@@ -89,6 +93,7 @@ func init_card():
 		front_texture.size = rect_size
 		front_texture.stretch_mode = TextureRect.STRETCH_SCALE
 	name_label.text = card_name
+	era_label.text = era_type
 	current_health = max_health
 	health_label.text = str(current_health) + " PS"
 	cost_label.text = str(cost)
@@ -99,13 +104,14 @@ func init_card():
 		ability_name = ability.name
 	ability_label.text = ability_name
 	
-	# Panel de info detallada
+	# Panel de info detallada.
 	name_hover.text = card_name
 	health_hover.text = "Vida: " + str(current_health) + "/" + str(max_health)
 	cost_hover.text = "Coste: " + str(cost)
 	attack_hover.text = "Ataque: " + str(attack)
 	defense_hover.text = "Def: " + str(defense)
 	ability_hover.text = ability_name + ":\n" + ability_detailed
+	era_hover.text = "Era: " + era_name
 	
 	# Espera un frame para asegurar que la carta está en el tablero.
 	await get_tree().process_frame

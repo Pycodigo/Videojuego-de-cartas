@@ -24,6 +24,9 @@ extends Node2D
 @onready var AIgenerator = $IA/generadorIA
 @onready var AIgeneratorbtn = $IA/Button
 
+# Era global.
+@onready var era_slot = $ranura_era_prueba
+
 # Botón para terminar turno.
 @onready var finish_turn_btn = $Finaliza
 
@@ -62,6 +65,9 @@ func _ready() -> void:
 	# Solo en el primer turno: decidir al azar quién empieza.
 	is_player_turn = randi() % 2 == 0
 	cnt_actions = 1
+	
+	era_slot.occupied = false
+	era_slot.current_era = null
 
 # Repartir n cartas desde la baraja.
 func draw_starting_hand(n: int):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://ofko1ir57eo5"]
+[gd_scene load_steps=9 format=3 uid="uid://ofko1ir57eo5"]
 
 [ext_resource type="Script" uid="uid://cijetf7r5hvri" path="res://Scripts/tableroIA_prueba3.gd" id="1_uyneq"]
 [ext_resource type="PackedScene" uid="uid://6hmvo400iucc" path="res://Scenes/ranura_prueba.tscn" id="2_71r00"]
@@ -7,9 +7,14 @@
 [ext_resource type="PackedScene" uid="uid://gy7fak3jv1tm" path="res://Scenes/generador_prueba.tscn" id="4_f4eja"]
 [ext_resource type="PackedScene" uid="uid://gh77jmcl3jn3" path="res://Scenes/generadorIA_prueba.tscn" id="5_71r00"]
 [ext_resource type="PackedScene" uid="uid://cnmwp17nxpirv" path="res://Scenes/energia_prueba.tscn" id="5_l714s"]
+[ext_resource type="PackedScene" uid="uid://cfi6eogp3e0rc" path="res://Scenes/ranura_era_prueba.tscn" id="8_f784s"]
 
 [node name="tablero" type="Node2D"]
 script = ExtResource("1_uyneq")
+
+[node name="ranura_era_prueba" parent="." instance=ExtResource("8_f784s")]
+position = Vector2(434, 332)
+rotation = -1.5708
 
 [node name="jugador" type="Node2D" parent="."]
 

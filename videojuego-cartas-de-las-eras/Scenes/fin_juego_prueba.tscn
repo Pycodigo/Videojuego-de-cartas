@@ -25,7 +25,7 @@ offset_bottom = 348.0
 color = Color(0.0877813, 0.240894, 1, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-anchors_preset = -1
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5

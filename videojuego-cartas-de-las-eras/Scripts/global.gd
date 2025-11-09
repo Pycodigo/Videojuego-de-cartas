@@ -7,6 +7,8 @@ var attack_mode: bool = false
 var attacking_card: Panel = null  # Carta que va a atacar.
 var attack_target: Panel = null   # Carta enemiga seleccionada.
 
+var active_era: Node = null
+
 func start_attack(card: Panel):
 	attack_mode = true
 	attacking_card = card
@@ -137,6 +139,97 @@ func _is_target_for_ability(source_card: Panel, target_card: Panel, ability: Dic
 		"enemy":
 			return source_card.owner != target_card.owner
 	return false
+
+# Guardar la era activa y aplicar sus efectos.
+func set_active_era(era: BaseEra) -> void:
+	if active_era:
+		remove_era_effect(active_era)
+	active_era = era
+	print("Era activa guardada en Global: ", era.name_era)
+	apply_era_effect(active_era)
+
+# Aplicar efecto de la era a todas las cartas en juego
+func apply_era_effect(era: BaseEra) -> void:
+	if not era or not era.effect:
+		return
+	var board = get_tree().current_scene
+
+	match era.effect["type"]:
+		"medieval":
+			apply_medieval_effect(era)
+
+	print("Efecto de la era aplicado: ", era.name_era)
+
+func apply_medieval_effect(era: BaseEra) -> void:
+	match era.effect["subtype"]:
+		"stat_mod":
+			apply_era_stat_mod(era)
+	
+	print("Efecto de la era aplicado: ", era.name_era)
+
+# Aplica el efecto de stats de la era a todas las cartas en juego
+func apply_era_stat_mod(era: BaseEra) -> void:
+	var board = get_tree().current_scene
+	if not board:
+		return
+	
+	var all_cards = board.player_board_play.get_children() + board.board_play.get_children()
+	
+	for card in all_cards:
+		if not (card is Card):
+			continue
+		if card.discarded or card.in_hand:
+			continue
+		
+		# Multiplicador según era
+		var multiplier: float = 1.0
+		if card.era_name == era.name_era:
+			multiplier = 1.0 + float(era.effect["value_era"]) / 100
+		else:
+			multiplier = 1.0 + float(era.effect["value_not_era"]) / 100
+
+		# Aplicar modificadores sobre stats base
+		card.modified_attack = int(card.attack * multiplier)
+		card.modified_defense = int(card.defense * multiplier)
+		
+		# Actualizar visual
+		if card.attack_hover:
+			card.attack_hover.text = "Ataque: %d (%+d%%)" % [card.attack, int(round((multiplier-1)*100))]
+			_show_buff_color(card.attack_hover)
+		if card.defense_hover:
+			card.defense_hover.text = "Def: %d (%+d%%)" % [card.defense, int(round((multiplier-1)*100))]
+			_show_buff_color(card.defense_hover)
+		
+		print("%s modificado por era %s: atk=%d, def=%d" % [card.card_name, era.name_era, card.modified_attack, card.modified_defense])
+
+
+# Retirar efecto de la era anterior.
+func remove_era_effect(era: BaseEra) -> void:
+	if not era:
+		return
+	var board = get_tree().current_scene
+	if not board:
+		return
+	
+	var all_cards = board.player_board_play.get_children() + board.board_play.get_children()
+	for card in all_cards:
+		if not (card is Card):
+			continue
+		if card.discarded or card.in_hand:
+			continue
+		
+		# Restaurar stats originales
+		card.modified_attack = card.attack
+		card.modified_defense = card.defense
+		
+		# Actualizar visual
+		if card.attack_hover:
+			card.attack_hover.text = "Ataque: %d" % card.attack
+		if card.defense_hover:
+			card.defense_hover.text = "Def: %d" % card.defense
+	
+	print("Efecto de la era retirado: ", era.name_era)
+	active_era = null
 
 # Mostrar color del bufo.
 func _show_buff_color(stat_label: Label):
