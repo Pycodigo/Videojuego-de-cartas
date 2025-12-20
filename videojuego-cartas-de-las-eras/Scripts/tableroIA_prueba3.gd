@@ -20,8 +20,9 @@ extends Node2D
 	 $IA/ranuras/ranura_prueba2,\
 	 $IA/ranuras/ranura_prueba3]
 @onready var AIdiscard_slot = $IA/ranura_descarte
-@onready var board_play = $IA/cartas_en_juego
+@onready var AIboard_play = $IA/cartas_en_juego
 @onready var AIgenerator = $IA/generadorIA
+@onready var AIenergy_bar = $IA/EnergiaIA
 @onready var AIgeneratorbtn = $IA/Button
 
 # Era global.
@@ -44,6 +45,9 @@ var first_player_turn_done: bool
 var cnt_actions: int = 1
 #var max_actions: int = 3
 var max_actions: int = 999
+# Contador de acciones del oponente por turno.
+var AIcnt_actions: int = 1
+var AImax_actions: int = 3
 
 var deployment_phase: bool = true  # Fase inicial de colocar cartas.
 var last_total_angle: float = 0.0
@@ -208,6 +212,9 @@ func show_next_turn(duration: float = 1.5) -> void:
 	# Hacer que el siguiente turno sea del contrario.
 	is_player_turn = not is_player_turn
 	
+	if Global.active_era:
+		Global.active_era.next_turn()
+	
 	var owner: String
 	if is_player_turn:
 		owner = "Vas tú"
@@ -285,8 +292,13 @@ func draw_card_per_turn():
 			new_cardAI.global_position = AIdeck.global_position  # Colocar sobre la baraja.
 			new_cardAI.original_position_global = new_cardAI.global_position # Guardar posición.
 			
+			print("Oponente vuelve a tener las tres acciones.");
+			AIcnt_actions = 1
+			
 			# Poner la mano en abanico.
 			organize_hand_AI()
+			# Hacer que la IA actúe en su turno.
+			AI_play_turn()
 
 func reset_slots_to_hand():
 	print("\n=== RESET DEBUG ===")
@@ -299,7 +311,7 @@ func reset_slots_to_hand():
 		return
 
 	# Recorrer todas las cartas que puedan estar en slots.
-	var all_cards = board_play.get_children() + player_hand.get_children()
+	var all_cards = player_board_play.get_children() + player_hand.get_children()
 	for card in all_cards:
 		# Solo cartas que realmente tienen un slot asignado y no están ya en la mano.
 		if card is Card and card.current_slot != null and not card.in_hand:
@@ -330,11 +342,11 @@ func _on_reset_btn_pressed() -> void:
 
 # Devuelve true si la IA tiene alguna carta activa en el tablero.
 func has_AI_cards_on_board() -> bool:
-	if not board_play:
+	if not AIboard_play:
 		return false
 
-	for card in board_play.get_children():
-		# Asegúrate de que las cartas IA tengan una propiedad "discarded" o "muerta"
+	for card in AIboard_play.get_children():
+		# Asegurar de que las cartas IA tengan una propiedad "discarded" o "muerta"
 		if card.is_inside_tree() and not card.discarded:
 			return true
 	return false
@@ -346,3 +358,106 @@ func _on_AIgenerator_pressed():
 		return
 	
 	Global.select_attack_target(AIgenerator)
+
+func AI_play_turn() -> void:
+	await get_tree().create_timer(0.5).timeout
+	print("\n=== TURNO IA INICIADO ===")
+	print("Acciones disponibles: ", AImax_actions)
+	print("Energía disponible: ", AIenergy_bar.AIcurrent_energy)
+
+	var attacked_cards = []  # Cartas que ya atacaron este turno
+
+	# Obtener todas las cartas de la IA que pueden atacar
+	var ai_cards = []
+	print("DEBUG: Revisando cartas en AIboard_play...")
+	print("DEBUG: AIboard_play.get_child_count() = ", AIboard_play.get_child_count())
+	for card in AIboard_play.get_children():
+		print("DEBUG: Hijo encontrado: ", card.name, " - Tipo: ", card.get_class())
+		# Cambiar de "is Card" a verificar que tenga las propiedades necesarias
+		if "card_name" in card and "discarded" in card and not card.discarded:
+			ai_cards.append(card)
+			print("  -> Añadida carta IA: ", card.card_name)
+	
+	# Obtener todas las cartas del JUGADOR disponibles como objetivo
+	var player_cards = []
+	print("DEBUG: Revisando cartas en player_board_play...")
+	print("DEBUG: player_board_play.get_child_count() = ", player_board_play.get_child_count())
+	for card in player_board_play.get_children():
+		print("DEBUG: Hijo encontrado: ", card.name, " - Tipo: ", card.get_class())
+		# Cambiar de "is Card" a verificar que tenga las propiedades necesarias
+		if "card_name" in card and "discarded" in card and "in_hand" in card and not card.discarded and not card.in_hand:
+			player_cards.append(card)
+			print("  -> Añadida carta Jugador: ", card.card_name)
+	
+	print("Cartas IA disponibles para atacar: ", ai_cards.size())
+	print("Cartas JUGADOR disponibles como objetivo: ", player_cards.size())
+
+	# Intentar atacar hasta gastar todas las acciones
+	while AIcnt_actions < AImax_actions:
+		# Seleccionar la mejor carta atacante que aún no ha atacado
+		var attacker = _choose_best_AI_attacker(ai_cards, attacked_cards)
+		
+		if not attacker:
+			print("IA: No quedan cartas para atacar")
+			break
+		
+		# Verificar si tenemos energía suficiente
+		var cost = attacker.cost if "cost" in attacker else 0
+		if AIenergy_bar.AIcurrent_energy < cost:
+			print("IA: Sin energía suficiente para ", attacker.card_name, " (necesita ", cost, ")")
+			attacked_cards.append(attacker)  # Marcarla como no disponible
+			continue
+		
+		# Elegir objetivo entre las cartas del jugador
+		var target = Global.choose_AIattack_target(player_cards)
+		
+		if not target:
+			print("IA: No hay objetivos válidos")
+			break
+		
+		print("IA: ", attacker.card_name, " (ATK:", attacker.attack, ") ataca a ", target.card_name if "card_name" in target else target.name)
+		
+		# IMPORTANTE: Ejecutar el ataque de forma síncrona
+		# Primero activar modo ataque y esperar
+		await Global.AIstart_attack(attacker)
+		# Ahora ejecutar el ataque inmediatamente (sin await para evitar que se desactive)
+		await Global.select_AIattack_target(target)
+		
+		# Marcar esta carta como que ya atacó
+		attacked_cards.append(attacker)
+		
+		# Pequeña pausa entre ataques
+		await get_tree().create_timer(0.6).timeout
+		
+		# Si gastamos todas las acciones, salir
+		if AIcnt_actions >= AImax_actions:
+			print("IA: Acciones agotadas")
+			break
+
+	print("=== TURNO IA FINALIZADO ===\n")
+	await get_tree().create_timer(0.3).timeout
+	
+	# Pasar turno al jugador
+	_on_finish_turn_btn_pressed()
+
+
+# Elige la mejor carta de la IA para atacar
+func _choose_best_AI_attacker(available_cards: Array, attacked_cards: Array) -> Panel:
+	var valid_cards = []
+	
+	# Filtrar cartas que ya atacaron
+	for card in available_cards:
+		if card not in attacked_cards:
+			valid_cards.append(card)
+	
+	if valid_cards.size() == 0:
+		return null
+	
+	# Ordenar por ataque (mayor ataque primero)
+	valid_cards.sort_custom(func(a, b): 
+		var atk_a = a.modified_attack if a.modified_attack != null else a.attack
+		var atk_b = b.modified_attack if b.modified_attack != null else b.attack
+		return atk_a > atk_b
+	)
+	
+	return valid_cards[0]

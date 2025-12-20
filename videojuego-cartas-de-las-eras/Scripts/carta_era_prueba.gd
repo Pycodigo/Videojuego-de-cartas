@@ -3,7 +3,7 @@ class_name BaseEra
 
 @export var text: String
 @export var name_era: String = "Era sin nombre"
-@export var max_turns: int = 3
+@export var max_turns: int
 @export var texture: Texture2D
 @export var effect: Dictionary = {}
 @export var effect_detailed: String = ""
@@ -49,7 +49,7 @@ var discarded: bool = false
 # Mostrar la carta.
 var is_hidden: bool = false 
 
-# Variable estática para controlar arrastre único
+# Variable estática para controlar arrastre único.
 static var card_dragged: Panel = null
 
 func _ready():
@@ -57,34 +57,35 @@ func _ready():
 	turns_left = max_turns
 	_update_visuals()
 
-# --- ACTIVACIÓN Y FINALIZACIÓN ---
+# Activar.
 func activate():
+	var board = get_tree().current_scene
+	
 	if active:
 		return
 	active = true
 	print("Era activada: ", name_era)
 	Global.set_active_era(self)
 	Global.apply_era_effect(self)
+	board.organize_hand()
 
 func inactivate():
 	if not active:
 		return
-	print("Era finalizada:", name_era)
+	print("Era finalizada: ", name_era)
 	active = false
 	Global.remove_era_effect(self)
 	discard()
 
-# --- TURNOS ---
 func next_turn():
 	if not active:
 		return
 	turns_left -= 1
-	print("Era", name_era, "-> turnos restantes: ", turns_left)
+	print("Era: ", name_era, "-> turnos restantes: ", turns_left)
 	_update_visuals()
 	if turns_left <= 0:
 		inactivate()
 
-# --- DESCARTE ---
 func discard():
 	var board = get_tree().current_scene
 	var tween = create_tween()
@@ -95,8 +96,34 @@ func discard():
 		var slot = board.get_node("ranura_era_prueba")
 		slot.occupied = false
 		slot.clear_era()
+	
+	# Animación y mover a descarte
+	var discard_tween = create_tween()
+	discard_tween.tween_property(self, "scale", Vector2(0.1,0.1), 0.4)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	discard_tween.tween_property(self, "modulate:a", 0, 0.4)
+	await discard_tween.finished
+	_move_to_discard()
 
-# --- VISUAL ---
+func _move_to_discard():
+	var board = get_tree().current_scene
+	var discard_slot = board.player_discard_slot
+	if get_parent() != discard_slot:
+		get_parent().remove_child(self)
+		discard_slot.add_child(self)
+
+	# Colocarlo en el centro del slot, invisible y pequeño.
+	position = Vector2.ZERO
+	rotation_degrees = 0
+
+	# Hacer animación inversa para que aparezca.
+	var appear_tween = create_tween()
+	appear_tween.tween_property(self, "scale", Vector2.ONE, 0.4) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	appear_tween.tween_property(self, "modulate:a", 1.0, 0.4)
+	
+	board.organize_hand()
+
 func _update_visuals():
 	info_hover.visible = false
 	if texture:
@@ -114,7 +141,7 @@ func _update_visuals():
 	turns_hover.text = "Duración: " + str(max_turns) + " turnos"
 	effect_hover.text = effect_name + ":\n" + effect_detailed
 
-# --- INFO DETALLADA (hover) ---
+# Info detallada.
 func _on_mouse_entered() -> void:
 	if discarded or info_hover.visible:
 		return
@@ -158,7 +185,7 @@ func _gui_input(event):
 		print("No hay escena activa.")
 		return
 
-	# Solo permitir interacción si es turno del jugador y no estamos en despliegue de fase extra
+	# Solo permitir interacción si es turno del jugador o estamos en preparativos.
 	if not board.is_player_turn or board.deployment_phase:
 		return
 

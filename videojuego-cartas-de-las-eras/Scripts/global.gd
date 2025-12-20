@@ -3,16 +3,28 @@ extends Node
 var music = 0.0
 
 # Ataque.
-var attack_mode: bool = false
-var attacking_card: Panel = null  # Carta que va a atacar.
-var attack_target: Panel = null   # Carta enemiga seleccionada.
+var player_attack_mode: bool = false
+var AIattack_mode: bool = false
+var player_attacking_card: Panel = null  # Carta que va a atacar.
+var AIattacking_card: Panel = null  # Carta que va a atacar el oponente.
+var player_attack_target: Panel = null   # Carta enemiga seleccionada.
+var AIattack_target: Panel = null   # Carta enemiga seleccionada.
 
 var active_era: Node = null
 
 func start_attack(card: Panel):
-	attack_mode = true
-	attacking_card = card
-	attack_target = null
+	player_attack_mode = true
+	player_attacking_card = card
+	player_attack_target = null
+	# Cambiar el color de la carta a rosa en 1 segundo.
+	var tween = create_tween()
+	tween.tween_property(card.front_texture, "modulate", Color(1,0,0.5,1), 1.0)
+	await tween.finished
+	
+func AIstart_attack(card: Panel):
+	AIattack_mode = true
+	AIattacking_card = card
+	AIattack_target = null
 	# Cambiar el color de la carta a rosa en 1 segundo.
 	var tween = create_tween()
 	tween.tween_property(card.front_texture, "modulate", Color(1,0,0.5,1), 1.0)
@@ -20,57 +32,196 @@ func start_attack(card: Panel):
 
 func select_attack_target(target: Node):
 	print(">>> select_attack_target() llamado con: ", target.name)
-	print("Modo de ataque: ", attack_mode)
+	print("Modo de ataque: ", player_attack_mode)
 	
-	if not attack_mode:
+	if not player_attack_mode:
 		print("No estás en modo ataque, se ignora la selección.")
 		return
 	
-	attack_target = target
+	player_attack_target = target
 
 	_execute_attack()
 
+func select_AIattack_target(target: Node):
+	print(">>> select_AIattack_target() llamado con: ", target.name)
+	print("Modo de ataque: ", AIattack_mode)
+	
+	AIattack_mode = true
+	if not AIattack_mode:
+		print("Oponente no está en modo ataque, se ignora la selección.")
+		return
+	
+	AIattack_target = target
+
+	_execute_AIattack()
+
 func _execute_attack():
-	if not attacking_card or not attack_target:
+	if not player_attacking_card or not player_attack_target:
 		return
 	
 	var board = get_tree().current_scene
-	var energy_cost = attacking_card.cost if "cost" in attacking_card else 0
+	var energy_cost = player_attacking_card.cost if "cost" in player_attacking_card else 0
 	
 	if not board.player_energy_bar:
 		print("No existe energía.")
 	else:
 		board.player_energy_bar.consume_energy(energy_cost)
-		print("Cantidad de energía usada por ", attacking_card.card_name, " en ataque: ", energy_cost)
+		print("Cantidad de energía usada por ", player_attacking_card.card_name, " en ataque: ", energy_cost)
 	
 	# Determinar ataque
-	var atk = attacking_card.modified_attack if attacking_card.modified_attack != null else attacking_card.attack
+	var atk = player_attacking_card.modified_attack if player_attacking_card.modified_attack != null else player_attacking_card.attack
 
 	# Determinar defensa si existe.
 	var def_target = 0
-	if "modified_defense" in attack_target:
-		def_target = attack_target.modified_defense if attack_target.modified_defense != null else attack_target.defense
+	if "modified_defense" in player_attack_target:
+		def_target = player_attack_target.modified_defense if player_attack_target.modified_defense != null else player_attack_target.defense
 
 	# Calcular daño
 	var damage = max(atk - def_target, 0)
 
 	# Aplicar daño
-	attack_target.take_damage(damage)
+	player_attack_target.take_damage(damage)
 
 	# Animación de la carta atacante
 	var tween = create_tween()
-	tween.tween_property(attacking_card.front_texture, "modulate", Color(1,1,1,1), 1.0)
+	tween.tween_property(player_attacking_card.front_texture, "modulate", Color(1,1,1,1), 1.0)
 	await tween.finished
 
 	# Limpiar modo ataque
-	attack_mode = false
-	attacking_card = null
-	attack_target = null
+	player_attack_mode = false
+	player_attacking_card = null
+	player_attack_target = null
 	
 	# Gastar acción.
 	if board.cnt_actions <= board.max_actions:
 		print("Acción gastada. Te quedan ", (board.max_actions - board.cnt_actions), " acciones.")
 		board.cnt_actions += 1
+
+func _execute_AIattack():
+	if not AIattacking_card or not AIattack_target:
+		return
+	
+	var board = get_tree().current_scene
+	var energy_cost = AIattacking_card.cost if "cost" in AIattacking_card else 0
+	
+	if not board.AIenergy_bar:
+		print("No existe energía.")
+	else:
+		board.AIenergy_bar.consume_energy(energy_cost)
+		print("Cantidad de energía usada por oponente ", AIattacking_card.card_name, " en ataque: ", energy_cost)
+	
+	# Determinar ataque
+	var atk = AIattacking_card.modified_attack if AIattacking_card.modified_attack != null else AIattacking_card.attack
+
+	# Determinar defensa si existe.
+	var def_target = 0
+	if "modified_defense" in AIattack_target:
+		def_target = AIattack_target.modified_defense if AIattack_target.modified_defense != null else AIattack_target.defense
+
+	# Calcular daño
+	var damage = max(atk - def_target, 0)
+
+	# Aplicar daño
+	AIattack_target.take_damage(damage)
+
+	# Animación de la carta atacante
+	var tween = create_tween()
+	tween.tween_property(AIattacking_card.front_texture, "modulate", Color(1,1,1,1), 1.0)
+	await tween.finished
+	
+	AIattack_mode = false
+	AIattacking_card = null
+	AIattack_target = null
+	
+	# Gastar acción.
+	if board.AIcnt_actions <= board.AImax_actions:
+		print("Acción gastada. Al oponente le quedan ", (board.AImax_actions - board.AIcnt_actions), " acciones.")
+		board.AIcnt_actions += 1
+
+func choose_AIattack_target(player_cards: Array = []) -> Node:
+	var board = get_tree().current_scene
+	var targets = []
+
+	# Si se pasaron cartas del jugador, filtrar las que siguen vivas
+	if player_cards.size() > 0:
+		for card in player_cards:
+			# Verificar que la carta sigue viva y en juego
+			if "discarded" in card and not card.discarded and "in_hand" in card and not card.in_hand:
+				targets.append(card)
+	else:
+		# Fallback: buscar en player_board_play
+		for c in board.player_board_play.get_children():
+			if "card_name" in c and "discarded" in c and "in_hand" in c and not c.discarded and not c.in_hand:
+				targets.append(c)
+	
+	print("IA: Cartas enemigas encontradas: ", targets.size())
+	if targets.size() > 0:
+		for t in targets:
+			print("  - ", t.card_name if "card_name" in t else t.name)
+
+	# Si hay cartas, elegir la mejor según prioridad
+	if targets.size() > 0:
+		return _choose_best_target(targets)
+	
+	# Solo atacar el generador si NO hay cartas y puede ser atacado
+	if board.player_generator.can_attack_generator():
+		print("IA: No hay cartas enemigas, atacando generador")
+		return board.player_generator
+	
+	print("IA: No hay objetivos válidos")
+	return null
+
+
+# Sistema de priorización inteligente de objetivos
+func _choose_best_target(targets: Array) -> Node:
+	var scored_targets = []
+	
+	print("DEBUG _choose_best_target: Evaluando ", targets.size(), " objetivos")
+	for target in targets:
+		print("  - Objetivo: ", target.card_name if "card_name" in target else target.name, " | Node: ", target.name, " | Padre: ", target.get_parent().name if target.get_parent() else "sin padre")
+		var score = _calculate_target_priority(target)
+		scored_targets.append({"card": target, "score": score})
+	
+	# Ordenar por puntuación (mayor = mejor objetivo)
+	scored_targets.sort_custom(func(a, b): return a.score > b.score)
+	
+	var best = scored_targets[0].card
+	print("IA: Objetivo elegido: ", best.card_name, " (puntuación: ", scored_targets[0].score, ")")
+	print("  -> Nodo elegido: ", best.name, " | Padre: ", best.get_parent().name if best.get_parent() else "sin padre")
+	return best
+
+
+# Calcula prioridad de un objetivo (mayor = más prioritario)
+func _calculate_target_priority(target) -> float:
+	var score = 0.0
+	
+	# Verificar que tenga las propiedades necesarias
+	if not ("modified_defense" in target and "modified_attack" in target and "current_health" in target):
+		return 0.0
+	
+	var def = target.modified_defense if target.modified_defense != null else target.defense
+	var atk = target.modified_attack if target.modified_attack != null else target.attack
+	var hp = target.current_health
+	
+	# PRIORIDAD 1: Cartas que podemos matar en un golpe (+100 puntos)
+	# Nota: Necesitamos la carta atacante para calcular esto, 
+	# pero de momento priorizamos cartas con poca vida
+	if hp <= 30:
+		score += 100
+	elif hp <= 50:
+		score += 50
+	
+	# PRIORIDAD 2: Cartas con alto ataque (amenazas) (+50 puntos por cada 5 de ataque)
+	score += (atk / 5.0) * 50
+	
+	# PRIORIDAD 3: Cartas con baja defensa (más fáciles de matar) (+30 puntos base - defensa)
+	score += (30 - def)
+	
+	# PRIORIDAD 4: Cartas con poca vida restante (+10 puntos por cada 10 de vida que le falte)
+	var missing_hp = target.max_health - hp
+	score += (missing_hp / 10.0) * 10
+	
+	return score
 
 
 # Aplicar habilidad.
@@ -117,13 +268,17 @@ func _apply_stat_mod(card: Panel, ability: Dictionary):
 				c.modified_attack = int(c.attack * stat_change)
 				if c.attack_hover:  # Evitar errores si no existe.
 					c.attack_hover.text = "Ataque: " + str(c.attack) + " (+" + str(ability.value) + "%)"
+					c.attack_label.text = str((c.attack * stat_change))
 					_show_buff_color(c.attack_hover)
+					_show_buff_color(c.attack_label)
 				break
 			"defense":
 				c.modified_defense = int(c.defense * stat_change)
 				if c.defense_hover:  # Evitar errores si no existe.
 					c.defense_hover.text = "Def: " + str(c.defense) + " (+" + str(ability.value) + "%)"
+					c.defense_label.text = str((c.defense * stat_change))
 					_show_buff_color(c.defense_hover)
+					_show_buff_color(c.defense_label)
 				break
 		
 		print("%s recibe modificación de %s por %s" % [c.card_name, ability.stat, ability.name])
@@ -195,10 +350,14 @@ func apply_era_stat_mod(era: BaseEra) -> void:
 		# Actualizar visual
 		if card.attack_hover:
 			card.attack_hover.text = "Ataque: %d (%+d%%)" % [card.attack, int(round((multiplier-1)*100))]
+			card.attack_label.text = str(card.modified_attack)
 			_show_buff_color(card.attack_hover)
+			_show_buff_color(card.attack_label)
 		if card.defense_hover:
 			card.defense_hover.text = "Def: %d (%+d%%)" % [card.defense, int(round((multiplier-1)*100))]
+			card.defense_label.text = str(card.modified_defense)
 			_show_buff_color(card.defense_hover)
+			_show_buff_color(card.defense_label)
 		
 		print("%s modificado por era %s: atk=%d, def=%d" % [card.card_name, era.name_era, card.modified_attack, card.modified_defense])
 

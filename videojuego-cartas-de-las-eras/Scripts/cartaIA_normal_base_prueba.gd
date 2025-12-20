@@ -84,8 +84,8 @@ func _gui_input(event: InputEvent) -> void:
 		return
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		if Global.attack_mode:
-			if Global.attacking_card == self:
+		if Global.player_attack_mode:
+			if Global.player_attacking_card == self:
 				return
 		print("Seleccionando objetivo: ", card_name)
 		Global.select_attack_target(self)
@@ -188,10 +188,10 @@ func _move_to_discard():
 
 func _move_to_board():
 	var board = get_tree().current_scene
-	if get_parent() != board.board_play:
+	if get_parent() != board.AIboard_play:
 		var old_global = global_position
 		get_parent().remove_child(self)
-		board.board_play.add_child(self)
+		board.AIboard_play.add_child(self)
 		global_position = old_global
 	
 	# Animación de movimiento hacia el slot y rotación 0º

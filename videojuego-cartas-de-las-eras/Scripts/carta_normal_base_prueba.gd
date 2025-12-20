@@ -329,9 +329,9 @@ func snap_to_slot():
 
 func _move_to_board():
 	var board = get_tree().current_scene
-	if get_parent() != board.board_play:
+	if get_parent() != board.player_board_play:
 		get_parent().remove_child(self)
-		board.board_play.add_child(self)
+		board.player_board_play.add_child(self)
 	
 	# Incrementar contador del slot.
 	if current_slot:
