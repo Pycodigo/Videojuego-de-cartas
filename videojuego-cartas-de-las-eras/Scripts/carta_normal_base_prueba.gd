@@ -230,6 +230,19 @@ func take_damage(amount: int):
 		old_health, current_health, 0.5
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	
+	var damage_in_tween = create_tween()
+	damage_in_tween.tween_property(front_texture, "modulate", Color(1,0,0,1), 0.2)
+	await damage_in_tween.finished
+	var damage_out_tween = create_tween()
+	damage_out_tween.tween_property(front_texture, "modulate", Color(1,1,1,1), 0.2)
+	await damage_out_tween.finished
+	var damage_finish_tween = create_tween()
+	damage_finish_tween.tween_property(front_texture, "modulate", Color(1,0,0,1), 0.2)
+	await damage_finish_tween.finished
+	var finish_tween = create_tween()
+	finish_tween.tween_property(front_texture, "modulate", Color(1,1,1,1), 0.2)
+	await finish_tween.finished
+	
 	# Activar habilidad si tiene trigger "on_damage"
 	if ability and ability.activation == "auto" and ability.has("trigger") and ability.trigger == "on_damage":
 		Global.apply_ability(self, ability)

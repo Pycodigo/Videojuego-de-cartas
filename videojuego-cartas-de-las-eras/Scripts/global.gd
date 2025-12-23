@@ -46,7 +46,6 @@ func select_AIattack_target(target: Node):
 	print(">>> select_AIattack_target() llamado con: ", target.name)
 	print("Modo de ataque: ", AIattack_mode)
 	
-	AIattack_mode = true
 	if not AIattack_mode:
 		print("Oponente no está en modo ataque, se ignora la selección.")
 		return
@@ -110,7 +109,7 @@ func _execute_AIattack():
 		board.AIenergy_bar.consume_energy(energy_cost)
 		print("Cantidad de energía usada por oponente ", AIattacking_card.card_name, " en ataque: ", energy_cost)
 	
-	# Determinar ataque
+	# Determinar ataque.
 	var atk = AIattacking_card.modified_attack if AIattacking_card.modified_attack != null else AIattacking_card.attack
 
 	# Determinar defensa si existe.
@@ -118,18 +117,17 @@ func _execute_AIattack():
 	if "modified_defense" in AIattack_target:
 		def_target = AIattack_target.modified_defense if AIattack_target.modified_defense != null else AIattack_target.defense
 
-	# Calcular daño
+	# Calcular daño.
 	var damage = max(atk - def_target, 0)
 
-	# Aplicar daño
+	# Aplicar daño.
 	AIattack_target.take_damage(damage)
 
-	# Animación de la carta atacante
+	# Animación de la carta atacante.
 	var tween = create_tween()
 	tween.tween_property(AIattacking_card.front_texture, "modulate", Color(1,1,1,1), 1.0)
 	await tween.finished
 	
-	AIattack_mode = false
 	AIattacking_card = null
 	AIattack_target = null
 	
@@ -137,15 +135,18 @@ func _execute_AIattack():
 	if board.AIcnt_actions <= board.AImax_actions:
 		print("Acción gastada. Al oponente le quedan ", (board.AImax_actions - board.AIcnt_actions), " acciones.")
 		board.AIcnt_actions += 1
+	else:
+		# Evitar que la IA siga atacando.
+		AIattack_mode = false
 
 func choose_AIattack_target(player_cards: Array = []) -> Node:
 	var board = get_tree().current_scene
 	var targets = []
 
-	# Si se pasaron cartas del jugador, filtrar las que siguen vivas
+	# Si se pasaron cartas del jugador, filtrar las que siguen vivas.
 	if player_cards.size() > 0:
 		for card in player_cards:
-			# Verificar que la carta sigue viva y en juego
+			# Verificar que la carta sigue viva y en juego.
 			if "discarded" in card and not card.discarded and "in_hand" in card and not card.in_hand:
 				targets.append(card)
 	else:

@@ -4,7 +4,7 @@ func _ready() -> void:
 	card_name = "Caballo de espadas"
 	era_type = "M"
 	texture = preload("res://Images/test/caballo.jpg")
-	max_health = 120
+	max_health = 3
 	cost = 2
 	attack = 9
 	defense = 9
