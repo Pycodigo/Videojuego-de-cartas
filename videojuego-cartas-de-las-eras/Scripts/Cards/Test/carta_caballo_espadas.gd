@@ -4,20 +4,20 @@ func _ready() -> void:
 	card_name = "Caballo de espadas"
 	era_type = "M"
 	texture = preload("res://Images/test/caballo.jpg")
-	max_health = 3
+	max_health = 120
 	cost = 2
 	attack = 9
 	defense = 9
 	ability = {
-		"name": "Por el pueblo",
+		"name": "Espíritu guerrero",
 		"type": "stat_mod",  # Tipo de habilidad.
 		"stat": "defense", # Stat que modifica.
-		"value": 10, # +x%.
+		"value": 15, # +x%.
 		"target": "self", # Objetivo.
 		"activation": "auto", # Activación automática.
 		"trigger": "on_damage" # Condición para activarse.
 	}
-	ability_detailed = "Durante el próximo turno, si\nrecibe daño directo,\n+10% de defensa"
+	ability_detailed = "Durante el próximo turno, si\nrecibe daño directo,\n+15% de defensa"
 	era_name = "Era medieval"
 	
 	init_card()

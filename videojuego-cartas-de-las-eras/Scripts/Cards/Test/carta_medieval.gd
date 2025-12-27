@@ -3,8 +3,8 @@ extends BaseEra
 func _ready() -> void:
 	name_era = "Era medieval"
 	texture = preload("res://Images/test/medieval.jpg")
-	max_turns = 4
-	effect = {
+	max_turns = 2
+	details = {
 		"name": "Espíritu de hierro",
 		"type": "medieval",  # Tipo de era.
 		"subtype": "stat_mod", # Tipo de efecto.

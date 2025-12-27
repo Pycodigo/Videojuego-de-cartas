@@ -5,7 +5,7 @@ class_name BaseEra
 @export var name_era: String = "Era sin nombre"
 @export var max_turns: int
 @export var texture: Texture2D
-@export var effect: Dictionary = {}
+@export var details: Dictionary = {}
 @export var effect_detailed: String = ""
 
 # Estados.
@@ -66,7 +66,6 @@ func activate():
 	active = true
 	print("Era activada: ", name_era)
 	Global.set_active_era(self)
-	Global.apply_era_effect(self)
 	board.organize_hand()
 
 func inactivate():
@@ -133,8 +132,8 @@ func _update_visuals():
 	card_label.text = text
 	
 	var effect_name = ""
-	if effect and effect.has("name"):
-		effect_name = effect["name"]
+	if details and details.has("name"):
+		effect_name = details["name"]
 	effect_label.text = effect_name
 	
 	name_hover.text = name_era

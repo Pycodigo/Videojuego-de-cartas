@@ -3,6 +3,8 @@ extends Panel
 # Atributos de la carta.
 @export var text: String
 @export var card_name: String
+@export var era_type: String
+@export var era_name: String
 @export var texture: Texture2D
 @export var max_health: int
 @export var cost: int
@@ -24,6 +26,7 @@ var modified_defense = null
 @onready var attack_label = $ataque
 @onready var defense_label = $defensa
 @onready var ability_label = $habilidad
+@onready var era_label = $tipo_era
 
 
 # Diferencia entre el ratón y la posición de la carta al iniciar el arrastre.
@@ -67,6 +70,7 @@ func init_card():
 		front_texture.size = rect_size
 		front_texture.stretch_mode = TextureRect.STRETCH_SCALE
 	name_label.text = card_name
+	era_label.text = era_type
 	current_health = max_health
 	health_label.text = str(current_health) + " PS"
 	cost_label.text = str(cost)
@@ -283,6 +287,7 @@ func update_card_visible():
 		front_texture.visible = false
 		hidden_texture.visible = true
 		card_label.visible = false
+		era_label.visible = false
 		name_label.visible = false
 		health_label.visible = false
 		cost_label.visible = false
@@ -293,6 +298,7 @@ func update_card_visible():
 		front_texture.visible = true
 		hidden_texture.visible = false
 		card_label.visible = true
+		era_label.visible = true
 		name_label.visible = true
 		health_label.visible = true
 		cost_label.visible = true

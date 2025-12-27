@@ -353,7 +353,7 @@ func has_AI_cards_on_board() -> bool:
 
 func _on_AIgenerator_pressed():
 	print("Generador presionado -> Llamando a select_attack_target")
-	if not Global.attack_mode:
+	if not Global.player_attack_mode:
 		print("No estás en modo ataque.")
 		return
 	

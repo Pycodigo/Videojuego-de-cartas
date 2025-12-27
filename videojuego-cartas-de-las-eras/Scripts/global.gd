@@ -67,26 +67,35 @@ func _execute_attack():
 		board.player_energy_bar.consume_energy(energy_cost)
 		print("Cantidad de energía usada por ", player_attacking_card.card_name, " en ataque: ", energy_cost)
 	
-	# Determinar ataque
-	var atk = player_attacking_card.modified_attack if player_attacking_card.modified_attack != null else player_attacking_card.attack
+	# Determinar ataque.
+	var atk = player_attacking_card.attack
+	if "modified_attack" in player_attacking_card and player_attacking_card.modified_attack != null:
+		atk = player_attacking_card.modified_attack
 
-	# Determinar defensa si existe.
+	# Determinar defensa del objetivo si existe.
 	var def_target = 0
-	if "modified_defense" in player_attack_target:
-		def_target = player_attack_target.modified_defense if player_attack_target.modified_defense != null else player_attack_target.defense
+	if "defense" in player_attack_target:
+		def_target = player_attack_target.defense
+		if "modified_defense" in player_attack_target and player_attack_target.modified_defense != null:
+			def_target = player_attack_target.modified_defense
 
-	# Calcular daño
+	# Calcular daño.
 	var damage = max(atk - def_target, 0)
+	print("Ataque: %s (%d atk) -> %s (%d def) = %d daño" % [
+		player_attacking_card.card_name, atk,
+		player_attack_target.card_name if "card_name" in player_attack_target else "objetivo",
+		def_target, damage
+	])
 
-	# Aplicar daño
+	# Aplicar daño.
 	player_attack_target.take_damage(damage)
 
-	# Animación de la carta atacante
+	# Animación de la carta atacante.
 	var tween = create_tween()
 	tween.tween_property(player_attacking_card.front_texture, "modulate", Color(1,1,1,1), 1.0)
 	await tween.finished
 
-	# Limpiar modo ataque
+	# Limpiar modo ataque.
 	player_attack_mode = false
 	player_attacking_card = null
 	player_attack_target = null
@@ -110,15 +119,24 @@ func _execute_AIattack():
 		print("Cantidad de energía usada por oponente ", AIattacking_card.card_name, " en ataque: ", energy_cost)
 	
 	# Determinar ataque.
-	var atk = AIattacking_card.modified_attack if AIattacking_card.modified_attack != null else AIattacking_card.attack
+	var atk = AIattacking_card.attack
+	if "modified_attack" in AIattacking_card and AIattacking_card.modified_attack != null:
+		atk = AIattacking_card.modified_attack
 
-	# Determinar defensa si existe.
+	# Determinar defensa del objetivo si existe.
 	var def_target = 0
-	if "modified_defense" in AIattack_target:
-		def_target = AIattack_target.modified_defense if AIattack_target.modified_defense != null else AIattack_target.defense
+	if "defense" in AIattack_target:
+		def_target = AIattack_target.defense
+		if "modified_defense" in AIattack_target and AIattack_target.modified_defense != null:
+			def_target = AIattack_target.modified_defense
 
 	# Calcular daño.
 	var damage = max(atk - def_target, 0)
+	print("Ataque IA: %s (%d atk) -> %s (%d def) = %d daño" % [
+		AIattacking_card.card_name, atk,
+		AIattack_target.card_name if "card_name" in AIattack_target else "objetivo",
+		def_target, damage
+	])
 
 	# Aplicar daño.
 	AIattack_target.take_damage(damage)
@@ -150,7 +168,7 @@ func choose_AIattack_target(player_cards: Array = []) -> Node:
 			if "discarded" in card and not card.discarded and "in_hand" in card and not card.in_hand:
 				targets.append(card)
 	else:
-		# Fallback: buscar en player_board_play
+		# Buscar en los slots del jugador.
 		for c in board.player_board_play.get_children():
 			if "card_name" in c and "discarded" in c and "in_hand" in c and not c.discarded and not c.in_hand:
 				targets.append(c)
@@ -160,67 +178,75 @@ func choose_AIattack_target(player_cards: Array = []) -> Node:
 		for t in targets:
 			print("  - ", t.card_name if "card_name" in t else t.name)
 
-	# Si hay cartas, elegir la mejor según prioridad
+	# Si hay cartas, elegir la mejor según prioridad.
 	if targets.size() > 0:
 		return _choose_best_target(targets)
 	
-	# Solo atacar el generador si NO hay cartas y puede ser atacado
+	# Solo atacar el generador si no hay cartas y puede ser atacado.
 	if board.player_generator.can_attack_generator():
-		print("IA: No hay cartas enemigas, atacando generador")
+		print("IA: No hay cartas enemigas, atacando generador.")
 		return board.player_generator
 	
 	print("IA: No hay objetivos válidos")
 	return null
 
 
-# Sistema de priorización inteligente de objetivos
+# Sistema de priorización inteligente de objetivos.
 func _choose_best_target(targets: Array) -> Node:
 	var scored_targets = []
 	
-	print("DEBUG _choose_best_target: Evaluando ", targets.size(), " objetivos")
+	print("Mejor objetivo: Evaluando ", targets.size(), " objetivos...")
 	for target in targets:
 		print("  - Objetivo: ", target.card_name if "card_name" in target else target.name, " | Node: ", target.name, " | Padre: ", target.get_parent().name if target.get_parent() else "sin padre")
 		var score = _calculate_target_priority(target)
 		scored_targets.append({"card": target, "score": score})
 	
-	# Ordenar por puntuación (mayor = mejor objetivo)
+	# Ordenar por puntuación (mayor = mejor objetivo).
 	scored_targets.sort_custom(func(a, b): return a.score > b.score)
 	
 	var best = scored_targets[0].card
-	print("IA: Objetivo elegido: ", best.card_name, " (puntuación: ", scored_targets[0].score, ")")
+	print("IA: Objetivo elegido: ", best.card_name, " (mejor puntuación: ", scored_targets[0].score, ")")
 	print("  -> Nodo elegido: ", best.name, " | Padre: ", best.get_parent().name if best.get_parent() else "sin padre")
 	return best
 
 
-# Calcula prioridad de un objetivo (mayor = más prioritario)
+# Calcula prioridad de un objetivo (mayor = más prioritario).
 func _calculate_target_priority(target) -> float:
 	var score = 0.0
 	
 	# Verificar que tenga las propiedades necesarias
-	if not ("modified_defense" in target and "modified_attack" in target and "current_health" in target):
+	if not ("defense" in target and "attack" in target and "current_health" in target):
 		return 0.0
 	
-	var def = target.modified_defense if target.modified_defense != null else target.defense
-	var atk = target.modified_attack if target.modified_attack != null else target.attack
+	var def = target.defense
+	if "modified_defense" in target and target.modified_defense != null:
+		def = target.modified_defense
+	
+	var atk = target.attack
+	if "modified_attack" in target and target.modified_attack != null:
+		atk = target.modified_attack
+	
 	var hp = target.current_health
+	var max_hp = target.max_health if "max_health" in target else hp
 	
-	# PRIORIDAD 1: Cartas que podemos matar en un golpe (+100 puntos)
-	# Nota: Necesitamos la carta atacante para calcular esto, 
-	# pero de momento priorizamos cartas con poca vida
-	if hp <= 30:
-		score += 100
-	elif hp <= 50:
+	# Prioridad 1: Cartas con alto ataque (amenazas).
+	score += (atk / 2.0) * 15  # Más puntos por ataque alto.
+	
+	# Prioridad 2: Cartas con baja defensa (fáciles de matar).
+	score += max(0, 15 - def) * 8  # Mucho peso a baja defensa.
+	
+	# Prioridad 3: Cartas muy dañadas que podemos rematar.
+	var hp_percent = (float(hp) / max_hp) * 100
+	if hp_percent <= 25:
+		score += 100  # Rematar cartas casi muertas.
+	elif hp_percent <= 50:
 		score += 50
+	elif hp_percent <= 75:
+		score += 20
 	
-	# PRIORIDAD 2: Cartas con alto ataque (amenazas) (+50 puntos por cada 5 de ataque)
-	score += (atk / 5.0) * 50
-	
-	# PRIORIDAD 3: Cartas con baja defensa (más fáciles de matar) (+30 puntos base - defensa)
-	score += (30 - def)
-	
-	# PRIORIDAD 4: Cartas con poca vida restante (+10 puntos por cada 10 de vida que le falte)
-	var missing_hp = target.max_health - hp
-	score += (missing_hp / 10.0) * 10
+	# Prioridad 4: Penalizar cartas con mucha vida restante.
+	if hp > 100:
+		score -= 10
 	
 	return score
 
@@ -232,21 +258,23 @@ func apply_ability(card: Card, ability: Dictionary):
 		return
 	
 	var board = get_tree().current_scene
-	var energy_cost = card.cost if "cost" in card else 0
 	
-	if not board.player_energy_bar:
-		print("No existe energía.")
-	else:
-		board.player_energy_bar.consume_energy(energy_cost)
-		print("Cantidad de energía usada por ", card.card_name, " en habilidad: ", energy_cost)
+	# No consumir energía si la habilidad es automática con trigger "on_damage".
+	if not (ability.activation == "auto" and ability.has("trigger") and ability.trigger == "on_damage"):
+		var energy_cost = card.cost if "cost" in card else 0
+		
+		if not board.player_energy_bar:
+			print("No existe energía.")
+		else:
+			board.player_energy_bar.consume_energy(energy_cost)
+			print("Cantidad de energía usada por ", card.card_name, " en habilidad: ", energy_cost)
 	
 	match ability.type:
 		"stat_mod":
 			_apply_stat_mod(card, ability)
-			#break
 	
-	# Gastar acción.
-	if board.cnt_actions <= board.max_actions:
+	# Gastar acción solo si es manual.
+	if ability.activation == "manual" and board.cnt_actions <= board.max_actions:
 		print("Acción gastada. Te quedan ", (board.max_actions - board.cnt_actions), " acciones.")
 		board.cnt_actions += 1
 
@@ -254,10 +282,10 @@ func apply_ability(card: Card, ability: Dictionary):
 func _apply_stat_mod(card: Panel, ability: Dictionary):
 	var board = get_tree().current_scene
 	var stat_change = 1 + float(ability.value) / 100  # Convertir porcentaje a multiplicador.
-
-	for c in board.board_play.get_children():
+	
+	for c in board.player_board_play.get_children():
 		# Comprobar que c es una carta con las propiedades necesarias.
-		if not (c is Card):
+		if not ("card_name" in c):
 			continue
 		if c.discarded or c.in_hand:
 			continue
@@ -266,21 +294,34 @@ func _apply_stat_mod(card: Panel, ability: Dictionary):
 		
 		match ability.stat:
 			"attack":
-				c.modified_attack = int(c.attack * stat_change)
-				if c.attack_hover:  # Evitar errores si no existe.
-					c.attack_hover.text = "Ataque: " + str(c.attack) + " (+" + str(ability.value) + "%)"
-					c.attack_label.text = str((c.attack * stat_change))
+				# Usar el valor ya modificado si existe, sino el base.
+				var current_atk = c.modified_attack if c.modified_attack != null else c.attack
+				c.modified_attack = int(current_atk * stat_change)
+				
+				if "attack_hover" in c and c.attack_hover:
+					var total_percent = int(((float(c.modified_attack) / c.attack) - 1.0) * 100)
+					c.attack_hover.text = "Ataque: " + str(c.attack) + " (+" + str(total_percent) + "%)"
+					c.attack_label.text = str(c.modified_attack)
 					_show_buff_color(c.attack_hover)
 					_show_buff_color(c.attack_label)
-				break
+				elif "attack_label" in c:
+					c.attack_label.text = str(c.modified_attack)
+					_show_buff_color(c.attack_label)
+				
 			"defense":
-				c.modified_defense = int(c.defense * stat_change)
-				if c.defense_hover:  # Evitar errores si no existe.
-					c.defense_hover.text = "Def: " + str(c.defense) + " (+" + str(ability.value) + "%)"
-					c.defense_label.text = str((c.defense * stat_change))
+				# Usar el valor ya modificado si existe, sino el base.
+				var current_def = c.modified_defense if c.modified_defense != null else c.defense
+				c.modified_defense = int(current_def * stat_change)
+				
+				if "defense_hover" in c and c.defense_hover:
+					var total_percent = int(((float(c.modified_defense) / c.defense) - 1.0) * 100)
+					c.defense_hover.text = "Def: " + str(c.defense) + " (+" + str(total_percent) + "%)"
+					c.defense_label.text = str(c.modified_defense)
 					_show_buff_color(c.defense_hover)
 					_show_buff_color(c.defense_label)
-				break
+				elif "defense_label" in c:
+					c.defense_label.text = str(c.modified_defense)
+					_show_buff_color(c.defense_label)
 		
 		print("%s recibe modificación de %s por %s" % [c.card_name, ability.stat, ability.name])
 
@@ -306,61 +347,76 @@ func set_active_era(era: BaseEra) -> void:
 
 # Aplicar efecto de la era a todas las cartas en juego
 func apply_era_effect(era: BaseEra) -> void:
-	if not era or not era.effect:
+	if not era or not era.details:
 		return
 	var board = get_tree().current_scene
 
-	match era.effect["type"]:
+	match era.details["type"]:
 		"medieval":
 			apply_medieval_effect(era)
 
 	print("Efecto de la era aplicado: ", era.name_era)
 
 func apply_medieval_effect(era: BaseEra) -> void:
-	match era.effect["subtype"]:
+	match era.details["subtype"]:
 		"stat_mod":
 			apply_era_stat_mod(era)
 	
 	print("Efecto de la era aplicado: ", era.name_era)
 
-# Aplica el efecto de stats de la era a todas las cartas en juego
+# Aplica el efecto de stats de la era a todas las cartas en juego.
 func apply_era_stat_mod(era: BaseEra) -> void:
 	var board = get_tree().current_scene
 	if not board:
 		return
 	
-	var all_cards = board.player_board_play.get_children() + board.board_play.get_children()
+	# Comporbar que se pillan todas las cartas en juego.
+	print("Cartas del jugador: ", board.player_board_play.get_children())
+	print("Cartas de la IA: ", board.AIboard_play.get_children())
+	var all_cards = board.player_board_play.get_children() + board.AIboard_play.get_children()
+	print("Todas las cartas: ", all_cards)
 	
 	for card in all_cards:
-		if not (card is Card):
+		# Verificar que tenga las propiedades necesarias.
+		if not ("card_name" in card and "era_name" in card and "attack" in card and "defense" in card):
 			continue
-		if card.discarded or card.in_hand:
+		if card.discarded:
 			continue
 		
-		# Multiplicador según era
+		# Asegurar que las cartas de IA no están marcadas como "in_hand".
+		if "in_hand" in card and card.in_hand and card.get_parent() == board.AIboard_play:
+			card.in_hand = false
+		
+		# Multiplicador según era.
 		var multiplier: float = 1.0
-		if card.era_name == era.name_era:
-			multiplier = 1.0 + float(era.effect["value_era"]) / 100
+		if card.era_name.strip_edges().to_lower() == era.name_era.strip_edges().to_lower():
+			print(card.era_name)
+			multiplier = 1.0 + float(era.details["value_era"]) / 100
 		else:
-			multiplier = 1.0 + float(era.effect["value_not_era"]) / 100
+			multiplier = 1.0 + float(era.details["value_not_era"]) / 100
 
 		# Aplicar modificadores sobre stats base
 		card.modified_attack = int(card.attack * multiplier)
 		card.modified_defense = int(card.defense * multiplier)
 		
-		# Actualizar visual
-		if card.attack_hover:
-			card.attack_hover.text = "Ataque: %d (%+d%%)" % [card.attack, int(round((multiplier-1)*100))]
+		# Actualizar texto de la carta.
+		if card.attack_label:
 			card.attack_label.text = str(card.modified_attack)
-			_show_buff_color(card.attack_hover)
 			_show_buff_color(card.attack_label)
-		if card.defense_hover:
-			card.defense_hover.text = "Def: %d (%+d%%)" % [card.defense, int(round((multiplier-1)*100))]
+		
+		if card.defense_label:
 			card.defense_label.text = str(card.modified_defense)
-			_show_buff_color(card.defense_hover)
 			_show_buff_color(card.defense_label)
 		
-		print("%s modificado por era %s: atk=%d, def=%d" % [card.card_name, era.name_era, card.modified_attack, card.modified_defense])
+		# Actualizar el panel solo si existe.
+		if "attack_hover" in card and card.attack_hover:
+			card.attack_hover.text = "Ataque: %d (%+d%%)" % [card.attack, int(round((multiplier-1)*100))]
+			_show_buff_color(card.attack_hover)
+		if "defense_hover" in card and card.defense_hover:
+			card.defense_hover.text = "Def: %d (%+d%%)" % [card.defense, int(round((multiplier-1)*100))]
+			_show_buff_color(card.defense_hover)
+		
+		print("%s modificado por %s: atk=%d, def=%d" % [card.card_name, era.name_era, card.modified_attack, card.modified_defense])
 
 
 # Retirar efecto de la era anterior.
@@ -371,22 +427,38 @@ func remove_era_effect(era: BaseEra) -> void:
 	if not board:
 		return
 	
-	var all_cards = board.player_board_play.get_children() + board.board_play.get_children()
+	var all_cards = board.player_board_play.get_children() + board.AIboard_play.get_children()
 	for card in all_cards:
-		if not (card is Card):
+		# Verificar que tenga las propiedades necesarias.
+		if not ("card_name" in card and "era_name" in card and "attack" in card and "defense" in card):
 			continue
-		if card.discarded or card.in_hand:
+		if card.discarded:
 			continue
+		
+		# Asegurar que las cartas de IA no están marcadas como "in_hand".
+		if "in_hand" in card and card.in_hand and card.get_parent() == board.AIboard_play:
+			card.in_hand = false
 		
 		# Restaurar stats originales
 		card.modified_attack = card.attack
 		card.modified_defense = card.defense
 		
-		# Actualizar visual
-		if card.attack_hover:
-			card.attack_hover.text = "Ataque: %d" % card.attack
-		if card.defense_hover:
-			card.defense_hover.text = "Def: %d" % card.defense
+		# Actualizar texto de la carta.
+		if card.attack_label:
+			card.attack_label.text = str(card.attack)
+			_return_color(card.attack_label)
+		
+		if card.defense_label:
+			card.defense_label.text = str(card.modified_defense)
+			_return_color(card.defense_label)
+		
+		# Actualizar el panel solo si existe.
+		if "attack_hover" in card and card.attack_hover:
+			card.attack_hover.text = "Ataque: %d " % card.attack
+			_return_color(card.attack_hover)
+		if "defense_hover" in card and card.defense_hover:
+			card.defense_hover.text = "Def: %d " % card.defense
+			_return_color(card.defense_hover)
 	
 	print("Efecto de la era retirado: ", era.name_era)
 	active_era = null
@@ -395,3 +467,7 @@ func remove_era_effect(era: BaseEra) -> void:
 func _show_buff_color(stat_label: Label):
 	var t = create_tween()
 	t.tween_property(stat_label, "modulate", Color(0.5, 1, 0.5, 1), 0.2)
+
+func _return_color(stat_normal: Label):
+	var t = create_tween()
+	t.tween_property(stat_normal, "modulate", Color(1, 1, 1, 1), 0.2)
