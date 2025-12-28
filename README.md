@@ -77,14 +77,14 @@
 
 <p><b>Medias:</b></p>
 
-- [ ] Poner, al menos, dos eras.
-- [ ] Configurar la IA básica.
-- [ ] Poner, al menos, dos efectos cualquiera de algunas cartas.
-- [ ] Poner los efectos de dichas eras.
+- [ ] Poner, al menos, una era funcional.
+- [x] Poner beneficios a las cartas correspondientes.
+- [x] Penalizar al resto.
+- [x] Configurar la IA básica de ataque.
+- [ ] Configurar IA para habilidades.
 - [ ] Hacer otros tipos de cartas.
 - [ ] Crear más habilidades variadas.
-- [ ] Poner beneficios a las cartas correspondientes.
-- [ ] Penalizar al resto.
+- [ ] Crear los tres modos de dificultad.
 - [ ] Crear editor de mazos.
 - [ ] Guardar mazos creados.
 - [ ] Guardar ajustes de la configuración.
@@ -92,6 +92,14 @@
 - [ ] Crear cartas con efectos variopintos.
 - [ ] Crear cartas inmunes a las eras.
 - [ ] Poner cronómetro en las partidas.
+
+<p><b>DEMO:</b></p>
+
+- [ ] Conectar todas las escenas.
+- [ ] Definir un mínimo de 500 cartas (normales, objeto, habilidad...).
+- [ ] Poner dificultad fácil y normal.
+- [ ] Tener diseño artístico de las cartas, escenarios, y opciones.
+- [ ] Tener música.
 
 
 <br/>
