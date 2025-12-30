@@ -338,7 +338,7 @@ func _is_target_for_ability(source_card: Panel, target_card: Panel, ability: Dic
 	return false
 
 # Guardar la era activa y aplicar sus efectos.
-func set_active_era(era: BaseEra) -> void:
+func set_active_era(era) -> void:
 	if active_era:
 		remove_era_effect(active_era)
 	active_era = era
@@ -346,7 +346,7 @@ func set_active_era(era: BaseEra) -> void:
 	apply_era_effect(active_era)
 
 # Aplicar efecto de la era a todas las cartas en juego
-func apply_era_effect(era: BaseEra) -> void:
+func apply_era_effect(era) -> void:
 	if not era or not era.details:
 		return
 	var board = get_tree().current_scene
@@ -420,7 +420,7 @@ func apply_era_stat_mod(era: BaseEra) -> void:
 
 
 # Retirar efecto de la era anterior.
-func remove_era_effect(era: BaseEra) -> void:
+func remove_era_effect(era) -> void:
 	if not era:
 		return
 	var board = get_tree().current_scene

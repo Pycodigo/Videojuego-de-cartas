@@ -1,12 +1,10 @@
 extends Panel
-class_name BaseEra
 
 @export var text: String
 @export var name_era: String = "Era sin nombre"
 @export var max_turns: int
 @export var texture: Texture2D
 @export var details: Dictionary = {}
-@export var effect_detailed: String = ""
 
 # Estados.
 var turns_left: int = 0
@@ -17,10 +15,6 @@ var active: bool = false
 @onready var name_label = $nombre
 @onready var turns_label = $turnos
 @onready var effect_label = $efecto
-@onready var info_hover = $info
-@onready var name_hover = $info/NombreInfo
-@onready var turns_hover = $info/TurnosInfo
-@onready var effect_hover = $info/EfectoInfo
 
 var dragging := false
 var offset := Vector2.ZERO
@@ -124,7 +118,6 @@ func _move_to_discard():
 	board.organize_hand()
 
 func _update_visuals():
-	info_hover.visible = false
 	if texture:
 		texture2d.texture = texture
 	name_label.text = name_era
@@ -135,94 +128,6 @@ func _update_visuals():
 	if details and details.has("name"):
 		effect_name = details["name"]
 	effect_label.text = effect_name
-	
-	name_hover.text = name_era
-	turns_hover.text = "Duración: " + str(max_turns) + " turnos"
-	effect_hover.text = effect_name + ":\n" + effect_detailed
-
-# Info detallada.
-func _on_mouse_entered() -> void:
-	if discarded or info_hover.visible:
-		return
-	info_hover.visible = true
-	info_hover.z_index = 100
-	info_hover.modulate.a = 0
-	create_tween().tween_property(info_hover, "modulate:a", 1.0, 0.2)
-	adjust_hover_position()
-
-func _on_mouse_exited() -> void:
-	var t = create_tween()
-	t.tween_property(info_hover, "modulate:a", 0, 0.25)
-	await t.finished
-	info_hover.visible = false
-
-func adjust_hover_position():
-	if info_hover == null:
-		return
-	
-	var viewport_size = get_viewport_rect().size
-	var global_pos = get_global_mouse_position()
-	var hover_size = info_hover.size
-	
-	var new_pos = global_pos + Vector2(20, 0)
-	if new_pos.x + hover_size.x > viewport_size.x:
-		new_pos.x = global_pos.x - hover_size.x - 20
-	if new_pos.y + hover_size.y > viewport_size.y:
-		new_pos.y = viewport_size.y - hover_size.y - 10
-	if new_pos.y < 0:
-		new_pos.y = 10
-	
-	info_hover.global_position = new_pos
-
-func _gui_input(event):
-	if discarded:
-		print("Carta descartada, ignorando input.")
-		return
-
-	var board = get_tree().current_scene
-	if not board:
-		print("No hay escena activa.")
-		return
-
-	# Solo permitir interacción si es turno del jugador o estamos en preparativos.
-	if not board.is_player_turn or board.deployment_phase:
-		return
-
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			if event.pressed:
-				# Inicio de clic/arrastre.
-				print("Click iniciado en carta: ", name_era)
-				click_started = true
-				dragging = false
-				offset = global_position - get_global_mouse_position()
-				sideways()
-			else:
-				# Botón soltado.
-				print("Botón soltado en carta: ", name_era)
-				if dragging:
-					print("Carta estaba siendo arrastrada.")
-					if in_hand or board.deployment_phase:
-						print("Intentando colocar en era_slot...")
-						snap_to_era_slot()
-					else:
-						print("Carta no está en mano ni fase de despliegue, no se coloca.")
-				click_started = false
-				dragging = false
-	elif event is InputEventMouseMotion:
-		# Arrastrar mientras el clic está activo y en la mano o fase de despliegue.
-		if click_started and (in_hand or board.deployment_phase):
-			global_position = get_global_mouse_position() + offset
-			straighten()
-			if not dragging:
-				dragging = true
-				print("Carta empieza a arrastrarse: ", name_era)
-				# Liberar slot previo si existía.
-				if current_slot:
-					print("Liberando slot previo: ", current_slot.name)
-					current_slot.occupied = false
-					current_slot = null
-					in_hand = true
 
 
 # Intentar colocar la carta en el slot de era.

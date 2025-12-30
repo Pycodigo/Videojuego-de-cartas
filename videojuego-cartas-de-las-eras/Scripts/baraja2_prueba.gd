@@ -21,8 +21,19 @@ func _ready():
 # Construir la baraja.
 func build_deck():
 	cards.clear()
-	for i in range(max_cards):
-		# Seleccionar tipo de carta
+	
+	# Añadir al menos una carta normal.
+	var normal_cards = [
+		card_scenes[0], 
+		card_scenes[1]
+	]
+	var first_card_scene = normal_cards[randi() % normal_cards.size()]
+	var first_card = first_card_scene.instantiate()
+	first_card.text = "1"
+	cards.append(first_card)
+	
+	for i in range(1, max_cards):
+		# Seleccionar tipo de carta.
 		var scene = card_scenes[randi() % card_scenes.size()]
 		var card = scene.instantiate()
 		card.text = str(i + 1)

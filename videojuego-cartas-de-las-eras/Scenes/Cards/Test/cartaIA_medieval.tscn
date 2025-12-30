@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://c4ipmhqvcur7v"]
+
+[ext_resource type="PackedScene" uid="uid://cebcdlg0dmy4w" path="res://Scenes/cartaIA_era_prueba.tscn" id="1_ksrkc"]
+[ext_resource type="Script" uid="uid://c3exxdb1fbqfb" path="res://Scripts/Cards/Test/cartaIA_medieval.gd" id="2_ett7u"]
+[ext_resource type="Texture2D" uid="uid://4ld0djnn1wog" path="res://Images/test/medieval.jpg" id="3_hvn8d"]
+
+[node name="Carta" instance=ExtResource("1_ksrkc")]
+script = ExtResource("2_ett7u")
+
+[node name="textura_carta" parent="." index="0"]
+offset_left = 1.0
+offset_top = -1.0
+offset_right = 141.0
+offset_bottom = 179.0
+texture = ExtResource("3_hvn8d")
+expand_mode = 1

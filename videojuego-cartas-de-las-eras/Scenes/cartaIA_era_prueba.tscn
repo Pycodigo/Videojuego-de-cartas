@@ -1,0 +1,90 @@
+[gd_scene load_steps=3 format=3 uid="uid://cebcdlg0dmy4w"]
+
+[ext_resource type="Script" uid="uid://br7ppdwawnihl" path="res://Scripts/cartaIA_era_prueba.gd" id="1_cdx6t"]
+[ext_resource type="Texture2D" uid="uid://q2oro1lhk423" path="res://Images/test/baseball-card.png" id="2_8pe4u"]
+
+[node name="Carta" type="Panel"]
+custom_minimum_size = Vector2(120, 180)
+offset_right = 40.0
+offset_bottom = 40.0
+pivot_offset = Vector2(50, 120)
+script = ExtResource("1_cdx6t")
+text = null
+name_era = null
+max_turns = null
+details = null
+
+[node name="textura_carta" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(140, 180)
+layout_mode = 0
+offset_left = -15.0
+offset_right = 120.0
+offset_bottom = 120.0
+texture = ExtResource("2_8pe4u")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.195
+anchor_top = 0.4
+anchor_right = 1.195
+anchor_bottom = 0.4
+offset_left = -4.50001
+offset_top = -11.0
+offset_right = 4.49999
+offset_bottom = 11.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 15
+text = "1"
+
+[node name="nombre" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.25
+anchor_right = 0.5
+anchor_bottom = 0.25
+offset_left = -40.0
+offset_top = -11.0
+offset_right = 20.0
+offset_bottom = 11.0
+theme_override_colors/font_color = Color(0.776641, 0.449548, 0.0605862, 1)
+theme_override_colors/font_shadow_color = Color(0.410155, 0.238639, 0.309087, 1)
+theme_override_font_sizes/font_size = 15
+text = "Nombre"
+
+[node name="efecto" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4
+anchor_top = 0.5
+anchor_right = 0.4
+anchor_bottom = 0.5
+offset_left = -35.0
+offset_top = -11.0
+offset_right = 25.0
+offset_bottom = 11.0
+theme_override_colors/font_color = Color(0.285741, 0.634827, 0.163288, 1)
+theme_override_colors/font_shadow_color = Color(0.0038547, 0.161983, 0.735585, 1)
+theme_override_font_sizes/font_size = 15
+text = "Efecto"
+
+[node name="turnos" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.08
+anchor_top = 0.112
+anchor_right = 0.08
+anchor_bottom = 0.112
+offset_left = -2.0
+offset_top = -15.44
+offset_right = 10.0
+offset_bottom = 12.56
+theme_override_colors/font_color = Color(0, 0.653731, 0.22001, 1)
+theme_override_colors/font_shadow_color = Color(0.0460029, 0.283837, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "4"
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
