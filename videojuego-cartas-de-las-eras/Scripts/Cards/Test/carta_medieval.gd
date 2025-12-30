@@ -3,7 +3,7 @@ extends BaseEra
 func _ready() -> void:
 	name_era = "Era medieval"
 	texture = preload("res://Images/test/medieval.jpg")
-	max_turns = 2
+	max_turns = 4
 	details = {
 		"name": "Espíritu de hierro",
 		"type": "medieval",  # Tipo de era.

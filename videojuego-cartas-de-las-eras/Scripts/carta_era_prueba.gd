@@ -196,7 +196,7 @@ func _gui_input(event):
 				click_started = true
 				dragging = false
 				offset = global_position - get_global_mouse_position()
-				straighten()
+				sideways()
 			else:
 				# Botón soltado.
 				print("Botón soltado en carta: ", name_era)
@@ -210,13 +210,14 @@ func _gui_input(event):
 				click_started = false
 				dragging = false
 	elif event is InputEventMouseMotion:
-		# Arrastrar mientras el clic está activo y en la mano o fase de despliegue
+		# Arrastrar mientras el clic está activo y en la mano o fase de despliegue.
 		if click_started and (in_hand or board.deployment_phase):
 			global_position = get_global_mouse_position() + offset
+			straighten()
 			if not dragging:
 				dragging = true
 				print("Carta empieza a arrastrarse: ", name_era)
-				# Liberar slot previo si existía
+				# Liberar slot previo si existía.
 				if current_slot:
 					print("Liberando slot previo: ", current_slot.name)
 					current_slot.occupied = false
@@ -228,24 +229,14 @@ func _gui_input(event):
 func snap_to_era_slot():
 	var board = get_tree().current_scene
 	if not board:
-		print("No hay tablero.")
 		return
 
 	var slot = board.era_slot
 	var dist = global_position.distance_to(slot.global_position)
 
-	print("Intentando colocar en era_slot: ", slot.name)
-	print("Distancia a slot: ", dist)
-	print("Slot ocupado: ", slot.occupied)
-	print("Carta en mano: ", in_hand)
-	print("Carta posición global: ", global_position)
-	print("Slot posición global: ", slot.global_position)
-
 	if dist < 200:
-		print("Carta lo suficientemente cerca para colocarse en slot: ", slot.name)
-
+		# Si hay otra era, descartar.
 		if slot.occupied and slot.current_era and slot.current_era != self:
-			print("Slot ya ocupado, descartando era anterior: ", slot.current_era.name_era)
 			slot.current_era.discard()
 
 		in_hand = false
@@ -253,22 +244,23 @@ func snap_to_era_slot():
 		slot.occupied = true
 		slot.current_era = self
 
-		# Asegurar que la carta es hija del mismo nodo que el slot para evitar desplazamiento
+		# Conservar posición global al reparentar.
+		var saved_global_pos := global_position
+
 		if get_parent() != slot.get_parent():
 			get_parent().remove_child(self)
 			slot.get_parent().add_child(self)
+			global_position = saved_global_pos
 
-		print("Animando carta a la posición del slot.")
-		var target_position = slot.position + Vector2(30, -150)
-		var tween = create_tween()
-		tween.tween_property(self, "position", target_position, 0.25)
+		# Animar usando posición global
+		var target_global_pos = slot.global_position + Vector2(30, -150)
+		var tween := create_tween()
+		tween.tween_property(self, "global_position", target_global_pos, 0.25)
 		tween.tween_property(self, "rotation_degrees", -90, 0.25)
 		await tween.finished
 
 		activate()
 	else:
-		print("Carta no lo suficientemente cerca del slot.")
-		print("Distancia requerida < 200, distancia actual: ", dist)
 		in_hand = true
 		restore_rotation()
 		return_to_hand()
@@ -276,9 +268,8 @@ func snap_to_era_slot():
 	board.update_finish_turn_btn()
 
 
-
 # Animar la carta a menos noventa grados de rotación cuando se arrastra.
-func straighten(duration: float = 0.2):
+func sideways(duration: float = 0.2):
 	if not ready_for_drag:
 		return
 	if not is_dragged:
@@ -291,6 +282,11 @@ func restore_rotation(duration: float = 0.2):
 	if is_dragged:
 		is_dragged = false
 		create_tween().tween_property(self, "rotation_degrees", original_rotation, duration)
+
+# Poner a 0º (recto) al arrastrar.
+func straighten(duration: float = 0.2):
+	create_tween().tween_property(self, "rotation_degrees", 0, duration)
+
 
 func return_to_hand():
 	# Liberar slot anterior si estaba en uno.
