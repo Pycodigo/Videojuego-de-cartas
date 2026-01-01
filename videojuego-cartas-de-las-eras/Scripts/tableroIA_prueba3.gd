@@ -224,6 +224,8 @@ func show_next_turn(duration: float = 1.5) -> void:
 	else:
 		owner = "Va tu oponente"
 		print("Turno IA\nTurno jugador: ", is_player_turn)
+		# Recuperar energía.
+		AIenergy_bar.recover_energy(5)
 	turn_label.text = "Turno " + str(turn)
 	turn_owner.text = owner
 	turn_label.visible = true

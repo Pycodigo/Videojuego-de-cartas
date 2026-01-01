@@ -1,5 +1,7 @@
 extends Panel
 
+signal energy_empty
+
 @onready var energy_bar = $ProgressBar
 @onready var current_energy_label = $Label
 
@@ -15,10 +17,6 @@ func _ready() -> void:
 
 # Restar energía al usar un ataque o habilidad.
 func consume_energy(amount: int):
-	if current_energy < amount:
-		print("No tienes suficiente energía.")
-		return
-	
 	current_energy = clamp(current_energy - amount, 0, max_energy)
 	update_energy_bar()
 
@@ -49,3 +47,4 @@ func update_energy_bar():
 	if current_energy <= 0:
 		current_energy = 0
 		print("Te has quedado sin energía.")
+		emit_signal("energy_empty")

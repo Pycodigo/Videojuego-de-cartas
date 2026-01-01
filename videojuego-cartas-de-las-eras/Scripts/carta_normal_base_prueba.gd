@@ -424,6 +424,9 @@ func _on_attack_btn_pressed() -> void:
 	if board.cnt_actions > board.max_actions:
 		print("Acciones ya gastadas para atacar. Pasa turno.")
 		return
+	if cost > board.player_energy_bar.current_energy:
+		print("Energía insuficiente. Recupérala o pasa turno.")
+		return
 	
 	# Solo si está en juego y lista para atacar.
 	if not in_hand and not discarded:
@@ -438,6 +441,9 @@ func _on_ability_pressed() -> void:
 	var board = get_tree().current_scene
 	if board.cnt_actions > board.max_actions:
 		print("Acciones ya gastadas para usar habilidad. Pasa turno.")
+		return
+	if cost > board.player_energy_bar.current_energy:
+		print("Energía insuficiente. Recupérala o pasa turno.")
 		return
 	
 	# Solo si está en juego y lista para atacar.
