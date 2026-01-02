@@ -60,6 +60,8 @@ var health_animation: Tween = null
 
 
 func _ready():
+	# Añadir a grupo.
+	add_to_group("cartas")
 	init_card()
 
 func init_card():
@@ -238,18 +240,27 @@ func return_to_hand():
 func deploy_AI_cards():
 	var board = get_tree().current_scene
 	
-	# Esperar a que la mano termine de organizarse
+	# Esperar a que la mano termine de organizarse.
 	board.organize_hand_AI(true)
 	await get_tree().create_timer(1.2).timeout
 
 	
+	# Filtrar solo cartas normales, no las demás.
 	for card in board.AIhand.get_children():
-		if card.in_hand:
+		# Saltar otras cartas.
+		if "name_era" in card:  # Si tiene name_era, es una carta de era.
+			print("Saltando carta de era: ", card.name_era if "name_era" in card else "Era")
+			continue
+		
+		# Solo procesar cartas normales que estén en la mano.
+		if "card_name" in card and card.in_hand:
 			var slot = get_random_free_AI_slot()
 			if slot:
 				card.in_hand = false
 				card.current_slot = slot
 				slot.occupied = true
+				
+				print("IA coloca carta normal: ", card.card_name, " en slot: ", slot.name)
 				
 				# Animar carta al slot.
 				var tween = create_tween()
@@ -259,6 +270,9 @@ func deploy_AI_cards():
 				
 				# Esperar un poco antes de colocar la siguiente carta.
 				await get_tree().create_timer(0.4).timeout
+			else:
+				print("IA: No hay más slots disponibles para ", card.card_name)
+				break  # Salir si no hay más slots.
 
 # Devuelve un slot aleatorio disponible para la IA.
 func get_random_free_AI_slot():

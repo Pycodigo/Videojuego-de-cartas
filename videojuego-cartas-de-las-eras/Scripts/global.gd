@@ -339,13 +339,18 @@ func _is_target_for_ability(source_card: Panel, target_card: Panel, ability: Dic
 
 # Guardar la era activa y aplicar sus efectos.
 func set_active_era(era) -> void:
-	if active_era:
-		remove_era_effect(active_era)
+	var board = get_tree().current_scene
+	# Si ya hay una era activa, descartar antes.
+	if active_era != null:
+		print("Descartando era activa: ", active_era.name_era)
+		active_era.discard()
+	# Guardar la nueva era.
 	active_era = era
-	print("Era activa guardada en Global: ", era.name_era)
 	apply_era_effect(active_era)
+	print("Era activa ahora: ", active_era.name_era)
 
-# Aplicar efecto de la era a todas las cartas en juego
+
+# Aplicar efecto de la era a todas las cartas en juego.
 func apply_era_effect(era) -> void:
 	if not era or not era.details:
 		return
@@ -357,7 +362,7 @@ func apply_era_effect(era) -> void:
 
 	print("Efecto de la era aplicado: ", era.name_era)
 
-func apply_medieval_effect(era: BaseEra) -> void:
+func apply_medieval_effect(era) -> void:
 	match era.details["subtype"]:
 		"stat_mod":
 			apply_era_stat_mod(era)
@@ -365,7 +370,7 @@ func apply_medieval_effect(era: BaseEra) -> void:
 	print("Efecto de la era aplicado: ", era.name_era)
 
 # Aplica el efecto de stats de la era a todas las cartas en juego.
-func apply_era_stat_mod(era: BaseEra) -> void:
+func apply_era_stat_mod(era) -> void:
 	var board = get_tree().current_scene
 	if not board:
 		return

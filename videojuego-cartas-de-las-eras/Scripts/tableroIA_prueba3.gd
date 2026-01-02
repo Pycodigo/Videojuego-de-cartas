@@ -402,7 +402,25 @@ func AI_play_turn() -> void:
 		return eff_a > eff_b
 	)
 	
-	print("IA: Orden de prioridad de atacantes:")
+	# Intentar jugar una era si es conveniente.
+	if not deployment_phase and not era_slot.occupied:
+		var eras_in_hand = []
+		for card in AIhand.get_children():
+			if "name_era" in card and card.in_hand:
+				eras_in_hand.append(card)
+		
+		if eras_in_hand.size() > 0:
+			print("IA: Evaluando si jugar era...")
+			# Intentar jugar cada era hasta que una sea conveniente.
+			for era in eras_in_hand:
+				var can_play = await era.should_AI_play_era()
+				var era_played = await era.AI_play_era()
+				if era_played && can_play:
+					print("IA: Era jugada con éxito")
+					await get_tree().create_timer(0.8).timeout
+					break  # Solo jugar una era.
+	
+	print("IA: Orden de prioridad de atacantes: ")
 	for card in sorted_attackers:
 		var atk = card.modified_attack if "modified_attack" in card and card.modified_attack != null else card.attack
 		var cost = card.cost if "cost" in card else 0

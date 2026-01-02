@@ -64,14 +64,14 @@ func activate():
 	if active:
 		return
 	active = true
-	print("Era activada: ", name_era)
+	print("Era activada de oponente: ", name_era)
 	Global.set_active_era(self)
 	board.organize_hand()
 
 func inactivate():
 	if not active:
 		return
-	print("Era finalizada: ", name_era)
+	print("Era finalizada de oponente: ", name_era)
 	active = false
 	Global.remove_era_effect(self)
 	discard()
@@ -86,23 +86,35 @@ func next_turn():
 		inactivate()
 
 func discard():
+	if discarded:
+		return
+
+	discarded = true
+	in_hand = false
+
 	var board = get_tree().current_scene
-	var tween = create_tween()
-	tween.tween_property(self, "modulate:a", 0, 0.4)
-	await tween.finished
-	queue_free()
-	if board and board.has_node("ranura_era_prueba"):
-		var slot = board.get_node("ranura_era_prueba")
-		slot.occupied = false
-		slot.clear_era()
-	
-	# Animación y mover a descarte
+
+	var slot = current_slot
+	if slot:
+		# Solo actualizar card_slot_cnt si existe (slots normales).
+		if "card_slot_cnt" in slot:
+			slot.card_slot_cnt = max(slot.card_slot_cnt - 1, 0)
+			if slot.card_slot_cnt == 0:
+				slot.occupied = false
+		else:
+			# Liberar ocupación.
+			slot.occupied = false
+
+		current_slot = null
+
+	# Animación y mover a descarte.
 	var discard_tween = create_tween()
-	discard_tween.tween_property(self, "scale", Vector2(0.1,0.1), 0.4)\
-		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	discard_tween.tween_property(self, "scale", Vector2(0.1,0.1), 0.4)
 	discard_tween.tween_property(self, "modulate:a", 0, 0.4)
 	await discard_tween.finished
 	_move_to_discard()
+
+
 
 func _move_to_discard():
 	var board = get_tree().current_scene
@@ -176,7 +188,6 @@ func adjust_hover_position():
 
 func _gui_input(event):
 	if discarded:
-		print("Carta descartada, ignorando input.")
 		return
 
 	var board = get_tree().current_scene

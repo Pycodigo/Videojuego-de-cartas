@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cebcdlg0dmy4w"]
+[gd_scene load_steps=4 format=3 uid="uid://cebcdlg0dmy4w"]
 
 [ext_resource type="Script" uid="uid://br7ppdwawnihl" path="res://Scripts/cartaIA_era_prueba.gd" id="1_cdx6t"]
 [ext_resource type="Texture2D" uid="uid://q2oro1lhk423" path="res://Images/test/baseball-card.png" id="2_8pe4u"]
+[ext_resource type="Texture2D" uid="uid://dya1dyuvlsp1w" path="res://Images/test/Carta reversa.png" id="3_8pe4u"]
 
 [node name="Carta" type="Panel"]
 custom_minimum_size = Vector2(120, 180)
@@ -9,10 +10,6 @@ offset_right = 40.0
 offset_bottom = 40.0
 pivot_offset = Vector2(50, 120)
 script = ExtResource("1_cdx6t")
-text = null
-name_era = null
-max_turns = null
-details = null
 
 [node name="textura_carta" type="TextureRect" parent="."]
 custom_minimum_size = Vector2(140, 180)
@@ -21,6 +18,14 @@ offset_left = -15.0
 offset_right = 120.0
 offset_bottom = 120.0
 texture = ExtResource("2_8pe4u")
+expand_mode = 3
+
+[node name="oculto" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(140, 180)
+offset_left = 1.0
+offset_right = 141.0
+offset_bottom = 180.0
+texture = ExtResource("3_8pe4u")
 expand_mode = 3
 
 [node name="Label" type="Label" parent="."]
