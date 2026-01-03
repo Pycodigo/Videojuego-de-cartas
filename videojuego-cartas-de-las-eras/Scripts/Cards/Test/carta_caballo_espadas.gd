@@ -12,12 +12,12 @@ func _ready() -> void:
 		"name": "Espíritu guerrero",
 		"type": "stat_mod",  # Tipo de habilidad.
 		"stat": "defense", # Stat que modifica.
-		"value": 15, # +x%.
+		"value": 1, # Cantidad.
 		"target": "self", # Objetivo.
 		"activation": "auto", # Activación automática.
 		"trigger": "on_damage" # Condición para activarse.
 	}
-	ability_detailed = "Durante el próximo turno, si\nrecibe daño directo,\n+15% de defensa"
+	ability_detailed = "Durante el próximo turno, si\nrecibe daño directo,\n+1 de defensa"
 	era_name = "Era medieval"
 	
 	init_card()

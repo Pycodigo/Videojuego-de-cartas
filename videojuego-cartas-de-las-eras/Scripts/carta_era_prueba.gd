@@ -61,17 +61,20 @@ func _ready():
 func activate():
 	var board = get_tree().current_scene
 	
+	if Global.active_era and Global.active_era != self:
+		Global.remove_era_effect(Global.active_era)
+	
 	if active:
 		return
 	active = true
-	print("Era activada de oponente: ", name_era)
+	print("Era activada: ", name_era)
 	Global.set_active_era(self)
 	board.organize_hand()
 
 func inactivate():
 	if not active:
 		return
-	print("Era finalizada de oponente: ", name_era)
+	print("Era finalizada: ", name_era)
 	active = false
 	Global.remove_era_effect(self)
 	discard()
@@ -248,7 +251,7 @@ func snap_to_era_slot():
 	if dist < 200:
 		# Si hay otra era, descartar.
 		if slot.occupied and slot.current_era and slot.current_era != self:
-			slot.current_era.discard()
+			slot.current_era.inactivate()
 
 		in_hand = false
 		current_slot = slot

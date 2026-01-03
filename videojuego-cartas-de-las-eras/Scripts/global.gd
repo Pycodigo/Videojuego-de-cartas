@@ -271,7 +271,7 @@ func apply_ability(card: Card, ability: Dictionary):
 	
 	match ability.type:
 		"stat_mod":
-			_apply_stat_mod(card, ability)
+			_apply_ability_stat_mod(card, ability)
 	
 	# Gastar acción solo si es manual.
 	if ability.activation == "manual" and board.cnt_actions <= board.max_actions:
@@ -279,9 +279,9 @@ func apply_ability(card: Card, ability: Dictionary):
 		board.cnt_actions += 1
 
 # Modificación de stats.
-func _apply_stat_mod(card: Panel, ability: Dictionary):
+func _apply_ability_stat_mod(card: Panel, ability: Dictionary):
 	var board = get_tree().current_scene
-	var stat_change = 1 + float(ability.value) / 100  # Convertir porcentaje a multiplicador.
+	var stat_change = int(ability.value)  # Convertir número a uno entero.
 	
 	for c in board.player_board_play.get_children():
 		# Comprobar que c es una carta con las propiedades necesarias.
@@ -292,15 +292,14 @@ func _apply_stat_mod(card: Panel, ability: Dictionary):
 		if not _is_target_for_ability(card, c, ability):
 			continue
 		
-		match ability.stat:
+		match ability["stat"]:
 			"attack":
 				# Usar el valor ya modificado si existe, sino el base.
 				var current_atk = c.modified_attack if c.modified_attack != null else c.attack
-				c.modified_attack = int(current_atk * stat_change)
+				c.modified_attack = int(current_atk + stat_change)
 				
 				if "attack_hover" in c and c.attack_hover:
-					var total_percent = int(((float(c.modified_attack) / c.attack) - 1.0) * 100)
-					c.attack_hover.text = "Ataque: " + str(c.attack) + " (+" + str(total_percent) + "%)"
+					c.attack_hover.text = "Ataque: " + str(c.attack) + " (+" + str(c.modified_attack - c.attack) + ")"
 					c.attack_label.text = str(c.modified_attack)
 					_show_buff_color(c.attack_hover)
 					_show_buff_color(c.attack_label)
@@ -311,11 +310,33 @@ func _apply_stat_mod(card: Panel, ability: Dictionary):
 			"defense":
 				# Usar el valor ya modificado si existe, sino el base.
 				var current_def = c.modified_defense if c.modified_defense != null else c.defense
-				c.modified_defense = int(current_def * stat_change)
+				c.modified_defense = int(current_def + stat_change)
 				
 				if "defense_hover" in c and c.defense_hover:
-					var total_percent = int(((float(c.modified_defense) / c.defense) - 1.0) * 100)
-					c.defense_hover.text = "Def: " + str(c.defense) + " (+" + str(total_percent) + "%)"
+					c.defense_hover.text = "Def: " + str(c.defense) + " (+" + str(c.modified_defense - c.defense) + ")"
+					c.defense_label.text = str(c.modified_defense)
+					_show_buff_color(c.defense_hover)
+					_show_buff_color(c.defense_label)
+				elif "defense_label" in c:
+					c.defense_label.text = str(c.modified_defense)
+					_show_buff_color(c.defense_label)
+			"attack_defense":
+				# Usar el valor ya modificado si existe, sino el base.
+				var current_atk = c.modified_attack if c.modified_attack != null else c.attack
+				c.modified_attack = int(current_atk + stat_change)
+				var current_def = c.modified_defense if c.modified_defense != null else c.defense
+				c.modified_defense = int(current_def + stat_change)
+				
+				if "attack_hover" in c and c.attack_hover:
+					c.attack_hover.text = "Ataque: " + str(c.attack) + " (+" + str(c.modified_attack - c.attack) + ")"
+					c.attack_label.text = str(c.modified_attack)
+					_show_buff_color(c.attack_hover)
+					_show_buff_color(c.attack_label)
+				elif "attack_label" in c:
+					c.attack_label.text = str(c.modified_attack)
+					_show_buff_color(c.attack_label)
+				if "defense_hover" in c and c.defense_hover:
+					c.defense_hover.text = "Def: " + str(c.defense) + " (+" + str(c.modified_defense - c.defense) + ")"
 					c.defense_label.text = str(c.modified_defense)
 					_show_buff_color(c.defense_hover)
 					_show_buff_color(c.defense_label)
@@ -359,10 +380,19 @@ func apply_era_effect(era) -> void:
 	match era.details["type"]:
 		"medieval":
 			apply_medieval_effect(era)
+		"future":
+			apply_future_effect(era)
 
 	print("Efecto de la era aplicado: ", era.name_era)
 
 func apply_medieval_effect(era) -> void:
+	match era.details["subtype"]:
+		"stat_mod":
+			apply_era_stat_mod(era)
+	
+	print("Efecto de la era aplicado: ", era.name_era)
+
+func apply_future_effect(era) -> void:
 	match era.details["subtype"]:
 		"stat_mod":
 			apply_era_stat_mod(era)
@@ -392,34 +422,105 @@ func apply_era_stat_mod(era) -> void:
 		if "in_hand" in card and card.in_hand and card.get_parent() == board.AIboard_play:
 			card.in_hand = false
 		
-		# Multiplicador según era.
-		var multiplier: float = 1.0
+		# Aumento según era.
+		var sum: int
 		if card.era_name.strip_edges().to_lower() == era.name_era.strip_edges().to_lower():
-			print(card.era_name)
-			multiplier = 1.0 + float(era.details["value_era"]) / 100
+			sum = int(era.details["value_era"])
 		else:
-			multiplier = 1.0 + float(era.details["value_not_era"]) / 100
-
-		# Aplicar modificadores sobre stats base
-		card.modified_attack = int(card.attack * multiplier)
-		card.modified_defense = int(card.defense * multiplier)
+			sum = int(era.details["value_not_era"])
 		
-		# Actualizar texto de la carta.
-		if card.attack_label:
-			card.attack_label.text = str(card.modified_attack)
-			_show_buff_color(card.attack_label)
-		
-		if card.defense_label:
-			card.defense_label.text = str(card.modified_defense)
-			_show_buff_color(card.defense_label)
-		
-		# Actualizar el panel solo si existe.
-		if "attack_hover" in card and card.attack_hover:
-			card.attack_hover.text = "Ataque: %d (%+d%%)" % [card.attack, int(round((multiplier-1)*100))]
-			_show_buff_color(card.attack_hover)
-		if "defense_hover" in card and card.defense_hover:
-			card.defense_hover.text = "Def: %d (%+d%%)" % [card.defense, int(round((multiplier-1)*100))]
-			_show_buff_color(card.defense_hover)
+		match era.details["effect"]:
+			"attack":
+				# Usar el valor ya modificado si existe, sino el base.
+				var current_atk = card.modified_attack if card.modified_attack != null else card.attack
+				card.modified_attack = int(current_atk + sum)
+				card.era_modified_attack = sum
+				
+				if "attack_hover" in card and card.attack_hover:
+					if card.era_name.strip_edges().to_lower() == era.name_era.strip_edges().to_lower():
+						card.attack_hover.text = "Ataque: " + str(card.attack) + " (+" + str(card.modified_attack - card.attack) + ")"
+						_show_buff_color(card.attack_hover)
+						_show_buff_color(card.attack_label)
+					else:
+						card.attack_hover.text = "Ataque: " + str(card.attack) + " (" + str(card.modified_attack - card.attack) + ")"
+						_show_debuff_color(card.attack_hover)
+						_show_debuff_color(card.attack_label)
+					
+				elif "attack_label" in card:
+					if card.era_name.strip_edges().to_lower() == era.name_era.strip_edges().to_lower():
+						_show_buff_color(card.attack_label)
+					else:
+						_show_debuff_color(card.attack_label)
+				
+				card.attack_label.text = str(card.modified_attack)
+				
+			"defense":
+				# Usar el valor ya modificado si existe, sino el base.
+				var current_defense = card.modified_defense if card.modified_defense != null else card.defense
+				card.modified_defense = int(current_defense + sum)
+				card.era_modified_defense = sum
+				
+				if "defense_hover" in card and card.defense_hover:
+					if card.era_name.strip_edges().to_lower() == era.name_era.strip_edges().to_lower():
+						card.defense_hover.text = "Def: " + str(card.defense) + " (+" + str(card.modified_defense - card.defense) + ")"
+						_show_buff_color(card.defense_hover)
+						_show_buff_color(card.defense_label)
+					else:
+						card.defense_hover.text = "Def: " + str(card.defense) + " (" + str(card.modified_defense - card.defense) + ")"
+						_show_buff_color(card.defense_hover)
+						_show_buff_color(card.defense_label)
+					
+				elif "defense_label" in card:
+					if card.era_name.strip_edges().to_lower() == era.name_era.strip_edges().to_lower():
+						_show_buff_color(card.defense_label)
+					else:
+						_show_debuff_color(card.defense_label)
+				
+				card.defense_label.text = str(card.modified_defense)
+			"attack_defense":
+				# Usar el valor ya modificado si existe, sino el base.
+				var current_atk = card.modified_attack if card.modified_attack != null else card.attack
+				card.modified_attack = int(current_atk + sum)
+				card.era_modified_attack = sum
+				var current_defense = card.modified_defense if card.modified_defense != null else card.defense
+				card.modified_defense = int(current_defense + sum)
+				card.era_modified_defense = sum
+				
+				if "attack_hover" in card and card.attack_hover:
+					if card.era_name.strip_edges().to_lower() == era.name_era.strip_edges().to_lower():
+						card.attack_hover.text = "Ataque: " + str(card.attack) + " (+" + str(card.modified_attack - card.attack) + ")"
+						_show_buff_color(card.attack_hover)
+						_show_buff_color(card.attack_label)
+					else:
+						card.attack_hover.text = "Ataque: " + str(card.attack) + " (" + str(card.modified_attack - card.attack) + ")"
+						_show_debuff_color(card.attack_hover)
+						_show_debuff_color(card.attack_label)
+					
+				elif "attack_label" in card:
+					if card.era_name.strip_edges().to_lower() == era.name_era.strip_edges().to_lower():
+						_show_buff_color(card.attack_label)
+					else:
+						_show_debuff_color(card.attack_label)
+				
+				card.attack_label.text = str(card.modified_attack)
+				
+				if "defense_hover" in card and card.defense_hover:
+					if card.era_name.strip_edges().to_lower() == era.name_era.strip_edges().to_lower():
+						card.defense_hover.text = "Def: " + str(card.defense) + " (+" + str(card.modified_defense - card.defense) + ")"
+						_show_buff_color(card.defense_hover)
+						_show_buff_color(card.defense_label)
+					else:
+						card.defense_hover.text = "Def: " + str(card.defense) + " (" + str(card.modified_defense - card.defense) + ")"
+						_show_buff_color(card.defense_hover)
+						_show_buff_color(card.defense_label)
+					
+				elif "defense_label" in card:
+					if card.era_name.strip_edges().to_lower() == era.name_era.strip_edges().to_lower():
+						_show_buff_color(card.defense_label)
+					else:
+						_show_debuff_color(card.defense_label)
+				
+				card.defense_label.text = str(card.modified_defense)
 		
 		print("%s modificado por %s: atk=%d, def=%d" % [card.card_name, era.name_era, card.modified_attack, card.modified_defense])
 
@@ -444,34 +545,40 @@ func remove_era_effect(era) -> void:
 		if "in_hand" in card and card.in_hand and card.get_parent() == board.AIboard_play:
 			card.in_hand = false
 		
-		# Restaurar stats originales
-		card.modified_attack = card.attack
-		card.modified_defense = card.defense
-		
-		# Actualizar texto de la carta.
+		var current_atk = card.modified_attack if card.modified_attack != null else card.attack
+		var current_defense = card.modified_defense if card.modified_defense != null else card.defense
+		var current_era_atk = card.era_modified_attack if card.era_modified_attack != null else 0
+		var current_era_defense = card.era_modified_defense if card.era_modified_defense != null else 0
+		# Quitar las modificaciones de esta era.
+		card.modified_attack = current_atk - current_era_atk
+		card.modified_defense = current_defense - current_era_defense
+
+		# UI
 		if card.attack_label:
-			card.attack_label.text = str(card.attack)
+			card.attack_label.text = str(card.modified_attack)
 			_return_color(card.attack_label)
-		
+		if "attack_hover" in card:
+			card.attack_hover.text = "Ataque: " + str(card.attack)
+			_return_color(card.attack_hover)
+
 		if card.defense_label:
 			card.defense_label.text = str(card.modified_defense)
 			_return_color(card.defense_label)
-		
-		# Actualizar el panel solo si existe.
-		if "attack_hover" in card and card.attack_hover:
-			card.attack_hover.text = "Ataque: %d " % card.attack
-			_return_color(card.attack_hover)
-		if "defense_hover" in card and card.defense_hover:
-			card.defense_hover.text = "Def: %d " % card.defense
+		if "defense_hover" in card:
+			card.defense_hover.text = "Def: " + str(card.defense)
 			_return_color(card.defense_hover)
-	
-	print("Efecto de la era retirado: ", era.name_era)
+
+	print("Efecto de la era retirado correctamente:", era.name_era)
 	active_era = null
 
-# Mostrar color del bufo.
+# Mostrar color del aumento.
 func _show_buff_color(stat_label: Label):
 	var t = create_tween()
 	t.tween_property(stat_label, "modulate", Color(0.5, 1, 0.5, 1), 0.2)
+
+func _show_debuff_color(stat_label: Label):
+	var t = create_tween()
+	t.tween_property(stat_label, "modulate", Color(0.7, 1, 0.7, 1), 0.2)
 
 func _return_color(stat_normal: Label):
 	var t = create_tween()

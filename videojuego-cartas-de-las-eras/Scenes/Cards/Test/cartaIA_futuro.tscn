@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://dyw8o6mlcag1w"]
+
+[ext_resource type="PackedScene" uid="uid://cebcdlg0dmy4w" path="res://Scenes/cartaIA_era_prueba.tscn" id="1_nbg7f"]
+[ext_resource type="Script" uid="uid://dvwpecel114lo" path="res://Scripts/Cards/Test/cartaIA_futuro.gd" id="2_2f4in"]
+[ext_resource type="Texture2D" uid="uid://chuqlay1xxr62" path="res://Images/test/futuro.jpg" id="3_a4aft"]
+
+[node name="Carta" instance=ExtResource("1_nbg7f")]
+script = ExtResource("2_2f4in")
+
+[node name="textura_carta" parent="." index="0"]
+offset_left = 1.0
+offset_right = 141.0
+offset_bottom = 180.0
+texture = ExtResource("3_a4aft")
+expand_mode = 1

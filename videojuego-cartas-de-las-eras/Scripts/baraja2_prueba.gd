@@ -6,7 +6,8 @@ extends Node2D
 var card_scenes: Array = [
 	preload("res://Scenes/Cards/Test/carta_rey_espadas.tscn"),
 	preload("res://Scenes/Cards/Test/carta_caballo_espadas.tscn"),
-	preload("res://Scenes/Cards/Test/carta_medieval.tscn")
+	preload("res://Scenes/Cards/Test/carta_medieval.tscn"),
+	preload("res://Scenes/Cards/Test/carta_futuro.tscn")
 ]
 var cards: Array = []           # Cartas del mazo.
 var visual_cards: Array = []    # Sprites que se apilan en el mazo.

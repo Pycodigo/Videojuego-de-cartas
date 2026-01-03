@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bk81yp3nn4nlx"]
+
+[ext_resource type="PackedScene" uid="uid://b3lp5vwhopuep" path="res://Scenes/carta_era_prueba.tscn" id="1_qblpk"]
+[ext_resource type="Script" uid="uid://dwgvv2rtpnvig" path="res://Scripts/Cards/Test/carta_futuro.gd" id="2_qblpk"]
+[ext_resource type="Texture2D" uid="uid://chuqlay1xxr62" path="res://Images/test/futuro.jpg" id="3_a4aft"]
+
+[node name="Carta" instance=ExtResource("1_qblpk")]
+script = ExtResource("2_qblpk")
+
+[node name="textura_carta" parent="." index="0"]
+offset_left = 1.0
+offset_right = 141.0
+offset_bottom = 180.0
+texture = ExtResource("3_a4aft")
+expand_mode = 1
+
+[node name="turnos" parent="." index="4"]
+offset_left = -2.6
+offset_top = -20.16
+offset_right = 9.4
+offset_bottom = 7.84

@@ -48,6 +48,9 @@ func _ready():
 func activate():
 	var board = get_tree().current_scene
 	
+	if Global.active_era and Global.active_era != self:
+		Global.remove_era_effect(Global.active_era)
+	
 	if active:
 		return
 	active = true

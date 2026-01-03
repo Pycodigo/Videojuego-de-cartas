@@ -9,11 +9,11 @@ func _ready() -> void:
 		"type": "medieval",  # Tipo de era.
 		"subtype": "stat_mod", # Tipo de efecto.
 		"effect": "attack_defense", # Stats que modifica (en este caso).
-		"value_era": 15, # +x%.
-		"value_not_era": -15, # -x% a cartas que no sean de esa era.
+		"value_era": 1, # +cantidad.
+		"value_not_era": -1, # -cantidad a cartas que no sean de esa era.
 		"activation": "auto" # Activación automática.
 	}
-	effect_detailed = "Aumento 15% ataque y defensa\na cartas medievales.\nEfecto opuesto a las que no."
+	effect_detailed = "Aumento +1 ataque y defensa\na cartas medievales."
 	
 	_update_visuals()
 	

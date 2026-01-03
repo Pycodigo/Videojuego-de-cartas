@@ -15,6 +15,8 @@ extends Panel
 # Estadísticas modificadas.
 var modified_attack = null
 var modified_defense = null
+var era_modified_attack = null
+var era_modified_defense = null
 
 # Nodos.
 @onready var front_texture = $textura_carta

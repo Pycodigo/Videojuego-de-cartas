@@ -22,6 +22,7 @@ expand_mode = 3
 
 [node name="oculto" type="TextureRect" parent="."]
 custom_minimum_size = Vector2(140, 180)
+layout_mode = 0
 offset_left = 1.0
 offset_right = 141.0
 offset_bottom = 180.0

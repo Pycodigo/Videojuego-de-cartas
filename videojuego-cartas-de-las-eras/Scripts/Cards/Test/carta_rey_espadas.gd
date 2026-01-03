@@ -12,11 +12,11 @@ func _ready() -> void:
 		"name": "Espíritu de Rey",
 		"type": "stat_mod",  # Tipo de habilidad.
 		"stat": "attack", # Stat que modifica.
-		"value": 20, # +x%.
+		"value": 2, # Cantidad.
 		"target": "allies", # Objetivo.
 		"activation": "manual" # Activación manual.
 	}
-	ability_detailed = "El rey ofrece +20% de ataque\na sus aliados"
+	ability_detailed = "El rey ofrece +2 de ataque\na sus aliados"
 	era_name = "Era futurista"
 	
 	init_card()
