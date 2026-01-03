@@ -567,6 +567,10 @@ func remove_era_effect(era) -> void:
 		if "defense_hover" in card:
 			card.defense_hover.text = "Def: " + str(card.defense)
 			_return_color(card.defense_hover)
+		
+		card.era_modified_attack = 0
+		card.era_modified_defense = 0
+
 
 	print("Efecto de la era retirado correctamente:", era.name_era)
 	active_era = null
