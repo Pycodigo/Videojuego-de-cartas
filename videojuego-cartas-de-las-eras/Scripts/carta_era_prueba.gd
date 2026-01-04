@@ -61,10 +61,11 @@ func _ready():
 func activate():
 	var board = get_tree().current_scene
 	
-	if Global.active_era and Global.active_era != self:
-		Global.remove_era_effect(Global.active_era)
+	#if Global.active_era and Global.active_era != self:
+		#Global.remove_era_effect(Global.active_era)
 	
 	if active:
+		print("Era ya estaba activada.")
 		return
 	active = true
 	print("Era activada: ", name_era)
@@ -76,7 +77,6 @@ func inactivate():
 		return
 	print("Era finalizada: ", name_era)
 	active = false
-	Global.remove_era_effect(self)
 	discard()
 
 func next_turn():
@@ -86,6 +86,9 @@ func next_turn():
 	print("Era: ", name_era, "-> turnos restantes: ", turns_left)
 	_update_visuals()
 	if turns_left <= 0:
+		# Remover efectos ANTES de inactivar
+		Global.remove_era_effect(self)
+		Global.active_era = null
 		inactivate()
 
 func discard():
@@ -249,9 +252,24 @@ func snap_to_era_slot():
 	var dist = global_position.distance_to(slot.global_position)
 
 	if dist < 200:
-		# Si hay otra era, descartar.
+		print("Colocando era en slot: ", name_era)
+		
+		# Si hay otra era activa (puede ser del jugador o de la IA), descartarla
 		if slot.occupied and slot.current_era and slot.current_era != self:
-			slot.current_era.inactivate()
+			print("Reemplazando era anterior: ", slot.current_era.name_era)
+			var old_era = slot.current_era
+			
+			# Remover efectos y limpiar Global PRIMERO
+			Global.remove_era_effect(old_era)
+			
+			# Liberar el slot ANTES de descartar
+			slot.current_era = null
+			slot.occupied = false
+			
+			# Desactivar y descartar la era anterior
+			old_era.active = false
+			old_era.discarded = false  # Resetear por si acaso
+			old_era.discard()
 
 		in_hand = false
 		current_slot = slot

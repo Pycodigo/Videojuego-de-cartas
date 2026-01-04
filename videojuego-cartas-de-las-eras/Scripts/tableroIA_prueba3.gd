@@ -403,7 +403,7 @@ func AI_play_turn() -> void:
 	)
 	
 	# Intentar jugar una era si es conveniente.
-	if not deployment_phase and not era_slot.occupied:
+	if not deployment_phase:
 		var eras_in_hand = []
 		for card in AIhand.get_children():
 			if "name_era" in card and card.in_hand:

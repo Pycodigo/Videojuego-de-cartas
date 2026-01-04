@@ -48,8 +48,8 @@ func _ready():
 func activate():
 	var board = get_tree().current_scene
 	
-	if Global.active_era and Global.active_era != self:
-		Global.remove_era_effect(Global.active_era)
+	#if Global.active_era and Global.active_era != self:
+		#Global.remove_era_effect(Global.active_era)
 	
 	if active:
 		return
@@ -73,29 +73,36 @@ func next_turn():
 	print("Era: ", name_era, "-> turnos restantes: ", turns_left)
 	_update_visuals()
 	if turns_left <= 0:
+		# Remover efectos ANTES de inactivar
+		Global.remove_era_effect(self)
+		Global.active_era = null
 		inactivate()
 
 func discard():
 	if discarded:
+		print("Era IA ya estaba descartada: ", name_era)
 		return
 
+	print("Descartando era IA: ", name_era)
 	discarded = true
 	in_hand = false
 
 	var board = get_tree().current_scene
-
+	
+	# Guardar el slot antes de limpiarlo
 	var slot = current_slot
-	if slot:
-		# Solo actualizar card_slot_cnt si existe (slots normales).
+	current_slot = null  # Limpiar ANTES de liberar el slot
+	
+	# Solo liberar el slot si esta era sigue siendo la asignada
+	# (evita conflictos si ya hay una nueva era en el slot)
+	if slot and slot.current_era == self:
 		if "card_slot_cnt" in slot:
 			slot.card_slot_cnt = max(slot.card_slot_cnt - 1, 0)
 			if slot.card_slot_cnt == 0:
 				slot.occupied = false
 		else:
-			# Liberar ocupación.
 			slot.occupied = false
-
-		current_slot = null
+		slot.current_era = null
 
 	# Animación y mover a descarte.
 	var discard_tween = create_tween()
@@ -136,6 +143,7 @@ func _update_visuals():
 	effect_label.text = effect_name
 
 # Comprobar si la IA debería jugar la era.
+# Comprobar si la IA debería jugar la era.
 func should_AI_play_era() -> bool:
 	var board = get_tree().current_scene
 	if not board:
@@ -161,7 +169,45 @@ func should_AI_play_era() -> bool:
 	
 	print("IA: Era '", name_era, "' beneficia a ", matching_cards, "/", ai_cards.size(), " cartas (", int(benefit_percentage), "%)")
 	
-	# Solo jugar si beneficia a más del 50% de las cartas.
+	# Si hay una era activa, verificar si es del jugador y nos perjudica
+	var slot = board.era_slot
+	if slot.occupied and slot.current_era:
+		var current_era = slot.current_era
+		
+		# Verificar si la era actual NO es de la IA (es decir, es del jugador)
+		var is_enemy_era = false
+		if current_era.get_script() != self.get_script():
+			# Si es de distinto tipo de script (BaseEra vs AIEra), es enemiga
+			is_enemy_era = true
+		elif current_era != self:
+			# Si es del mismo tipo pero no es esta misma era, también es enemiga
+			is_enemy_era = true
+		
+		if is_enemy_era:
+			var enemy_era_name = current_era.name_era if "name_era" in current_era else ""
+			print("IA: Detectada era enemiga activa: '", enemy_era_name, "'")
+			
+			# Si la era enemiga es LA MISMA que la que queremos jugar, no tiene sentido reemplazarla
+			if enemy_era_name.strip_edges().to_lower() == name_era.strip_edges().to_lower():
+				print("IA: La era enemiga es la misma que tenemos, no la reemplazamos")
+				return false
+			
+			# Contar cuántas cartas se están viendo perjudicadas por la era enemiga
+			var cards_hurt_by_enemy = 0
+			for card in ai_cards:
+				if card.era_name.strip_edges().to_lower() != enemy_era_name.strip_edges().to_lower():
+					cards_hurt_by_enemy += 1
+			
+			var hurt_percentage = (float(cards_hurt_by_enemy) / ai_cards.size()) * 100
+			print("IA: Era enemiga '", enemy_era_name, "' perjudica a ", cards_hurt_by_enemy, "/", ai_cards.size(), " cartas (", int(hurt_percentage), "%)")
+			
+			# Si la era enemiga perjudica al 40% o más de nuestras cartas,
+			# jugar nuestra era aunque solo beneficie al 30% o más
+			if hurt_percentage >= 40.0 and benefit_percentage >= 30.0:
+				print("IA: Jugando era defensivamente para quitar era enemiga")
+				return true
+	
+	# Criterio normal: solo jugar si beneficia a más del 50% de las cartas
 	return benefit_percentage > 50.0
 
 # Jugar la era en su turno.
@@ -179,22 +225,35 @@ func AI_play_era():
 	
 	var slot = board.era_slot
 	
-	# Si el slot está ocupado, no jugar esta era.
-	if slot.occupied:
-		print("IA: Slot de era ya ocupado")
-		return false
-	
-	# Verificar si es conveniente jugar esta era.
+	# PRIMERO verificar si es conveniente jugar esta era
 	if not should_AI_play_era():
 		print("IA: No es conveniente jugar era ", name_era)
 		return false
 	
-	print("IA: Jugando era ", name_era, " (beneficia a mayoría de cartas)")
+	print("IA: Jugando era ", name_era)
+	
+	# AHORA SÍ, si el slot está ocupado, reemplazar la era anterior
+	if slot.occupied and slot.current_era:
+		print("IA: Reemplazando era anterior en el slot: ", slot.current_era.name_era)
+		var old_era = slot.current_era
+		
+		# Remover efectos y limpiar Global PRIMERO
+		Global.remove_era_effect(old_era)
+		
+		# Liberar el slot ANTES de descartar
+		slot.current_era = null
+		slot.occupied = false
+		
+		# Desactivar y descartar la era anterior
+		old_era.active = false
+		old_era.discarded = false  # Resetear por si acaso
+		old_era.discard()
 	
 	# Colocar esta era.
 	in_hand = false
 	current_slot = slot
 	slot.occupied = true
+	slot.current_era = self
 	
 	# Guardar posición global antes de reparentar.
 	var saved_global_pos = global_position
@@ -218,11 +277,12 @@ func AI_play_era():
 
 func show_card():
 	is_hidden = false
-	update_card_visible()
+	#update_card_visible()
 
 func hide_card():
 	is_hidden = true
-	update_card_visible()
+	hidden_texture.visible = false
+	#update_card_visible()
 
 func update_card_visible():
 	# Comprobar si está oculta.
