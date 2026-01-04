@@ -61,9 +61,6 @@ func _ready():
 func activate():
 	var board = get_tree().current_scene
 	
-	#if Global.active_era and Global.active_era != self:
-		#Global.remove_era_effect(Global.active_era)
-	
 	if active:
 		print("Era ya estaba activada.")
 		return
@@ -254,21 +251,21 @@ func snap_to_era_slot():
 	if dist < 200:
 		print("Colocando era en slot: ", name_era)
 		
-		# Si hay otra era activa (puede ser del jugador o de la IA), descartarla
+		# Si hay otra era activa, descartar.
 		if slot.occupied and slot.current_era and slot.current_era != self:
 			print("Reemplazando era anterior: ", slot.current_era.name_era)
 			var old_era = slot.current_era
 			
-			# Remover efectos y limpiar Global PRIMERO
+			# Remover efectos y limpiar Global primero.
 			Global.remove_era_effect(old_era)
 			
-			# Liberar el slot ANTES de descartar
+			# Liberar el slot antes de descartar.
 			slot.current_era = null
 			slot.occupied = false
 			
-			# Desactivar y descartar la era anterior
+			# Desactivar y descartar la era anterior.
 			old_era.active = false
-			old_era.discarded = false  # Resetear por si acaso
+			old_era.discarded = false  # Reiniciar.
 			old_era.discard()
 
 		in_hand = false
@@ -284,7 +281,7 @@ func snap_to_era_slot():
 			slot.get_parent().add_child(self)
 			global_position = saved_global_pos
 
-		# Animar usando posición global
+		# Animar usando posición global.
 		var target_global_pos = slot.global_position + Vector2(30, -150)
 		var tween := create_tween()
 		tween.tween_property(self, "global_position", target_global_pos, 0.25)

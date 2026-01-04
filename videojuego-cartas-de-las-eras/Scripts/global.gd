@@ -366,7 +366,7 @@ func set_active_era(era) -> void:
 	if active_era != null and active_era != era:
 		print("ADVERTENCIA: Intentando activar era cuando ya hay una activa.")
 	
-	# Guardar y aplicar la nueva era
+	# Guardar y aplicar la nueva era.
 	active_era = era
 	print("Era activa ahora: ", active_era.name_era)
 	apply_era_effect(active_era)
