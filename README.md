@@ -77,13 +77,12 @@
 
 <p><b>Medias:</b></p>
 
-- [ ] Poner, al menos, una era funcional.
+- [x] Poner, al menos, dos era funcionales (tanto IA como jugador).
 - [x] Poner beneficios a las cartas correspondientes.
 - [x] Penalizar al resto.
 - [x] Configurar la IA básica de ataque.
-- [ ] Configurar IA para habilidades.
-- [ ] Hacer otros tipos de cartas.
-- [ ] Crear más habilidades variadas.
+- [x] Configurar IA para habilidades.
+- [ ] Terminar todas las tareas anteriores y hacer la primera demo-beta (ir a 'Tareas para la DEMO-BETA 1').
 - [ ] Crear los tres modos de dificultad.
 - [ ] Crear editor de mazos.
 - [ ] Guardar mazos creados.
@@ -93,13 +92,17 @@
 - [ ] Crear cartas inmunes a las eras.
 - [ ] Poner cronómetro en las partidas.
 
-<p><b>DEMO:</b></p>
+<p><b>DEMO-BETA 1:</b></p>
 
-- [ ] Conectar todas las escenas.
-- [ ] Definir un mínimo de 500 cartas (normales, objeto, habilidad...).
+- [ ] Definir un aproximado de 500 cartas (normales).
+- [ ] Definir las 5 cartas de era.
+- [ ] Programar nuevas habilidades introducidas.
 - [ ] Poner dificultad fácil y normal.
 - [ ] Tener diseño artístico de las cartas, escenarios, y opciones.
 - [ ] Tener música.
+- [ ] Hacer mejores animaciones.
+- [ ] Conectar todas las escenas.
+- [ ] Hacer el ejecutable.
 
 
 <br/>
