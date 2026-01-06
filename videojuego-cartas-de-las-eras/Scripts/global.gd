@@ -150,9 +150,9 @@ func _execute_AIattack():
 	AIattack_target = null
 	
 	# Gastar acción.
-	if board.AIcnt_actions <= board.AImax_actions:
-		print("Acción gastada. Al oponente le quedan ", (board.AImax_actions - board.AIcnt_actions), " acciones.")
+	if board.AIcnt_actions < board.AImax_actions:
 		board.AIcnt_actions += 1
+		print("Acción gastada por ataque. Al oponente le quedan ", (board.AImax_actions - board.AIcnt_actions), " acciones.")
 	else:
 		# Evitar que la IA siga atacando.
 		AIattack_mode = false
@@ -357,6 +357,199 @@ func _is_target_for_ability(source_card: Panel, target_card: Panel, ability: Dic
 		"enemy":
 			return source_card.owner != target_card.owner
 	return false
+
+# Aplicar habilidad de la IA.
+func apply_AI_ability(card: Panel, ability: Dictionary):
+	if ability.is_empty():
+		print("La carta IA ", card.card_name, " no tiene habilidad.")
+		return
+	
+	var board = get_tree().current_scene
+	
+	# No consumir energía si la habilidad es automática.
+	if not (ability.activation == "auto"):
+		var energy_cost = card.cost if "cost" in card else 0
+		
+		if not board.AIenergy_bar:
+			print("No existe energía para IA.")
+		else:
+			board.AIenergy_bar.consume_energy(energy_cost)
+			print("Energía usada por IA ", card.card_name, " en habilidad: ", energy_cost)
+	
+	match ability.type:
+		"stat_mod":
+			_apply_AI_ability_stat_mod(card, ability)
+	
+	# Gastar acción solo si es manual.
+	if ability.activation == "manual" and board.AIcnt_actions < board.AImax_actions:
+		board.AIcnt_actions += 1
+		print("IA: Acción gastada por habilidad. Acciones restantes para el oponente: ", board.AImax_actions - board.AIcnt_actions)
+	else:
+		print("El oponente no puede usar habilidades.")
+
+# Modificación de stats para IA.
+func _apply_AI_ability_stat_mod(card: Panel, ability: Dictionary):
+	var board = get_tree().current_scene
+	var stat_change = int(ability.value)
+	
+	for c in board.AIboard_play.get_children():
+		if not ("card_name" in c):
+			continue
+		if c.discarded or c.in_hand:
+			continue
+		if not _is_target_for_AI_ability(card, c, ability):
+			continue
+		
+		match ability["stat"]:
+			"attack":
+				var current_atk = c.modified_attack if c.modified_attack != null else c.attack
+				c.modified_attack = int(current_atk + stat_change)
+				if "attack_label" in c:
+					c.attack_label.text = str(c.modified_attack)
+					_show_buff_color(c.attack_label)
+				
+			"defense":
+				var current_def = c.modified_defense if c.modified_defense != null else c.defense
+				c.modified_defense = int(current_def + stat_change)
+				if "defense_label" in c:
+					c.defense_label.text = str(c.modified_defense)
+					_show_buff_color(c.defense_label)
+			
+			"attack_defense":
+				var current_atk = c.modified_attack if c.modified_attack != null else c.attack
+				c.modified_attack = int(current_atk + stat_change)
+				var current_def = c.modified_defense if c.modified_defense != null else c.defense
+				c.modified_defense = int(current_def + stat_change)
+				if "attack_label" in c:
+					c.attack_label.text = str(c.modified_attack)
+					_show_buff_color(c.attack_label)
+				if "defense_label" in c:
+					c.defense_label.text = str(c.modified_defense)
+					_show_buff_color(c.defense_label)
+		
+		print("IA: %s recibe modificación de %s por %s" % [c.card_name, ability.stat, ability.name])
+
+
+# Comprobar si la carta es objetivo válido para habilidad de IA.
+func _is_target_for_AI_ability(source_card: Panel, target_card: Panel, ability: Dictionary) -> bool:
+	match ability.target:
+		"self":
+			return source_card == target_card
+		"allies": 
+			var board = get_tree().current_scene
+			# Incluir al propio Rey si no hay otros aliados.
+			if target_card.get_parent() != board.AIboard_play:
+				return false
+			if target_card == source_card:
+				return true  # Permitir buffarse a sí mismo si no hay otros.
+			return source_card.get_parent() == board.AIboard_play
+		"enemy":
+			# Para IA: source en AIboard_play, target en player_board_play.
+			var board = get_tree().current_scene
+			return (source_card.get_parent() == board.AIboard_play and 
+					target_card.get_parent() == board.player_board_play)
+	return false
+
+
+# Evalúa si la IA debe usar habilidad o atacar.
+func AI_should_use_ability(card: Panel, player_cards: Array) -> Dictionary:
+	if not card or not "ability" in card:
+		return {"use_ability": false, "reason": "Sin habilidad", "target": null}
+	
+	var ability = card.ability
+	
+	# Si no tiene habilidad o no es manual, no la puede usar.
+	if ability.is_empty() or ability.activation != "manual":
+		return {"use_ability": false, "reason": "No manual", "target": null}
+	
+	var board = get_tree().current_scene
+	
+	# Verificar que tenga energía.
+	if card.cost > board.AIenergy_bar.AIcurrent_energy:
+		return {"use_ability": false, "reason": "Sin energía", "target": null}
+	
+	# Evaluar según el tipo de habilidad.
+	match ability.type:
+		"stat_mod":
+			return _evaluate_stat_mod_ability(card, ability, player_cards)
+	
+	# Por defecto, preferir atacar.
+	return {"use_ability": false, "reason": "Tipo desconocido", "target": null}
+
+
+# Evalúa si conviene usar habilidad de modificación de stats.
+func _evaluate_stat_mod_ability(card: Panel, ability: Dictionary, player_cards: Array) -> Dictionary:
+	var board = get_tree().current_scene
+	var value := int(ability.value)
+
+	# Aliados afectados.
+	var affected_allies := []
+	for c in board.AIboard_play.get_children():
+		if not ("card_name" in c):
+			continue
+		if c.discarded or c.in_hand:
+			continue
+		if _is_target_for_AI_ability(card, c, ability):
+			affected_allies.append(c)
+	if affected_allies.is_empty() or value <= 0:
+		return {"use_ability": false, "reason": "Sin objetivos o buff inútil", "target": null}
+
+	# Determinar defensa máxima de enemigos, considerando otras modificaciones.
+	var highest_enemy_def := 0
+	for enemy in player_cards:
+		if enemy.discarded or enemy.in_hand:
+			continue
+		var enemy_def = enemy.modified_defense if enemy.modified_defense != null else enemy.defense
+		# Simular aumentos automáticos.
+		if "ability" in enemy and enemy.ability.activation == "auto" and enemy.ability.trigger == "on_damage" and enemy.ability.stat in ["defense", "attack_defense"]:
+			enemy_def += int(enemy.ability.value)
+		if enemy_def > highest_enemy_def:
+			highest_enemy_def = enemy_def
+
+	# Ataque actual de nuestra carta.
+	var current_attack = card.modified_attack if card.modified_attack != null else card.attack
+
+	# Estrategia: usar habilidad si ataque < 2x defensa enemiga simulada.
+	if current_attack < 2 * highest_enemy_def:
+		return {
+			"use_ability": true,
+			"reason": "Buffear hasta superar la defensa simulada del objetivo",
+			"target": null
+		}
+
+	# Puntuación tradicional.
+	var attack_score := 0.0
+	for enemy in player_cards:
+		if enemy.discarded or enemy.in_hand:
+			continue
+		var def = enemy.modified_defense if enemy.modified_defense != null else enemy.defense
+		var damage = max(current_attack - def, 0)
+		var score = damage * 10
+		if damage >= enemy.current_health:
+			score += 100
+		attack_score = max(attack_score, score)
+
+	var ability_score := 0.0
+	for ally in affected_allies:
+		var ally_atk = ally.modified_attack if ally.modified_attack != null else ally.attack
+		var ally_def = ally.modified_defense if ally.modified_defense != null else ally.defense
+		match ability.stat:
+			"attack":
+				ability_score += value * 8 + ally_atk * 0.5
+			"defense":
+				ability_score += value * 5 + ally_def * 0.3
+			"attack_defense":
+				ability_score += value * 12 + (ally_atk + ally_def) * 0.4
+	ability_score *= min(affected_allies.size(), 3)
+
+	if attack_score > 60:
+		ability_score *= 0.6
+
+	if ability_score > attack_score:
+		return {"use_ability": true, "reason": "Habilidad más rentable", "target": null}
+
+	return {"use_ability": false, "reason": "Atacar es mejor", "target": null}
+
 
 # Guardar la era activa y aplicar sus efectos.
 func set_active_era(era) -> void:

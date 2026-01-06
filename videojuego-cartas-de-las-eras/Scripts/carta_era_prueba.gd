@@ -129,7 +129,10 @@ func _move_to_discard():
 	# Colocarlo en el centro del slot, invisible y pequeño.
 	position = Vector2.ZERO
 	rotation_degrees = 0
-
+	
+	# Ponerle los turnos originales.
+	turns_left = max_turns
+	
 	# Hacer animación inversa para que aparezca.
 	var appear_tween = create_tween()
 	appear_tween.tween_property(self, "scale", Vector2.ONE, 0.4) \

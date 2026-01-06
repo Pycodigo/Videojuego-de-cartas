@@ -231,6 +231,7 @@ func take_damage(amount: int):
 		func(v): health_label.text = str(int(v)) + "PS",
 		old_health, current_health, 0.5
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	health_hover.text = "Vida: " + str(current_health) + "/" + str(max_health)
 	
 	var damage_in_tween = create_tween()
 	damage_in_tween.tween_property(front_texture, "modulate", Color(1,0,0,1), 0.2)

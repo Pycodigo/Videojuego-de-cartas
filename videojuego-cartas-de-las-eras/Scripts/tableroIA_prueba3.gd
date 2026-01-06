@@ -46,7 +46,7 @@ var cnt_actions: int = 1
 var max_actions: int = 3
 #var max_actions: int = 999
 # Contador de acciones del oponente por turno.
-var AIcnt_actions: int = 1
+var AIcnt_actions: int = 0
 var AImax_actions: int = 3
 
 var deployment_phase: bool = true  # Fase inicial de colocar cartas.
@@ -295,7 +295,7 @@ func draw_card_per_turn():
 			new_cardAI.original_position_global = new_cardAI.global_position # Guardar posición.
 			
 			print("Oponente vuelve a tener las tres acciones.");
-			AIcnt_actions = 1
+			AIcnt_actions = 0
 			
 			# Poner la mano en abanico.
 			organize_hand_AI()
@@ -362,47 +362,16 @@ func _on_AIgenerator_pressed():
 	Global.select_attack_target(AIgenerator)
 
 func AI_play_turn() -> void:
-	# Quitar botón de finalizar turno.
 	finish_turn_btn.visible = false
 	await get_tree().create_timer(0.5).timeout
+
 	print("\n=== TURNO IA INICIADO ===")
 	print("Acciones disponibles: ", AImax_actions)
 	print("Energía disponible: ", AIenergy_bar.AIcurrent_energy)
 
-	# Obtener todas las cartas de la IA que pueden atacar.
-	var AIcards = []
-	for card in AIboard_play.get_children():
-		if "card_name" in card and "discarded" in card and not card.discarded:
-			AIcards.append(card)
-	
-	# Obtener todas las cartas del jugador disponibles como objetivo.
-	var player_cards = []
-	for card in player_board_play.get_children():
-		if "card_name" in card and "discarded" in card and "in_hand" in card and not card.discarded and not card.in_hand:
-			player_cards.append(card)
-	
-	print("Cartas del oponente disponibles: ", AIcards.size())
-	print("Cartas del jugador disponibles: ", player_cards.size())
+	var board = get_tree().current_scene
 
-	# Si no hay cartas.
-	if AIcards.size() == 0:
-		print("IA: No tiene cartas para usar.")
-		_on_finish_turn_btn_pressed()
-		return
-
-	# Ordenar cartas por eficiencia (ataque/coste).
-	var sorted_attackers = AIcards.duplicate()
-	sorted_attackers.sort_custom(func(a, b):
-		var atk_a = a.modified_attack if "modified_attack" in a and a.modified_attack != null else a.attack
-		var atk_b = b.modified_attack if "modified_attack" in b and b.modified_attack != null else b.attack
-		var cost_a = a.cost if "cost" in a else 1
-		var cost_b = b.cost if "cost" in b else 1
-		var eff_a = float(atk_a) / max(cost_a, 1)
-		var eff_b = float(atk_b) / max(cost_b, 1)
-		return eff_a > eff_b
-	)
-	
-	# Intentar jugar una era si es conveniente.
+	# Intentar jugar carta de era.
 	if not deployment_phase:
 		var eras_in_hand = []
 		for card in AIhand.get_children():
@@ -411,61 +380,79 @@ func AI_play_turn() -> void:
 		
 		if eras_in_hand.size() > 0:
 			print("IA: Evaluando si jugar era...")
-			# Intentar jugar cada era hasta que una sea conveniente.
 			for era in eras_in_hand:
 				var can_play = await era.should_AI_play_era()
 				var era_played = await era.AI_play_era()
-				if era_played && can_play:
-					print("IA: Era jugada con éxito")
+				if era_played and can_play:
+					print("IA: Era jugada con éxito.")
 					await get_tree().create_timer(0.8).timeout
-					break  # Solo jugar una era.
-	
-	print("IA: Orden de prioridad de atacantes: ")
-	for card in sorted_attackers:
-		var atk = card.modified_attack if "modified_attack" in card and card.modified_attack != null else card.attack
-		var cost = card.cost if "cost" in card else 0
-		var eff = float(atk) / max(cost, 1)
-		print("  - ", card.card_name, " (ATK:", atk, ", Coste:", cost, ", Eficiencia:", "%.2f" % eff, ")")
+					break
 
-	# Atacar con las cartas en orden de eficiencia.
-	var attacker_index = 0
-	
-	while AIcnt_actions <= AImax_actions and attacker_index < sorted_attackers.size():
-		var attacker = sorted_attackers[attacker_index]
-		var cost = attacker.cost if "cost" in attacker else 0
+	# Usar habilidad de stat_mod solo una vez si conviene.
+	var ability_used := false
+	for card in AIboard_play.get_children():
+		if "card_name" in card and "ability" in card and not card.discarded and not card.in_hand:
+			var decision = Global.AI_should_use_ability(card, [])
+			if decision.use_ability and card.ability.type == "stat_mod" and not ability_used:
+				Global.apply_AI_ability(card, card.ability)
+				ability_used = true
+				await get_tree().create_timer(0.5).timeout
+				break  # Solo una habilidad por turno.
+
+	# Atacar con todas las acciones restantes.
+	while AIcnt_actions < AImax_actions:
+		var any_action_done := false
+
+		# Obtener cartas IA disponibles para atacar.
+		var AIcards := []
+		for card in AIboard_play.get_children():
+			if "card_name" in card and not card.discarded and not card.in_hand:
+				AIcards.append(card)
 		
-		# Si no tenemos energía para esa carta, pasar a la siguiente.
-		if AIenergy_bar.AIcurrent_energy < cost:
-			print("IA: Sin energía para ", attacker.card_name, " (necesita ", cost, ", tenemos ", AIenergy_bar.AIcurrent_energy, ")")
-			attacker_index += 1
-			continue
-		
-		# Elegir objetivo.
-		var target = Global.choose_AIattack_target(player_cards)
-		
-		if not target:
-			print("IA: No hay objetivos válidos.")
+		if AIcards.size() == 0:
+			print("IA: No tiene cartas para usar.")
 			break
-		
-		print("IA: ", attacker.card_name, " (ATK:", attacker.attack, ", Coste:", cost, ") ataca a ", target.card_name if "card_name" in target else target.name)
-		
-		# Ejecutar el ataque completo.
-		await Global.AIstart_attack(attacker)
-		await Global.select_AIattack_target(target)
-		
-		# Pequeña pausa entre ataques.
-		await get_tree().create_timer(0.6).timeout
-		
-		# Si gastamos todas las acciones, terminar turno.
-		if AIcnt_actions > AImax_actions:
-			print("IA: Acciones agotadas")
+
+		# Obtener cartas del jugador como posibles objetivos.
+		var player_cards := []
+		for card in player_board_play.get_children():
+			if "card_name" in card and not card.discarded and not card.in_hand:
+				player_cards.append(card)
+
+		if player_cards.size() == 0:
+			print("IA: No hay cartas enemigas, se puede atacar el generador si es posible.")
+			break
+
+		# Ordenar cartas IA por eficiencia (ataque/coste).
+		var sorted_cards = AIcards.duplicate()
+		sorted_cards.sort_custom(func(a, b):
+			var atk_a = a.modified_attack if "modified_attack" in a and a.modified_attack != null else a.attack
+			var atk_b = b.modified_attack if "modified_attack" in b and b.modified_attack != null else b.attack
+			var cost_a = a.cost if "cost" in a else 1
+			var cost_b = b.cost if "cost" in b else 1
+			var eff_a = float(atk_a) / max(cost_a, 1)
+			var eff_b = float(atk_b) / max(cost_b, 1)
+			return eff_a > eff_b
+		)
+
+		# Atacar con la mejor carta disponible.
+		for card in sorted_cards:
+			if AIcnt_actions >= AImax_actions:
+				break
+
+			var target = Global.choose_AIattack_target(player_cards)
+			if target:
+				await Global.AIstart_attack(card)
+				await Global.select_AIattack_target(target)
+				any_action_done = true
+				await get_tree().create_timer(0.5).timeout
+
+		if not any_action_done:
 			break
 
 	print("=== TURNO IA FINALIZADO ===")
 	print("Energía restante: ", AIenergy_bar.AIcurrent_energy)
-	print("Acciones usadas: ", AIcnt_actions - 1, "/", AImax_actions)
+	print("Acciones usadas: ", AIcnt_actions, "/", AImax_actions)
 	await get_tree().create_timer(0.3).timeout
-	
 	finish_turn_btn.visible = true
-	# Pasar turno al jugador.
 	_on_finish_turn_btn_pressed()

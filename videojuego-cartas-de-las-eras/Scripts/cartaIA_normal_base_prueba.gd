@@ -10,7 +10,7 @@ extends Panel
 @export var cost: int
 @export var attack: int
 @export var defense: int
-@export var ability: String
+@export var ability: Dictionary = {} #Diccionario que describe la habilidad.
 
 # Estadísticas modificadas.
 var modified_attack = null
@@ -80,7 +80,10 @@ func init_card():
 	cost_label.text = str(cost)
 	attack_label.text = str(attack)
 	defense_label.text = str(defense)
-	ability_label.text = ability
+	var ability_name = ""
+	if ability and ability.has("name"):
+		ability_name = ability.name
+	ability_label.text = ability_name
 	
 	# Guardar la posición inicial global de la carta.
 	original_position_global = global_position
@@ -137,6 +140,10 @@ func take_damage(amount: int):
 	var finish_tween = create_tween()
 	finish_tween.tween_property(front_texture, "modulate", Color(1,1,1,1), 0.2)
 	await finish_tween.finished
+	
+	# Activar habilidad si tiene trigger "on_damage".
+	if ability and ability.activation == "auto" and ability.has("trigger") and ability.trigger == "on_damage":
+		Global.apply_AI_ability(self, ability)
 	
 	if current_health <= 0:
 		current_health = 0
