@@ -72,6 +72,9 @@ func _ready() -> void:
 	
 	era_slot.occupied = false
 	era_slot.current_era = null
+	
+	var viewport_size = get_viewport().get_visible_rect().size
+	print(viewport_size)  # Vector2(ancho, alto)
 
 # Repartir n cartas desde la baraja.
 func draw_starting_hand(n: int):
