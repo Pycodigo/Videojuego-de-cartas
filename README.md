@@ -95,7 +95,7 @@
 <p><b>DEMO-BETA 1:</b></p>
 
 - [ ] Definir un aproximado de 500 cartas (normales).
-- [ ] Definir las 5 cartas de era.
+- [ ] Definir varias cartas de era.
 - [ ] Programar nuevas habilidades introducidas.
 - [ ] Poner dificultad fácil y normal.
 - [ ] Tener diseño artístico de las cartas, escenarios, y opciones.
