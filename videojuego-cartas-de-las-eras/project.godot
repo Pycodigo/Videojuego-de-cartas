@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Videojuego cartas de las eras"
+config/name="Dominio Cronológico"
 run/main_scene="uid://bhv68ga71uery"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
@@ -30,6 +30,11 @@ window/handheld/orientation=1
 [editor_plugins]
 
 enabled=PackedStringArray()
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://Translations/ui.es.translation", "res://Translations/ui.en.translation", "res://Translations/ui.gl.translation")
+locale/fallback="es"
 
 [plugins]
 

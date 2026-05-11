@@ -12,8 +12,16 @@ var min_height = 600
 
 # Lista de idiomas.
 var idioms: Array[String] = [
-	"Español",
-	"Gallego"
+	"UI_LANGUAGE_ES",        # Español.
+	"UI_LANGUAGE_EN",        # Inglés.
+	"UI_LANGUAGE_GL"         # Gallego.
+]
+
+# Claves.
+var locales: Array[String] = [
+	"es",
+	"en",
+	"gl"
 ]
 
 # Lista de resoluciones disponibles.
@@ -39,6 +47,13 @@ func _ready() -> void:
 	
 	for idiom in idioms:
 		language.add_item(idiom)
+	
+	# Seleccionar el idioma actual al abrir config.
+	var current = locales.find(TranslationServer.get_locale())
+	if current != -1:
+		language.select(current)
+	
+	language.connect("item_selected", Callable(self, "_on_idioma_item_selected"))
 	
 	# Llenar las opciones.
 	for res in resolutions:
@@ -108,3 +123,13 @@ func _on_fps_slider_changed(fps_value:float) -> void:
 
 func _on_btn_test_pressed() -> void:
 	$ButtonSound.play()
+
+
+func _on_idioma_item_selected(index: int) -> void:
+	var locale = locales[index]
+	TranslationServer.set_locale(locale)
+
+	var config = ConfigFile.new()
+	config.load("user://config.cfg")
+	config.set_value("settings", "locale", locale)
+	config.save("user://config.cfg")

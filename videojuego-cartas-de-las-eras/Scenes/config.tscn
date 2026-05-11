@@ -28,7 +28,7 @@ offset_top = -34.536
 offset_right = 283.48
 offset_bottom = 34.464
 theme_override_font_sizes/font_size = 50
-text = "Configuración"
+text = "UI_CONFIG_TITLE"
 horizontal_alignment = 1
 
 [node name="volver" type="Button" parent="."]
@@ -81,7 +81,7 @@ theme_override_constants/separation = 250
 [node name="Label" type="Label" parent="opc/General/VBoxContainer/idioma"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
-text = "Idioma"
+text = "UI_LANGUAGE_TITLE"
 horizontal_alignment = 1
 
 [node name="idioma" type="OptionButton" parent="opc/General/VBoxContainer/idioma"]
@@ -269,6 +269,7 @@ stream = ExtResource("6_a7ocr")
 bus = &"Music"
 
 [connection signal="pressed" from="volver" to="volver" method="_on_volver_config_pressed"]
+[connection signal="item_selected" from="opc/General/VBoxContainer/idioma/idioma" to="." method="_on_idioma_item_selected"]
 [connection signal="item_selected" from="opc/Gráficos/VBoxContainer/resolución/opc" to="." method="_on_opc_item_selected"]
 [connection signal="item_selected" from="opc/Gráficos/VBoxContainer/modo/ventana" to="." method="_on_vindow_item_selected"]
 [connection signal="toggled" from="opc/Gráficos/VBoxContainer/sincro/CheckButton" to="." method="_on_check_button_toggled"]
