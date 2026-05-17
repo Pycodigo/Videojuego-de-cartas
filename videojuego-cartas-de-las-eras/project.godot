@@ -17,6 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+GlobalTest="*res://Scripts/Test/global_prueba.gd"
+GlobalConfigFile="*res://Scripts/config_file.gd"
 Global="*res://Scripts/global.gd"
 
 [display]

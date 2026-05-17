@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bk81yp3nn4nlx"]
 
-[ext_resource type="PackedScene" uid="uid://b3lp5vwhopuep" path="res://Scenes/carta_era_prueba.tscn" id="1_qblpk"]
+[ext_resource type="PackedScene" uid="uid://b3lp5vwhopuep" path="res://Scenes/Test/carta_era_prueba.tscn" id="1_qblpk"]
 [ext_resource type="Script" uid="uid://dwgvv2rtpnvig" path="res://Scripts/Cards/Test/carta_futuro.gd" id="2_qblpk"]
 [ext_resource type="Texture2D" uid="uid://chuqlay1xxr62" path="res://Images/test/futuro.jpg" id="3_a4aft"]
 

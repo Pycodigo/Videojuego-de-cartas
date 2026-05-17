@@ -1,10 +1,8 @@
 extends Control
 
-@onready var language = $opc/General/VBoxContainer/idioma/idioma
-@onready var resolution_type = $"opc/Gráficos/VBoxContainer/resolución/opc"
-@onready var window_mode = $"opc/Gráficos/VBoxContainer/modo/ventana"
-@onready var fps_slider = $"opc/Gráficos/FPSlider"
-@onready var fps_label = $"opc/Gráficos/fps_num"
+@onready var language = $opc/UI_TAB_GENERAL/VBoxContainer/idioma/idioma
+@onready var resolution_type = $"opc/UI_TAB_GRAPHICS/VBoxContainer/resolución/opc"
+@onready var window_type = $"opc/UI_TAB_GRAPHICS/VBoxContainer/modo/ventana"
 
 # Tamaño mínimo.
 var min_width = 1024
@@ -12,12 +10,12 @@ var min_height = 600
 
 # Lista de idiomas.
 var idioms: Array[String] = [
-	"UI_LANGUAGE_ES",        # Español.
-	"UI_LANGUAGE_EN",        # Inglés.
-	"UI_LANGUAGE_GL"         # Gallego.
+	"UI_LANGUAGE_ES",
+	"UI_LANGUAGE_EN",
+	"UI_LANGUAGE_GL"
 ]
 
-# Claves.
+# Claves de idioma.
 var locales: Array[String] = [
 	"es",
 	"en",
@@ -35,101 +33,62 @@ var resolutions = [
 ]
 
 # Modos de ventana.
-const window_modes: Array[String] = [
-	"Con bordes",
-	"Sin bordes",
-	"Pantalla completa"
+const window_mode: Array[String] = [
+	"UI_WINDOW_BORDERED",
+	"UI_WINDOW_BORDERLESS"
 ]
 
 func _ready() -> void:
 	# Iniciar música.
 	$MenuChill.play(Global.music)
 	
+	# Idiomas.
 	for idiom in idioms:
 		language.add_item(idiom)
 	
-	# Seleccionar el idioma actual al abrir config.
 	var current = locales.find(TranslationServer.get_locale())
 	if current != -1:
 		language.select(current)
 	
-	language.connect("item_selected", Callable(self, "_on_idioma_item_selected"))
-	
-	# Llenar las opciones.
+	# Resoluciones.
 	for res in resolutions:
 		resolution_type.add_item(str(res.x) + "x" + str(res.y))
 	
-	for mode in window_modes:
-		window_mode.add_item(mode)
+	# Seleccionar la resolución guardada.
+	var saved_res = GlobalConfigFile.config.get_value("settings", "resolution", Vector2i(1280, 720))
+	var res_index = resolutions.find(saved_res)
+	if res_index != -1:
+		resolution_type.select(res_index)
 	
-	# Desactivar resolución si estamos en pantalla completa, incluso al volver.
-	resolution_type.disabled = (DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN)
+	# Modos de ventana
+	for mode in window_mode:
+		window_type.add_item(mode)
 	
-	# Comprobar los fps del ordenador.
-	print(str(Engine.get_frames_per_second()) + " fps actuales.")
+	# Seleccionar el modo guardado.
+	var saved_mode = GlobalConfigFile.config.get_value("settings", "window_mode", 0)
+	window_type.select(saved_mode)
 	
-	# Aplicar valor inicial.
-	Engine.max_fps = int(fps_slider.value)
-	# Mostrar en texto.
-	fps_label.text = str(int(fps_slider.value))
-	
-	#Conectar los fps.
-	fps_slider.connect("value_changed", Callable(self, "_on_fps_slider_changed"))
-
-func _on_opc_item_selected(index: int) -> void:
-	var res = resolutions[index]
-	
-	# Forzar tamaño elegido.
-	var width = max(res.x, min_width)
-	var height = max(res.y, min_height)
-	
-	DisplayServer.window_set_size(Vector2i(width, height))
-
-
-func _on_vindow_item_selected(mode: int) -> void:
-	match mode:
-		0: # Con bordes.
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
-		1: #Sin bordes.
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
-		2: # Pantalla completa.
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-			#Quitar bordes.
-			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
-	
-	# Desactivar resolución si estamos en pantalla completa.
-	resolution_type.disabled = (DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN)
-
-
-func _on_check_button_toggled(pressed: bool) -> void:
-	# Comprobar si el botón está activado.
-	if pressed:
-		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
-		print("vsync activado")
-	else:
-		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
-		print("vsync desactivado")
-
-
-func _on_fps_slider_changed(fps_value:float) -> void:
-	# Cambiar fps dinámicamente.
-	Engine.max_fps = int(fps_value)
-	# Mostrar el texto.
-	fps_label.text = str(int(fps_value))
-	print(str(Engine.get_frames_per_second()) + " fps actuales.")
-
-
-func _on_btn_test_pressed() -> void:
-	$ButtonSound.play()
+	# Aplicar estado inicial de pantalla completa.
+	var is_fullscreen = GlobalConfigFile.config.get_value("settings", "fullscreen", false)
+	$"opc/UI_TAB_GRAPHICS/VBoxContainer/completo/CheckButtonFullScreen".button_pressed = is_fullscreen
 
 
 func _on_idioma_item_selected(index: int) -> void:
-	var locale = locales[index]
-	TranslationServer.set_locale(locale)
+	GlobalConfigFile.set_locale(locales[index])
 
-	var config = ConfigFile.new()
-	config.load("user://config.cfg")
-	config.set_value("settings", "locale", locale)
-	config.save("user://config.cfg")
+func _on_opc_item_selected(index: int) -> void:
+	GlobalConfigFile.set_resolution(resolutions[index])
+
+func _on_vindow_item_selected(mode: int) -> void:
+	GlobalConfigFile.set_window_mode(mode)
+
+func _on_check_button_v_sync_toggled(toggled_on: bool) -> void:
+	GlobalConfigFile.set_vsync(toggled_on)
+
+func _on_check_button_full_screen_toggled(toggled_on: bool) -> void:
+	GlobalConfigFile.set_fullscreen(toggled_on)
+	resolution_type.disabled = toggled_on
+	window_type.disabled = toggled_on
+
+func _on_btn_test_pressed() -> void:
+	$ButtonSound.play()

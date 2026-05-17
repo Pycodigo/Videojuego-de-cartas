@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://fabkfcdpmg13"]
 
-[ext_resource type="PackedScene" uid="uid://bk3ifesmxvwou" path="res://Scenes/carta_normal_base_prueba.tscn" id="1_hhnrv"]
+[ext_resource type="PackedScene" uid="uid://bk3ifesmxvwou" path="res://Scenes/Test/carta_normal_base_prueba.tscn" id="1_hhnrv"]
 [ext_resource type="Script" uid="uid://bwjx4jbny3dqu" path="res://Scripts/Cards/Test/carta_rey_espadas.gd" id="2_ndrco"]
 [ext_resource type="Texture2D" uid="uid://dnexbu5djg0lc" path="res://Images/test/rey.jpg" id="3_5ooqq"]
 

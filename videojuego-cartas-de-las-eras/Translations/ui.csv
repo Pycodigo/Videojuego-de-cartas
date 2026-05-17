@@ -5,3 +5,17 @@ UI_LANGUAGE_ES,Español,Spanish,Castelán
 UI_LANGUAGE_EN,Inglés,English,Inglés
 UI_LANGUAGE_GL,Gallego,Galician,Galego
 UI_LANGUAGE_TITLE,Idioma,Language,Lingua
+UI_TAB_GENERAL,General,General,Xeral
+UI_TAB_GRAPHICS,Gráficos,Graphics,Gráficos
+UI_TAB_SOUND,Sonido,Sound,Son
+UI_RESOLUTION,Resolución,Resolution,Resolución
+UI_WINDOW_MODE,Modo ventana,Window mode,Modo ventá
+UI_WINDOW_BORDERED,Con bordes,With borders,Con bordes
+UI_WINDOW_BORDERLESS,Sin bordes,Borderless,Sen bordes
+UI_VSYNC,Sincronización vertical,VSync,Sincronización vertical
+UI_FULL_SCREEN,Pantalla completa,Full Screen,Pantalla completa
+UI_MASTER,Volumen General,Master Volume,Volume Xeral
+UI_MUSIC,Música,Music,Música
+UI_SFX,Efectos de Sonido,SFX ,Efectos de Son
+UI_TEST_SFX,Probar Efectos,Test SFX,Probar Efectos
+UI_PLAY,Jugar contra\n la IA,Play against\n AI,Xogar contra\n a IA
