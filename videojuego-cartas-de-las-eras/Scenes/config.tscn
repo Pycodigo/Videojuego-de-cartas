@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://xrc2gvhblmqb"]
 
 [ext_resource type="Script" uid="uid://e0xl2f3rvud6" path="res://Scripts/config.gd" id="1_6u63q"]
-[ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/test/volver.png" id="1_gyli8"]
+[ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/Test/volver.png" id="1_gyli8"]
 [ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/btn_menu.gd" id="2_6u63q"]
-[ext_resource type="PackedScene" uid="uid://mp8x3lwf3mq0" path="res://Scenes/sonido.tscn" id="4_lrmn4"]
+[ext_resource type="PackedScene" uid="uid://mp8x3lwf3mq0" path="res://Scenes/sound.tscn" id="4_lrmn4"]
 [ext_resource type="AudioStream" uid="uid://bmthy11a5bnsc" path="res://Sound effects/Test/button sound.wav" id="5_p4uu7"]
 [ext_resource type="AudioStream" uid="uid://kf1c3t0v75k0" path="res://Music/Test/menu_chill.wav" id="6_a7ocr"]
 

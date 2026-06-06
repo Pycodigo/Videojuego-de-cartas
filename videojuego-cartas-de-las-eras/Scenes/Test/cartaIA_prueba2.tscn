@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://ybt6p63tas6n"]
 
 [ext_resource type="Script" uid="uid://cqskjmaqb8xab" path="res://Scripts/Test/cartaIA_prueba.gd" id="1_sw3ng"]
-[ext_resource type="Texture2D" uid="uid://dya1dyuvlsp1w" path="res://Images/test/Carta reversa.png" id="2_mjv01"]
+[ext_resource type="Texture2D" uid="uid://dya1dyuvlsp1w" path="res://Images/Test/Carta reversa.png" id="2_mjv01"]
 
 [node name="Carta" type="Panel"]
 custom_minimum_size = Vector2(100, 120)

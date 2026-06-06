@@ -52,14 +52,14 @@ func _on_mouse_exited():
 func _on_modos_pressed() -> void:
 	$"../ButtonSound".play()
 	await $"../ButtonSound".finished
-	get_tree().change_scene_to_file("res://Scenes/modos.tscn")
+	get_tree().change_scene_to_file("res://Scenes/modes.tscn")
 	Global.music = $"../MenuChill".get_playback_position()
 
 # Volver desde modos de juego.
 func _on_volver_pressed() -> void:
 	$"../ButtonSound".play()
 	await $"../ButtonSound".finished
-	get_tree().change_scene_to_file("res://Scenes/principal.tscn")
+	get_tree().change_scene_to_file("res://Scenes/main.tscn")
 	Global.music = $"../MenuChill".get_playback_position()
 
 
@@ -72,7 +72,7 @@ func _on_salir_pressed() -> void:
 func _on_volver_config_pressed() -> void:
 	$"../ButtonSound".play()
 	await $"../ButtonSound".finished
-	get_tree().change_scene_to_file("res://Scenes/principal.tscn")
+	get_tree().change_scene_to_file("res://Scenes/main.tscn")
 	Global.music = $"../MenuChill".get_playback_position()
 
 

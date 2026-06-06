@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://gh77jmcl3jn3"]
 
-[ext_resource type="Texture2D" uid="uid://cd5ekix0xn2mm" path="res://Images/test/circulo sin fondo.png" id="1_33jjj"]
+[ext_resource type="Texture2D" uid="uid://cd5ekix0xn2mm" path="res://Images/Test/circulo sin fondo.png" id="1_33jjj"]
 [ext_resource type="Script" uid="uid://cmwap76ry3ggw" path="res://Scripts/Test/generadorIA_prueba.gd" id="1_i1imr"]
-[ext_resource type="Texture2D" uid="uid://hfduhierp8ap" path="res://Images/test/circulo gris 130.png" id="1_mbqse"]
-[ext_resource type="Texture2D" uid="uid://does2cfy2kqgo" path="res://Images/test/flecha-linea.png" id="2_7w7kp"]
-[ext_resource type="Texture2D" uid="uid://ugdb10atkxmn" path="res://Images/test/circulo azul 130.png" id="2_i1imr"]
+[ext_resource type="Texture2D" uid="uid://hfduhierp8ap" path="res://Images/Test/circulo gris 130.png" id="1_mbqse"]
+[ext_resource type="Texture2D" uid="uid://does2cfy2kqgo" path="res://Images/Test/flecha-linea.png" id="2_7w7kp"]
+[ext_resource type="Texture2D" uid="uid://ugdb10atkxmn" path="res://Images/Test/circulo azul 130.png" id="2_i1imr"]
 
 [node name="Panel" type="Panel"]
 script = ExtResource("1_i1imr")

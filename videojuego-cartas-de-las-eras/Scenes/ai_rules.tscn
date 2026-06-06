@@ -1,9 +1,9 @@
 [gd_scene load_steps=9 format=3 uid="uid://bndn1sx8yhjxw"]
 
-[ext_resource type="Script" uid="uid://bvlmftvqligpu" path="res://Scripts/reglas.gd" id="1_ht4ys"]
-[ext_resource type="Texture2D" uid="uid://xn0ew4nddwmo" path="res://Images/test/flecha.png" id="2_ab607"]
+[ext_resource type="Script" uid="uid://bvlmftvqligpu" path="res://Scripts/rules.gd" id="1_ht4ys"]
+[ext_resource type="Texture2D" uid="uid://xn0ew4nddwmo" path="res://Images/Test/flecha.png" id="2_ab607"]
 [ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/btn_menu.gd" id="3_bdjx7"]
-[ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/test/volver.png" id="4_hjbmg"]
+[ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/Test/volver.png" id="4_hjbmg"]
 [ext_resource type="AudioStream" uid="uid://kf1c3t0v75k0" path="res://Music/Test/menu_chill.wav" id="5_heryo"]
 [ext_resource type="AudioStream" uid="uid://bmthy11a5bnsc" path="res://Sound effects/Test/button sound.wav" id="6_chvkp"]
 
@@ -206,7 +206,6 @@ bus = &"Music"
 [node name="ButtonSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_chvkp")
 volume_db = 15.0
-bus = &"Sound effects"
 
 [connection signal="pressed" from="izda" to="." method="_on_left_d_pressed"]
 [connection signal="pressed" from="dcha" to="." method="_on_right_d_pressed"]

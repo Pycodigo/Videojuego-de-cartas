@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://csj07anhfvanj"]
 
 [ext_resource type="PackedScene" uid="uid://bn1wbxc4pdsal" path="res://Scenes/Test/cartaIA_normal_base_prueba.tscn" id="1_svvds"]
-[ext_resource type="Texture2D" uid="uid://c2tnrk0xg86ox" path="res://Images/test/caballo.jpg" id="2_5i574"]
+[ext_resource type="Texture2D" uid="uid://c2tnrk0xg86ox" path="res://Images/Test/caballo.jpg" id="2_5i574"]
 [ext_resource type="Script" uid="uid://bc1dvhpdoaedp" path="res://Scripts/Cards/Test/cartaIA_caballo_espadas.gd" id="2_mynlh"]
 
 [node name="Carta" instance=ExtResource("1_svvds")]

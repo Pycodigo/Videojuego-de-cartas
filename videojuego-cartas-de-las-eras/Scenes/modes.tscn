@@ -1,12 +1,12 @@
 [gd_scene load_steps=10 format=3 uid="uid://c1jn1aos7b6xt"]
 
-[ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/test/volver.png" id="1_bf5c0"]
-[ext_resource type="Script" uid="uid://cpj3j6obh02dr" path="res://Scripts/modos.gd" id="1_mxn7y"]
+[ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/Test/volver.png" id="1_bf5c0"]
+[ext_resource type="Script" uid="uid://cpj3j6obh02dr" path="res://Scripts/modes.gd" id="1_mxn7y"]
 [ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/btn_menu.gd" id="2_c3ayc"]
-[ext_resource type="Texture2D" uid="uid://b36yhggvahxp6" path="res://Images/test/editor.png" id="3_c3ayc"]
-[ext_resource type="Texture2D" uid="uid://3ghyxi0sfn31" path="res://Images/test/hoja (duelo).png" id="4_sm8xl"]
-[ext_resource type="Texture2D" uid="uid://mjst6chub151" path="res://Images/test/hoja (campaña).png" id="5_5jk1s"]
-[ext_resource type="Texture2D" uid="uid://bav1kjust62a4" path="res://Images/test/hoja (desafío).png" id="6_j80um"]
+[ext_resource type="Texture2D" uid="uid://b36yhggvahxp6" path="res://Images/Test/editor.png" id="3_c3ayc"]
+[ext_resource type="Texture2D" uid="uid://3ghyxi0sfn31" path="res://Images/Test/hoja (duelo).png" id="4_sm8xl"]
+[ext_resource type="Texture2D" uid="uid://mjst6chub151" path="res://Images/Test/hoja (campaña).png" id="5_5jk1s"]
+[ext_resource type="Texture2D" uid="uid://bav1kjust62a4" path="res://Images/Test/hoja (desafío).png" id="6_j80um"]
 [ext_resource type="AudioStream" uid="uid://bmthy11a5bnsc" path="res://Sound effects/Test/button sound.wav" id="7_j80um"]
 [ext_resource type="AudioStream" uid="uid://kf1c3t0v75k0" path="res://Music/Test/menu_chill.wav" id="8_mxn7y"]
 

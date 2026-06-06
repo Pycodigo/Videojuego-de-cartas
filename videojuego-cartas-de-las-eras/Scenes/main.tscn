@@ -1,13 +1,13 @@
 [gd_scene load_steps=9 format=3 uid="uid://bhv68ga71uery"]
 
-[ext_resource type="Texture2D" uid="uid://dc50b0udohe0h" path="res://Images/test/config.png" id="1_6ndk6"]
-[ext_resource type="Texture2D" uid="uid://dbo0by8ch577f" path="res://Images/test/hoja.png" id="1_8ed56"]
-[ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/btn_menu.gd" id="2_7w63j"]
-[ext_resource type="Texture2D" uid="uid://dbjmuyg4pmhjr" path="res://Images/test/reglas.png" id="2_l1yxy"]
-[ext_resource type="Texture2D" uid="uid://c5od8lr5gv00j" path="res://Images/test/creditos.png" id="3_7w63j"]
-[ext_resource type="Texture2D" uid="uid://cyloah0bpjr17" path="res://Images/test/salir.png" id="4_lop0i"]
-[ext_resource type="AudioStream" uid="uid://bmthy11a5bnsc" path="res://Sound effects/Test/button sound.wav" id="7_8ed56"]
-[ext_resource type="AudioStream" uid="uid://kf1c3t0v75k0" path="res://Music/Test/menu_chill.wav" id="8_hjo07"]
+[ext_resource type="Texture2D" uid="uid://dbo0by8ch577f" path="res://Images/Test/hoja.png" id="1_344ge"]
+[ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/btn_menu.gd" id="2_ynf5e"]
+[ext_resource type="Texture2D" uid="uid://dc50b0udohe0h" path="res://Images/Test/config.png" id="3_hptm8"]
+[ext_resource type="Texture2D" uid="uid://dbjmuyg4pmhjr" path="res://Images/Test/reglas.png" id="4_d1ilt"]
+[ext_resource type="Texture2D" uid="uid://c5od8lr5gv00j" path="res://Images/Test/creditos.png" id="5_6iyac"]
+[ext_resource type="Texture2D" uid="uid://cyloah0bpjr17" path="res://Images/Test/salir.png" id="6_fdnlq"]
+[ext_resource type="AudioStream" uid="uid://bmthy11a5bnsc" path="res://Sound effects/Test/button sound.wav" id="7_jkdf5"]
+[ext_resource type="AudioStream" uid="uid://kf1c3t0v75k0" path="res://Music/Test/menu_chill.wav" id="8_wsu2k"]
 
 [node name="principal" type="Control"]
 layout_mode = 3
@@ -42,9 +42,9 @@ offset_left = -99.088
 offset_top = -111.792
 offset_right = 99.912
 offset_bottom = 111.208
-icon = ExtResource("1_8ed56")
+icon = ExtResource("1_344ge")
 expand_icon = true
-script = ExtResource("2_7w63j")
+script = ExtResource("2_ynf5e")
 
 [node name="Label" type="Label" parent="modos"]
 layout_mode = 1
@@ -75,9 +75,9 @@ offset_left = -46.264
 offset_top = -45.104
 offset_right = 45.736
 offset_bottom = 44.896
-icon = ExtResource("1_6ndk6")
+icon = ExtResource("3_hptm8")
 expand_icon = true
-script = ExtResource("2_7w63j")
+script = ExtResource("2_ynf5e")
 
 [node name="reglas" type="Button" parent="."]
 layout_mode = 1
@@ -90,7 +90,7 @@ offset_left = -45.608
 offset_top = -45.176
 offset_right = 46.392
 offset_bottom = 44.824
-icon = ExtResource("2_l1yxy")
+icon = ExtResource("4_d1ilt")
 expand_icon = true
 
 [node name="créditos" type="Button" parent="."]
@@ -104,7 +104,7 @@ offset_left = -45.512
 offset_top = -45.104
 offset_right = 46.488
 offset_bottom = 44.896
-icon = ExtResource("3_7w63j")
+icon = ExtResource("5_6iyac")
 expand_icon = true
 
 [node name="salir" type="Button" parent="."]
@@ -118,17 +118,17 @@ offset_left = -45.7521
 offset_top = -44.68
 offset_right = 46.2479
 offset_bottom = 45.32
-icon = ExtResource("4_lop0i")
+icon = ExtResource("6_fdnlq")
 expand_icon = true
-script = ExtResource("2_7w63j")
+script = ExtResource("2_ynf5e")
 
 [node name="ButtonSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("7_8ed56")
+stream = ExtResource("7_jkdf5")
 volume_db = 15.0
 bus = &"SFX"
 
 [node name="MenuChill" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("8_hjo07")
+stream = ExtResource("8_wsu2k")
 bus = &"Music"
 
 [connection signal="pressed" from="modos" to="modos" method="_on_modos_pressed"]

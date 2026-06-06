@@ -1,0 +1,60 @@
+[gd_scene load_steps=5 format=3 uid="uid://c7c1vhq5pb5h7"]
+
+[ext_resource type="Texture2D" uid="uid://hfduhierp8ap" path="res://Images/Test/circulo gris 130.png" id="2_lbc2h"]
+[ext_resource type="Texture2D" uid="uid://ugdb10atkxmn" path="res://Images/Test/circulo azul 130.png" id="3_fcmvp"]
+[ext_resource type="Texture2D" uid="uid://cd5ekix0xn2mm" path="res://Images/Test/circulo sin fondo.png" id="4_owcrv"]
+[ext_resource type="Texture2D" uid="uid://does2cfy2kqgo" path="res://Images/Test/flecha-linea.png" id="5_wvh8q"]
+
+[node name="Hp" type="Panel"]
+
+[node name="Health" type="TextureProgressBar" parent="."]
+layout_mode = 0
+offset_right = 130.0
+offset_bottom = 130.0
+scale = Vector2(0.8, 0.8)
+max_value = 180.0
+value = 180.0
+rounded = true
+fill_mode = 5
+texture_under = ExtResource("2_lbc2h")
+texture_progress = ExtResource("3_fcmvp")
+tint_over = Color(0.745098, 0.0156863, 0.0196078, 1)
+
+[node name="Circle" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 106.0
+offset_bottom = 106.0
+texture = ExtResource("4_owcrv")
+expand_mode = 1
+
+[node name="ArrowBig" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 31.0
+offset_top = 58.0
+offset_right = 92.0
+offset_bottom = 102.0
+rotation = -1.5708
+texture = ExtResource("5_wvh8q")
+expand_mode = 1
+
+[node name="ArrowSmall" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 31.0
+offset_top = 58.0
+offset_right = 75.0
+offset_bottom = 102.0
+rotation = -1.5708
+texture = ExtResource("5_wvh8q")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 42.0
+offset_right = 71.0
+offset_bottom = 70.0
+theme_override_font_sizes/font_size = 20
+text = "180"
+horizontal_alignment = 1

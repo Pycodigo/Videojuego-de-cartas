@@ -56,5 +56,5 @@ func _on_right_t_pressed() -> void:
 func _on_volver_pressed() -> void:
 	$ButtonSound.play()
 	await $ButtonSound.finished
-	get_tree().change_scene_to_file("res://Scenes/modos.tscn")
+	get_tree().change_scene_to_file("res://Scenes/modes.tscn")
 	Global.music = $MenuChill.get_playback_position()

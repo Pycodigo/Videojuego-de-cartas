@@ -89,7 +89,7 @@ func destroy_generator():
 		print("ERROR: no existe la escena:", "res://Scenes/fin_juego_prueba.tscn")
 		return
 
-	var victory_scene = preload("res://Scenes/fin_juego_prueba.tscn")
+	var victory_scene = preload("res://Scenes/Test/fin_juego_prueba.tscn")
 	var victory_panel = victory_scene.instantiate()
 
 	# Añadir al árbol en la raíz para asegurarnos que se vea por encima.

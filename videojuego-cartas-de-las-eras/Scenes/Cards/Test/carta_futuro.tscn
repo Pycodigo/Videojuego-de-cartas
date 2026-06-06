@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://b3lp5vwhopuep" path="res://Scenes/Test/carta_era_prueba.tscn" id="1_qblpk"]
 [ext_resource type="Script" uid="uid://dwgvv2rtpnvig" path="res://Scripts/Cards/Test/carta_futuro.gd" id="2_qblpk"]
-[ext_resource type="Texture2D" uid="uid://chuqlay1xxr62" path="res://Images/test/futuro.jpg" id="3_a4aft"]
+[ext_resource type="Texture2D" uid="uid://chuqlay1xxr62" path="res://Images/Test/futuro.jpg" id="3_a4aft"]
 
 [node name="Carta" instance=ExtResource("1_qblpk")]
 script = ExtResource("2_qblpk")

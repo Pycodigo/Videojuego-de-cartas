@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://b3lp5vwhopuep"]
 
 [ext_resource type="Script" uid="uid://bt58il7jb2lp2" path="res://Scripts/Test/carta_era_prueba.gd" id="1_pymfh"]
-[ext_resource type="Texture2D" uid="uid://q2oro1lhk423" path="res://Images/test/baseball-card.png" id="2_l80bv"]
+[ext_resource type="Texture2D" uid="uid://q2oro1lhk423" path="res://Images/Test/baseball-card.png" id="2_l80bv"]
 
 [node name="Carta" type="Panel"]
 custom_minimum_size = Vector2(120, 180)

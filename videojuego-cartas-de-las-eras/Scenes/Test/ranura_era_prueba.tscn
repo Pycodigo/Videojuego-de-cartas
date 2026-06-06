@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cfi6eogp3e0rc"]
 
 [ext_resource type="Script" uid="uid://ba7fnwko1gbuo" path="res://Scripts/Test/ranura_era_prueba.gd" id="1_sik7h"]
-[ext_resource type="Texture2D" uid="uid://bi8sj04q42pg0" path="res://Images/test/cuadro.png" id="2_bdb8b"]
+[ext_resource type="Texture2D" uid="uid://bi8sj04q42pg0" path="res://Images/Test/cuadro.png" id="2_bdb8b"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6682a"]
 size = Vector2(98, 120.25)

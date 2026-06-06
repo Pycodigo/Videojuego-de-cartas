@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://cyiswfk3x07np"]
+
+[ext_resource type="Texture2D" uid="uid://lluye314nbjp" path="res://Images/Slot.png" id="1_luhj6"]
+
+[node name="Slot" type="Node2D"]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 300.0
+offset_bottom = 420.0
+texture = ExtResource("1_luhj6")
+expand_mode = 1

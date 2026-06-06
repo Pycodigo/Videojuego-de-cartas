@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://hfduhierp8ap"
-path="res://.godot/imported/circulo gris 130.png-90f743eb21f10efa8b8358c765200f31.ctex"
+path="res://.godot/imported/circulo gris 130.png-79213a6c115d7035a2e9a0d614c0c217.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/test/circulo gris 130.png"
-dest_files=["res://.godot/imported/circulo gris 130.png-90f743eb21f10efa8b8358c765200f31.ctex"]
+source_file="res://Images/Test/circulo gris 130.png"
+dest_files=["res://.godot/imported/circulo gris 130.png-79213a6c115d7035a2e9a0d614c0c217.ctex"]
 
 [params]
 

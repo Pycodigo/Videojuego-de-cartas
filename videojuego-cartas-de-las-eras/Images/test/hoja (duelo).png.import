@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://3ghyxi0sfn31"
-path="res://.godot/imported/hoja (duelo).png-5c93a6df2082a4d80b0e81ded42c43a9.ctex"
+path="res://.godot/imported/hoja (duelo).png-92a5f83c5abb42619f6466494bd47445.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/test/hoja (duelo).png"
-dest_files=["res://.godot/imported/hoja (duelo).png-5c93a6df2082a4d80b0e81ded42c43a9.ctex"]
+source_file="res://Images/Test/hoja (duelo).png"
+dest_files=["res://.godot/imported/hoja (duelo).png-92a5f83c5abb42619f6466494bd47445.ctex"]
 
 [params]
 

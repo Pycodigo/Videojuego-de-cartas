@@ -1,4 +1,4 @@
-extends "res://Scripts/carta_normal_base_prueba.gd"
+extends "res://Scripts/Test/carta_normal_base_prueba.gd"
 
 func _ready() -> void:
 	card_name = "Rey de espadas"

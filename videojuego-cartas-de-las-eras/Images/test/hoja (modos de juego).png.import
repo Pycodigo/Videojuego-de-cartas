@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ddqa4nhj4en0e"
-path="res://.godot/imported/hoja (modos de juego).png-a6511bc087a871e17bc550b347d84ee8.ctex"
+path="res://.godot/imported/hoja (modos de juego).png-76af3a998958b5e80112e95017f50559.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/test/hoja (modos de juego).png"
-dest_files=["res://.godot/imported/hoja (modos de juego).png-a6511bc087a871e17bc550b347d84ee8.ctex"]
+source_file="res://Images/Test/hoja (modos de juego).png"
+dest_files=["res://.godot/imported/hoja (modos de juego).png-76af3a998958b5e80112e95017f50559.ctex"]
 
 [params]
 

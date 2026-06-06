@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bav1kjust62a4"
-path="res://.godot/imported/hoja (desafío).png-e027617d70eb1af94abbf20e141cd31b.ctex"
+path="res://.godot/imported/hoja (desafío).png-b209c8ab672c45f3a43f0ea9cb44158c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/test/hoja (desafío).png"
-dest_files=["res://.godot/imported/hoja (desafío).png-e027617d70eb1af94abbf20e141cd31b.ctex"]
+source_file="res://Images/Test/hoja (desafío).png"
+dest_files=["res://.godot/imported/hoja (desafío).png-b209c8ab672c45f3a43f0ea9cb44158c.ctex"]
 
 [params]
 

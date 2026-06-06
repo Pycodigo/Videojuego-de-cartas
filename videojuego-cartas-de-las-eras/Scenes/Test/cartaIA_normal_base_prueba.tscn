@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://bn1wbxc4pdsal"]
 
 [ext_resource type="Script" uid="uid://wjuu2q72cx7c" path="res://Scripts/Test/cartaIA_normal_base_prueba.gd" id="1_bsawk"]
-[ext_resource type="Texture2D" uid="uid://q2oro1lhk423" path="res://Images/test/baseball-card.png" id="2_3rgpu"]
-[ext_resource type="Texture2D" uid="uid://dya1dyuvlsp1w" path="res://Images/test/Carta reversa.png" id="2_bsawk"]
+[ext_resource type="Texture2D" uid="uid://q2oro1lhk423" path="res://Images/Test/baseball-card.png" id="2_3rgpu"]
+[ext_resource type="Texture2D" uid="uid://dya1dyuvlsp1w" path="res://Images/Test/Carta reversa.png" id="2_bsawk"]
 
 [node name="Carta" type="Panel"]
 custom_minimum_size = Vector2(140, 180)

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cd5ekix0xn2mm"
-path="res://.godot/imported/circulo sin fondo.png-d06f8637c949dce09af9b5c89f6e3dd5.ctex"
+path="res://.godot/imported/circulo sin fondo.png-373b6e6b9b4e9d88d58e91306284a80f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/test/circulo sin fondo.png"
-dest_files=["res://.godot/imported/circulo sin fondo.png-d06f8637c949dce09af9b5c89f6e3dd5.ctex"]
+source_file="res://Images/Test/circulo sin fondo.png"
+dest_files=["res://.godot/imported/circulo sin fondo.png-373b6e6b9b4e9d88d58e91306284a80f.ctex"]
 
 [params]
 

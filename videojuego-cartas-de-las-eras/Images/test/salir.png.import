@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cyloah0bpjr17"
-path="res://.godot/imported/salir.png-f9db9920ffe11c18a878ea520772cb2c.ctex"
+path="res://.godot/imported/salir.png-056f66efb8ac35853e3806350a97d782.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/test/salir.png"
-dest_files=["res://.godot/imported/salir.png-f9db9920ffe11c18a878ea520772cb2c.ctex"]
+source_file="res://Images/Test/salir.png"
+dest_files=["res://.godot/imported/salir.png-056f66efb8ac35853e3806350a97d782.ctex"]
 
 [params]
 

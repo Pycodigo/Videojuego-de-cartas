@@ -1,4 +1,4 @@
-extends "res://Scripts/cartaIA_era_prueba.gd"
+extends "res://Scripts/Test/cartaIA_era_prueba.gd"
 
 func _ready() -> void:
 	name_era = "Era futurista"

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://w4viae8bs1b7"]
 
-[ext_resource type="Script" uid="uid://ih34u6skru7l" path="res://Scripts/barajaIA_prueba.gd" id="1_4houi"]
-[ext_resource type="Texture2D" uid="uid://q2oro1lhk423" path="res://Images/test/baseball-card.png" id="2_n5kn0"]
+[ext_resource type="Script" uid="uid://ih34u6skru7l" path="res://Scripts/Test/barajaIA_prueba.gd" id="1_4houi"]
+[ext_resource type="Texture2D" uid="uid://q2oro1lhk423" path="res://Images/Test/baseball-card.png" id="2_n5kn0"]
 
 [node name="barajaIA" type="Node2D"]
 script = ExtResource("1_4houi")
