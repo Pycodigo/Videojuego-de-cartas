@@ -1,4 +1,4 @@
-extends Panel
+extends Control
 
 # Atributos de la carta.
 @export var card_name: String
@@ -14,28 +14,43 @@ extends Panel
 @export var cooldown: int
 
 # Nodos de la carta.
-@onready var card_panel = $"."
-@onready var cart_art = $CardTexture
-@onready var era_art = $EraTexture
-@onready var name_text = $NameText
-@onready var energy_cost_text = $EnergyText
-@onready var ability_text = $AbilityText
-@onready var hp_text = $HpText
-@onready var attack_text = $AttackText
-@onready var defense_text = $DefenseText
-@onready var cooldown_text = $CooldownText
+@onready var card_panel = $BasicCard
+@onready var cart_art = $BasicCard/CardTexture
+@onready var era_art = $BasicCard/EraTexture
+@onready var name_text = $BasicCard/NameText
+@onready var energy_cost_text = $BasicCard/EnergyText
+@onready var ability_text = $BasicCard/AbilityText
+@onready var hp_text = $BasicCard/HpText
+@onready var attack_text = $BasicCard/AttackText
+@onready var defense_text = $BasicCard/DefenseText
+@onready var cooldown_text = $BasicCard/CooldownText
 
 # Detalles de la carta.
 @onready var detail_panel = $Details
-@onready var plus_button = $PlusButton
-@onready var plus_text = $PlusButton/PlusText
-@onready var cancel_button = $CancelButton
-@onready var cancel_text = $CancelButton/CancelText
+@onready var name_detail = $Details/NameDetail
+@onready var era_detail = $Details/EraDetailText
+@onready var ability_detail = $Details/AbilityNameDetailText
+@onready var ability_description = $Details/ScrollContainer/DescriptionDetailText
+@onready var hp_num_detail = $Details/HPNumDetail
+@onready var energy_cost_num_detail = $Details/EnergyNumDetail
+@onready var atk_num_detail = $Details/ATKNumDetail
+@onready var def_num_detail = $Details/DEFNumDetail
+@onready var cooldown_num_detail = $Details/CooldownNumDetail
+@onready var state_text_detail = $Details/StateText
+
+# Botones.
+@onready var plus_button = $BasicCard/PlusButton
+@onready var plus_text = $BasicCard/PlusButton/PlusText
+@onready var cancel_button = $BasicCard/CancelButton
+@onready var cancel_text = $BasicCard/CancelButton/CancelText
 
 # Tamaño de la carta.
 var card_size = Vector2(300, 400)
 # Tamaño agrandado.
 var card_zoom_size = Vector2(512, 700)
+
+# Tamaño fijo del panel de detalles (debe coincidir con el diseño de la .tscn).
+const DETAIL_SIZE = Vector2(912, 700)
 
 # Guardar posiciones.
 var original_position_global: Vector2
@@ -63,12 +78,22 @@ func init_card():
 		era_art.texture = era_texture
 		era_art.stretch_mode = TextureRect.STRETCH_SCALE
 	name_text.text = card_name
+	name_detail.text = card_name
+	era_detail.text = era_name
 	energy_cost_text.text = str(energy_cost)
+	energy_cost_num_detail.text = str(energy_cost)
 	ability_text.text = ability.get("name", "")
+	ability_detail.text = ability.get("name", "")
+	state_text_detail.text = ability.get("state", "")
+	ability_description.text = ability.get("description", "")
 	hp_text.text = str(hp)
 	attack_text.text = str(attack)
 	defense_text.text = str(defense)
 	cooldown_text.text = str(cooldown)
+	hp_num_detail.text = str(hp)
+	atk_num_detail.text = str(attack)
+	def_num_detail.text = str(defense)
+	cooldown_num_detail.text = str(cooldown)
 	
 	# Ocultar el panel de la info al principio (y desactivar el botón).
 	detail_panel.visible = false
@@ -80,7 +105,7 @@ func init_card():
 	cancel_text.visible = false
 	
 	# Guardar la posición inicial global de la carta.
-	original_position_global = global_position
+	original_position_global = card_panel.global_position
 
 # Zoom de la carta.
 func _show_zoom() -> void:
@@ -194,23 +219,20 @@ func _on_plus_button_pressed() -> void:
 	detail_panel.visible = true
 	
 	var viewport_size = get_viewport().get_visible_rect().size
-	var margin = 40
 	var gap = 50
-	var scale = card_zoom_size / card_size
 	
-	# Calcular tamaño y posición del panel.
-	var panel_width = viewport_size.x - card_zoom_size.x - gap - margin * 2
-	detail_panel.size = Vector2(panel_width / scale.x, card_zoom_size.y / scale.y)
+	# El panel usa tamaño fijo para que coincida con el diseño de sus hijos en la .tscn.
+	detail_panel.size = DETAIL_SIZE
 	
-	# Calcular posiciones de carta y panel centrados juntos.
-	var total_width = card_zoom_size.x + gap + panel_width
+	# Centrar carta y panel juntos en pantalla.
+	var total_width = card_zoom_size.x + gap + DETAIL_SIZE.x
 	var start_x = viewport_size.x / 2 - total_width / 2
 	var start_y = viewport_size.y / 2 - card_zoom_size.y / 2
 	
-	detail_panel.position = Vector2(card_size.x + gap / scale.x, 0)
-	
 	var target_pos_left = Vector2(start_x, start_y)
-	var panel_pos = Vector2(start_x + card_zoom_size.x + gap, start_y)
+	
+	# Detail se posiciona en global, justo a la derecha de la carta.
+	detail_panel.global_position = Vector2(start_x + card_zoom_size.x + gap, start_y)
 	
 	# Crear animaciones.
 	var tween = create_tween()

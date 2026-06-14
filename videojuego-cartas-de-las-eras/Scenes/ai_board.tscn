@@ -1,6 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://0qv0xluy23g7"]
-
-[ext_resource type="PackedScene" uid="uid://7wd1ti8tipi4" path="res://Scenes/Cards/basic_card.tscn" id="1_abaw6"]
+[gd_scene format=3 uid="uid://0qv0xluy23g7"]
 
 [node name="AiBoard" type="Control"]
 texture_filter = 1
@@ -10,12 +8,5 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="BasicCard" parent="." instance=ExtResource("1_abaw6")]
-layout_mode = 0
-offset_left = 669.0
-offset_top = 347.0
-offset_right = 969.0
-offset_bottom = 747.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
