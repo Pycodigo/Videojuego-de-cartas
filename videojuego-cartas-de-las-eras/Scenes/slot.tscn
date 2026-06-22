@@ -1,11 +1,22 @@
-[gd_scene load_steps=2 format=3 uid="uid://cyiswfk3x07np"]
+[gd_scene load_steps=4 format=3 uid="uid://cyiswfk3x07np"]
 
+[ext_resource type="Script" uid="uid://nhs1b2mdo5qa" path="res://Scripts/slot.gd" id="1_12ej0"]
 [ext_resource type="Texture2D" uid="uid://lluye314nbjp" path="res://Images/Slot.png" id="1_luhj6"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_luhj6"]
+size = Vector2(130, 240)
+
 [node name="Slot" type="Node2D"]
+script = ExtResource("1_12ej0")
 
 [node name="TextureRect" type="TextureRect" parent="."]
-offset_right = 300.0
-offset_bottom = 420.0
+offset_right = 120.0
+offset_bottom = 200.0
 texture = ExtResource("1_luhj6")
 expand_mode = 1
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(60, 100)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_luhj6")

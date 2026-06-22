@@ -1,0 +1,308 @@
+[gd_scene load_steps=6 format=3 uid="uid://c50kma1r2bivt"]
+
+[ext_resource type="Texture2D" uid="uid://dmyr8prvkcfj5" path="res://Images/Test/Info.png" id="1_cbgd3"]
+[ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/Test/volver.png" id="1_jdjvw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cbgd3"]
+bg_color = Color(0.6, 0.6, 0.6, 0.196078)
+border_width_left = 15
+border_width_top = 5
+border_width_right = 15
+border_width_bottom = 5
+border_color = Color(0.6, 0.6, 0.6, 0.196078)
+border_blend = true
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ta10"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q6pgw"]
+bg_color = Color(0, 0.219608, 0.509804, 1)
+border_color = Color(0, 0.219608, 0.509804, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="DeckEditor" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 19.0
+offset_right = -14.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopBarName" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 2.0
+offset_top = -515.0
+offset_right = -916.0
+offset_bottom = -449.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 50
+
+[node name="DeckLabel" type="Label" parent="TopBarName"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Mazo:"
+
+[node name="DeckNameInput" type="LineEdit" parent="TopBarName"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 35
+placeholder_text = "Nombre del mazo..."
+
+[node name="BtnNew" type="Button" parent="TopBarName"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Nuevo"
+
+[node name="BtnLoad" type="Button" parent="TopBarName"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Cargar"
+
+[node name="TopBarActions" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 1293.0
+offset_top = -515.0
+offset_right = 12.0
+offset_bottom = -449.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 50
+
+[node name="BtnDelete" type="Button" parent="TopBarActions"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Eliminar"
+
+[node name="BtnSave" type="Button" parent="TopBarActions"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Guardar"
+
+[node name="BtnInfo" type="Button" parent="TopBarActions"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+icon = ExtResource("1_cbgd3")
+icon_alignment = 1
+expand_icon = true
+
+[node name="BtnBack" type="Button" parent="TopBarActions"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+icon = ExtResource("1_jdjvw")
+icon_alignment = 1
+expand_icon = true
+
+[node name="MainBar" type="HBoxContainer" parent="."]
+layout_mode = 1
+offset_top = 124.0
+offset_right = 1886.0
+offset_bottom = 1081.0
+theme_override_constants/separation = 40
+
+[node name="ColectionBar" type="VBoxContainer" parent="MainBar"]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="HeaderColection" type="HBoxContainer" parent="MainBar/ColectionBar"]
+layout_mode = 2
+theme_override_constants/separation = 800
+
+[node name="TitleColection" type="Label" parent="MainBar/ColectionBar/HeaderColection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Colección"
+
+[node name="CountColection" type="Label" parent="MainBar/ColectionBar/HeaderColection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "999"
+
+[node name="LineEdit" type="LineEdit" parent="MainBar/ColectionBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+placeholder_text = "Buscar carta..."
+
+[node name="Filter" type="VBoxContainer" parent="MainBar/ColectionBar"]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="CardsFilter" type="HBoxContainer" parent="MainBar/ColectionBar/Filter"]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="AllCardsBtn" type="Button" parent="MainBar/ColectionBar/Filter/CardsFilter"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_cbgd3")
+text = "Todas"
+
+[node name="BasicBtn" type="Button" parent="MainBar/ColectionBar/Filter/CardsFilter"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_cbgd3")
+text = "Básicas"
+
+[node name="EraBtn" type="Button" parent="MainBar/ColectionBar/Filter/CardsFilter"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_cbgd3")
+text = "Eras"
+
+[node name="HSeparator" type="HSeparator" parent="MainBar/ColectionBar/Filter"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="ErasFilter" type="HBoxContainer" parent="MainBar/ColectionBar/Filter"]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="AllErasBtn" type="Button" parent="MainBar/ColectionBar/Filter/ErasFilter"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_cbgd3")
+text = "Todas"
+
+[node name="PrehistoryBtn" type="Button" parent="MainBar/ColectionBar/Filter/ErasFilter"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_cbgd3")
+text = "Prehistoria"
+
+[node name="AncientBtn" type="Button" parent="MainBar/ColectionBar/Filter/ErasFilter"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_cbgd3")
+text = "Antigüedad"
+
+[node name="MedievalBtn" type="Button" parent="MainBar/ColectionBar/Filter/ErasFilter"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_cbgd3")
+text = "Edad Media"
+
+[node name="ErasFilter2" type="HBoxContainer" parent="MainBar/ColectionBar/Filter"]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="IRBtn" type="Button" parent="MainBar/ColectionBar/Filter/ErasFilter2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_cbgd3")
+text = "Rev. Industrial"
+
+[node name="FutureBtn" type="Button" parent="MainBar/ColectionBar/Filter/ErasFilter2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_cbgd3")
+text = "Futuro"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainBar/ColectionBar"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="MainBar/ColectionBar/ScrollContainer"]
+layout_mode = 2
+columns = 4
+
+[node name="DeckBar" type="VBoxContainer" parent="MainBar"]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="Header" type="VBoxContainer" parent="MainBar/DeckBar"]
+layout_mode = 2
+
+[node name="HeaderDeck" type="HBoxContainer" parent="MainBar/DeckBar/Header"]
+layout_mode = 2
+theme_override_constants/separation = 550
+
+[node name="TitleDeck" type="Label" parent="MainBar/DeckBar/Header/HeaderDeck"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Mazo actual"
+
+[node name="CountDeck" type="Label" parent="MainBar/DeckBar/Header/HeaderDeck"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "0/60"
+
+[node name="ProgressBar" type="ProgressBar" parent="MainBar/DeckBar/Header"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.219608, 0.509804, 1)
+theme_override_styles/background = SubResource("StyleBoxFlat_7ta10")
+theme_override_styles/fill = SubResource("StyleBoxFlat_q6pgw")
+max_value = 60.0
+value = 30.0
+show_percentage = false
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainBar/DeckBar"]
+layout_mode = 2
+
+[node name="DeckList" type="VBoxContainer" parent="MainBar/DeckBar/ScrollContainer"]
+layout_mode = 2
+
+[node name="Stadistics" type="VBoxContainer" parent="MainBar/DeckBar"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="StadisticsCards" type="HBoxContainer" parent="MainBar/DeckBar/Stadistics"]
+layout_mode = 2
+theme_override_constants/separation = 100
+
+[node name="PrehistoryStats" type="Label" parent="MainBar/DeckBar/Stadistics/StadisticsCards"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Prehistoria x20"
+
+[node name="AncientStats" type="Label" parent="MainBar/DeckBar/Stadistics/StadisticsCards"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Antigüedad x20"
+
+[node name="MedievalStats" type="Label" parent="MainBar/DeckBar/Stadistics/StadisticsCards"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Edad Media x20"
+
+[node name="StadisticsCards2" type="HBoxContainer" parent="MainBar/DeckBar/Stadistics"]
+layout_mode = 2
+theme_override_constants/separation = 100
+alignment = 1
+
+[node name="IRStats" type="Label" parent="MainBar/DeckBar/Stadistics/StadisticsCards2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Rev. Industrial x20"
+
+[node name="FutureStats" type="Label" parent="MainBar/DeckBar/Stadistics/StadisticsCards2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Futuro x20"

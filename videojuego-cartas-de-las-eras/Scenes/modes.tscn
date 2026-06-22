@@ -109,7 +109,6 @@ expand_icon = true
 [node name="ButtonSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_j80um")
 volume_db = 15.0
-bus = &"Sound effects"
 
 [node name="MenuChill" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_mxn7y")

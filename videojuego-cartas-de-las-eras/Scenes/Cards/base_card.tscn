@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cqni8h8tmukl8"]
+[gd_scene load_steps=18 format=3 uid="uid://cqni8h8tmukl8"]
 
 [ext_resource type="Script" uid="uid://b5lqa63fswvko" path="res://Scripts/Cards/base_card.gd" id="1_x5hng"]
 [ext_resource type="Texture2D" uid="uid://myue64h8ybjx" path="res://Images/Polígono.png" id="2_rfn2n"]
@@ -10,8 +10,10 @@
 [ext_resource type="Texture2D" uid="uid://dap2g0pwheym" path="res://Images/Rayo.png" id="8_2sihe"]
 [ext_resource type="Texture2D" uid="uid://byxauoe3tvc8m" path="res://Images/Habilidad-borde.png" id="9_opvx1"]
 [ext_resource type="Texture2D" uid="uid://13rn04bcy7yx" path="res://Images/Boton.png" id="10_qcxs8"]
+[ext_resource type="Texture2D" uid="uid://dmxs75a103jmw" path="res://Images/Boton Atacar.png" id="11_2w3gi"]
 [ext_resource type="Texture2D" uid="uid://cltesqibe6806" path="res://Images/Borde PS detalle.png" id="11_vr43h"]
 [ext_resource type="Texture2D" uid="uid://dvh3vrgdob301" path="res://Images/Borde Coste detalle.png" id="12_8cdgg"]
+[ext_resource type="Texture2D" uid="uid://d0ekkxl0u2qc7" path="res://Images/Boton Defender.png" id="12_fvadl"]
 [ext_resource type="Texture2D" uid="uid://cfnasn48tup1v" path="res://Images/Borde ATK detalle.png" id="13_i4kx0"]
 [ext_resource type="Texture2D" uid="uid://bpwr3idxqaeck" path="res://Images/Borde DEF detalle.png" id="14_ho3s0"]
 [ext_resource type="Texture2D" uid="uid://cdafceox73xs8" path="res://Images/linea.png" id="15_bty5r"]
@@ -250,12 +252,6 @@ theme_override_font_sizes/font_size = 20
 text = "99"
 horizontal_alignment = 1
 
-[node name="Options" type="BoxContainer" parent="BasicCard"]
-layout_mode = 0
-offset_top = -62.0
-offset_right = 297.0
-offset_bottom = 476.0
-
 [node name="PlusButton" type="TextureButton" parent="BasicCard"]
 layout_mode = 0
 offset_left = 101.0
@@ -298,6 +294,26 @@ theme_override_colors/font_color = Color(0.752637, 0.104591, 0.108491, 1)
 theme_override_font_sizes/font_size = 30
 text = "X"
 horizontal_alignment = 1
+
+[node name="ATKBtn" type="Button" parent="BasicCard"]
+layout_mode = 0
+offset_left = -4.0
+offset_top = -7.0
+offset_right = 304.0
+offset_bottom = 155.0
+icon = ExtResource("11_2w3gi")
+flat = true
+expand_icon = true
+
+[node name="DefBtn" type="Button" parent="BasicCard"]
+layout_mode = 0
+offset_left = -4.0
+offset_top = 245.0
+offset_right = 304.0
+offset_bottom = 407.0
+icon = ExtResource("12_fvadl")
+flat = true
+expand_icon = true
 
 [node name="Details" type="Panel" parent="."]
 layout_mode = 0
@@ -511,7 +527,7 @@ anchor_top = 0.26
 anchor_right = 0.38764
 anchor_bottom = 0.33
 theme_override_font_sizes/font_size = 18
-text = "Puntos de Salud (PS)"
+text = "BASE_HP_DETAIL_TEXT"
 horizontal_alignment = 1
 
 [node name="EnergyDetailText" type="Label" parent="Details"]
@@ -604,6 +620,6 @@ size_flags_horizontal = 3
 text = "bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
 fit_content = true
 
-[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="gui_input" from="BasicCard" to="." method="_on_basic_card_gui_input"]
 [connection signal="pressed" from="BasicCard/PlusButton" to="." method="_on_plus_button_pressed"]
 [connection signal="pressed" from="BasicCard/CancelButton" to="." method="_on_cancel_button_pressed"]

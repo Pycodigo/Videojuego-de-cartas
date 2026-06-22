@@ -1,4 +1,7 @@
-[gd_scene format=3 uid="uid://0qv0xluy23g7"]
+[gd_scene load_steps=3 format=3 uid="uid://0qv0xluy23g7"]
+
+[ext_resource type="PackedScene" uid="uid://cqni8h8tmukl8" path="res://Scenes/Cards/base_card.tscn" id="1_abaw6"]
+[ext_resource type="PackedScene" uid="uid://cyiswfk3x07np" path="res://Scenes/slot.tscn" id="2_t2wnw"]
 
 [node name="AiBoard" type="Control"]
 texture_filter = 1
@@ -9,4 +12,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Slot" parent="." instance=ExtResource("2_t2wnw")]
+position = Vector2(371, 621)
+
+[node name="BaseCard" parent="." instance=ExtResource("1_abaw6")]
+layout_mode = 1
+offset_left = 813.0
+offset_top = 305.0
+offset_right = 813.0
+offset_bottom = -75.0

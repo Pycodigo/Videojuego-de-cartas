@@ -43,6 +43,8 @@ extends Control
 @onready var plus_text = $BasicCard/PlusButton/PlusText
 @onready var cancel_button = $BasicCard/CancelButton
 @onready var cancel_text = $BasicCard/CancelButton/CancelText
+@onready var atk_btn = $BasicCard/ATKBtn
+@onready var def_btn = $BasicCard/DefBtn
 
 # Tamaño de la carta.
 var card_size = Vector2(300, 400)
@@ -55,19 +57,36 @@ const DETAIL_SIZE = Vector2(912, 700)
 # Guardar posiciones.
 var original_position_global: Vector2
 var original_position_local: Vector2
+var atk_btn_original_pos: Vector2
+var def_btn_original_pos: Vector2
 
 # Tiempo del ratón sobre la carta.
 var mouse_time: float = 0.0
 # Indicar que el ratón pasó por la carta.
 var mouse_hovering: bool = false
+# Indicar si el ratón está sujetando la carta.
+var hold_card: bool = false
 # Determinar si la carta tiene zoom.
 var zoom_active: bool = false
+var cannot_zoom: bool = false
 # Hacer que el panel de detalles aparezca solo una vez.
 var detail_panel_appeared: bool = false
+# Hacer que las acciones de una carta aparezcan solo una vez.
+var actions_showed: bool = false
+# Guardar distancia entre cursor y esquina de la carta.
+var drag_offset = null
+
+# Estado de arrastre/click.
+var press_position: Vector2 = Vector2.ZERO
+var is_dragging: bool = false
+const DRAG_THRESHOLD := 15.0  # Píxeles que hay que mover el ratón para que cuente como arrastre.
 
 
 func _ready() -> void:
 	init_card()
+	# Conectar las funciones del ratón a la carta de panel.
+	if not card_panel.gui_input.is_connected(_on_basic_card_gui_input):
+		card_panel.gui_input.connect(_on_basic_card_gui_input)
 
 # Base de las cartas.
 func init_card():
@@ -95,6 +114,12 @@ func init_card():
 	def_num_detail.text = str(defense)
 	cooldown_num_detail.text = str(cooldown)
 	
+	# Ocultar botones de acciones.
+	atk_btn.visible = false
+	def_btn.visible = false
+	atk_btn.disabled = true
+	def_btn.disabled = true
+	
 	# Ocultar el panel de la info al principio (y desactivar el botón).
 	detail_panel.visible = false
 	plus_button.visible = false
@@ -106,6 +131,9 @@ func init_card():
 	
 	# Guardar la posición inicial global de la carta.
 	original_position_global = card_panel.global_position
+	
+	atk_btn_original_pos = atk_btn.position
+	def_btn_original_pos = def_btn.position
 
 # Zoom de la carta.
 func _show_zoom() -> void:
@@ -178,16 +206,23 @@ func _hide_zoom() -> void:
 	tween.tween_callback(func(): plus_text.text = "+")
 
 func _process(delta: float) -> void:
-	if mouse_hovering and not zoom_active:
-		# Inicializar el 'cronómetro' del ratón.
+	# Calcular hover en tiempo real en vez de depender de señales.
+	var mouse_over = card_panel.get_global_rect().has_point(get_global_mouse_position())
+	
+	if not mouse_over or zoom_active or cannot_zoom or hold_card:
+		mouse_time = 0.0
+		if not mouse_over:
+			mouse_hovering = false
+	else:
+		mouse_hovering = true
 		mouse_time += delta
 		if mouse_time >= 1.5:
+			mouse_time = 0.0
 			zoom_active = true
 			_show_zoom()
-
-func _on_mouse_entered() -> void:
-	# Ponemos este bool, pues mouse_hovering solo se activa una vez.
-	mouse_hovering = true
+	
+	if hold_card:
+		card_panel.global_position = get_global_mouse_position() - drag_offset
 
 func _on_plus_button_pressed() -> void:
 	if detail_panel_appeared:
@@ -261,3 +296,112 @@ func _on_cancel_button_pressed() -> void:
 	if zoom_active:
 		zoom_active = false
 		_hide_zoom()
+
+
+func _on_basic_card_gui_input(event: InputEvent) -> void:
+	if zoom_active:
+		return
+
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			# Aún no se arrastra, solo guardar dónde se pulsó.
+			press_position = get_global_mouse_position()
+			drag_offset = press_position - card_panel.global_position
+			is_dragging = false
+			mouse_hovering = false
+			mouse_time = 0.0
+		else:
+			if is_dragging:
+				hold_card = false
+				is_dragging = false
+				_try_drop_on_slot()
+			else:
+				# El ratón nunca superó el umbral: fue un click.
+				_on_card_left_clicked()
+
+	elif event is InputEventMouseMotion:
+		if event.button_mask & MOUSE_BUTTON_MASK_LEFT and not is_dragging:
+			if press_position.distance_to(get_global_mouse_position()) >= DRAG_THRESHOLD:
+				is_dragging = true
+				hold_card = true
+				print("Arrastrando carta...")
+
+func _input(event: InputEvent) -> void:
+	if not actions_showed:
+		return
+	
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if not _is_click_inside_card(get_global_mouse_position()):
+			_deselect_card()
+
+
+func _is_click_inside_card(point: Vector2) -> bool:
+	if card_panel.get_global_rect().has_point(point):
+		return true
+	if atk_btn.visible and atk_btn.get_global_rect().has_point(point):
+		return true
+	if def_btn.visible and def_btn.get_global_rect().has_point(point):
+		return true
+	return false
+
+
+func _deselect_card() -> void:
+	cannot_zoom = false
+	actions_showed = false
+	
+	var tween = create_tween()
+	tween.tween_property(atk_btn, "position:y", atk_btn_original_pos.y, 0.4)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.parallel().tween_property(def_btn, "position:y", def_btn_original_pos.y, 0.4)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.parallel().tween_property(atk_btn, "modulate:a", 0.0, 0.3)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.parallel().tween_property(def_btn, "modulate:a", 0.0, 0.3)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
+	tween.tween_callback(func():
+		atk_btn.visible = false
+		def_btn.visible = false
+		atk_btn.disabled = true
+		def_btn.disabled = true
+	)
+
+func _try_drop_on_slot() -> void:
+	var mouse_pos = get_global_mouse_position()
+	# Buscar todos los slots disponibles.
+	var slots = get_tree().get_nodes_in_group("slots")
+	for slot in slots:
+		if slot.contains_point(mouse_pos):
+			if slot.try_place_card(self):
+				return
+	# Si no cayó en ningún slot válido, volver a la posición anterior.
+	card_panel.global_position = original_position_global
+	
+
+func _on_card_left_clicked() -> void:
+	if actions_showed:
+		return
+	
+	print("Click izquierdo sobre la carta...")
+	cannot_zoom = true
+	
+	# Crear animaciones.
+	var tween = create_tween()
+	# Mover en vertical los botones, y que aparezcan de forma suave.
+	tween.tween_property(atk_btn, "position:y", atk_btn.position.y - 150, 0.5)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.parallel().tween_property(def_btn, "position:y", def_btn.position.y + 150, 0.5)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	atk_btn.modulate.a = 0.0
+	tween.parallel().tween_property(atk_btn, "modulate:a", 1.0, 0.4)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	def_btn.modulate.a = 0.0
+	tween.parallel().tween_property(def_btn, "modulate:a", 1.0, 0.4)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
+	atk_btn.visible = true
+	def_btn.visible = true
+	atk_btn.disabled = false
+	def_btn.disabled = false
+	
+	actions_showed = true
