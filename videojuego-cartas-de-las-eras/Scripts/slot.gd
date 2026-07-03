@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 signal card_placed(card)
 
@@ -6,6 +6,8 @@ signal card_placed(card)
 @export var accepted_card_type: String = ""
 
 var occupied: bool = false
+# Carta que ocupa el slot (null si está libre).
+var current_card = null
 
 func _ready() -> void:
 	add_to_group("slots")
@@ -18,11 +20,21 @@ func try_place_card(card) -> bool:
 		print("Este slot solo acepta cartas de tipo: ", accepted_card_type)
 		return false
 	occupied = true
+	current_card = card
 	card_placed.emit(card)
 	print("Carta colocada: ", card.card_name)
 	return true
 
+# Llamar cuando la carta es removida o eliminada. Libera dicho slot.
+func remove_card() -> void:
+	if not occupied:
+		return
+	
+	var card = current_card
+	occupied = false
+	current_card = null
+	card_placed.emit(card)
+
 func contains_point(point: Vector2) -> bool:
 	# Área de la colisión para las cartas.
-	var slot_rect = Rect2(global_position, Vector2(130, 240))
-	return slot_rect.has_point(point)
+	return get_global_rect().has_point(point)

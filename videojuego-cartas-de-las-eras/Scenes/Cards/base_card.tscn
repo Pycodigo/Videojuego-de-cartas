@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cqni8h8tmukl8"]
+[gd_scene load_steps=20 format=3 uid="uid://cqni8h8tmukl8"]
 
 [ext_resource type="Script" uid="uid://b5lqa63fswvko" path="res://Scripts/Cards/base_card.gd" id="1_x5hng"]
 [ext_resource type="Texture2D" uid="uid://myue64h8ybjx" path="res://Images/Polígono.png" id="2_rfn2n"]
@@ -9,11 +9,13 @@
 [ext_resource type="Texture2D" uid="uid://dkecbfu13gon2" path="res://Images/Espada.png" id="7_0wn3j"]
 [ext_resource type="Texture2D" uid="uid://dap2g0pwheym" path="res://Images/Rayo.png" id="8_2sihe"]
 [ext_resource type="Texture2D" uid="uid://byxauoe3tvc8m" path="res://Images/Habilidad-borde.png" id="9_opvx1"]
+[ext_resource type="Texture2D" uid="uid://ctq85w115fk3r" path="res://Images/Enfriamiento.png" id="10_aod86"]
 [ext_resource type="Texture2D" uid="uid://13rn04bcy7yx" path="res://Images/Boton.png" id="10_qcxs8"]
 [ext_resource type="Texture2D" uid="uid://dmxs75a103jmw" path="res://Images/Boton Atacar.png" id="11_2w3gi"]
 [ext_resource type="Texture2D" uid="uid://cltesqibe6806" path="res://Images/Borde PS detalle.png" id="11_vr43h"]
 [ext_resource type="Texture2D" uid="uid://dvh3vrgdob301" path="res://Images/Borde Coste detalle.png" id="12_8cdgg"]
 [ext_resource type="Texture2D" uid="uid://d0ekkxl0u2qc7" path="res://Images/Boton Defender.png" id="12_fvadl"]
+[ext_resource type="Texture2D" uid="uid://b3pwm8pt3l2ge" path="res://Images/Borde stats zoom.png" id="13_fvadl"]
 [ext_resource type="Texture2D" uid="uid://cfnasn48tup1v" path="res://Images/Borde ATK detalle.png" id="13_i4kx0"]
 [ext_resource type="Texture2D" uid="uid://bpwr3idxqaeck" path="res://Images/Borde DEF detalle.png" id="14_ho3s0"]
 [ext_resource type="Texture2D" uid="uid://cdafceox73xs8" path="res://Images/linea.png" id="15_bty5r"]
@@ -115,6 +117,15 @@ texture = ExtResource("3_2w3gi")
 expand_mode = 1
 flip_h = true
 
+[node name="ThunderTexture" type="TextureRect" parent="BasicCard"]
+layout_mode = 0
+offset_left = 284.0
+offset_top = 2.0
+offset_right = 299.0
+offset_bottom = 18.0
+texture = ExtResource("8_2sihe")
+expand_mode = 1
+
 [node name="HeartTexture" type="TextureRect" parent="BasicCard"]
 layout_mode = 0
 offset_left = 3.0
@@ -142,15 +153,6 @@ offset_bottom = 100.0
 texture = ExtResource("7_0wn3j")
 expand_mode = 1
 
-[node name="ThunderTexture" type="TextureRect" parent="BasicCard"]
-layout_mode = 0
-offset_left = 284.0
-offset_top = 2.0
-offset_right = 299.0
-offset_bottom = 18.0
-texture = ExtResource("8_2sihe")
-expand_mode = 1
-
 [node name="CardTexture" type="TextureRect" parent="BasicCard"]
 layout_mode = 0
 offset_top = 104.0
@@ -173,6 +175,21 @@ offset_bottom = 365.4
 texture = ExtResource("9_opvx1")
 expand_mode = 1
 
+[node name="CooldownTexture" type="TextureRect" parent="BasicCard"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.094
+anchor_right = 0.5
+anchor_bottom = 0.094
+offset_left = 97.0
+offset_top = 296.4
+offset_right = 116.0
+offset_bottom = 318.4
+texture = ExtResource("10_aod86")
+expand_mode = 1
+
 [node name="NameText" type="Label" parent="BasicCard"]
 texture_filter = 1
 layout_mode = 0
@@ -187,9 +204,9 @@ horizontal_alignment = 1
 [node name="AbilityText" type="Label" parent="BasicCard"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 66.0
+offset_left = 1.0
 offset_top = 353.0
-offset_right = 244.0
+offset_right = 299.0
 offset_bottom = 381.0
 theme_override_font_sizes/font_size = 20
 text = "Nombre habilidad"
@@ -252,6 +269,28 @@ theme_override_font_sizes/font_size = 20
 text = "99"
 horizontal_alignment = 1
 
+[node name="ATKBtn" type="Button" parent="BasicCard"]
+visible = false
+layout_mode = 0
+offset_left = -4.0
+offset_top = -7.0
+offset_right = 304.0
+offset_bottom = 155.0
+icon = ExtResource("11_2w3gi")
+flat = true
+expand_icon = true
+
+[node name="DefBtn" type="Button" parent="BasicCard"]
+visible = false
+layout_mode = 0
+offset_left = -4.0
+offset_top = 245.0
+offset_right = 304.0
+offset_bottom = 407.0
+icon = ExtResource("12_fvadl")
+flat = true
+expand_icon = true
+
 [node name="PlusButton" type="TextureButton" parent="BasicCard"]
 layout_mode = 0
 offset_left = 101.0
@@ -295,25 +334,173 @@ theme_override_font_sizes/font_size = 30
 text = "X"
 horizontal_alignment = 1
 
-[node name="ATKBtn" type="Button" parent="BasicCard"]
+[node name="HpZoomBorderTexture" type="TextureRect" parent="BasicCard"]
 layout_mode = 0
-offset_left = -4.0
-offset_top = -7.0
-offset_right = 304.0
-offset_bottom = 155.0
-icon = ExtResource("11_2w3gi")
-flat = true
-expand_icon = true
+offset_left = 26.0
+offset_top = 195.0
+offset_right = 105.0
+offset_bottom = 229.0
+texture = ExtResource("13_fvadl")
+expand_mode = 1
 
-[node name="DefBtn" type="Button" parent="BasicCard"]
+[node name="HpZoomText" type="Label" parent="BasicCard/HpZoomBorderTexture"]
+layout_mode = 2
+offset_left = 34.0
+offset_top = -6.0
+offset_right = 74.0
+offset_bottom = 36.0
+theme_override_font_sizes/font_size = 30
+text = "99"
+horizontal_alignment = 1
+
+[node name="HeartZoomTexture" type="TextureRect" parent="BasicCard/HpZoomBorderTexture"]
 layout_mode = 0
-offset_left = -4.0
-offset_top = 245.0
-offset_right = 304.0
-offset_bottom = 407.0
-icon = ExtResource("12_fvadl")
-flat = true
-expand_icon = true
+offset_left = 7.0
+offset_top = 2.0
+offset_right = 37.0
+offset_bottom = 32.0
+texture = ExtResource("5_aod86")
+expand_mode = 1
+
+[node name="AbilityZoomBorderTexture" type="TextureRect" parent="BasicCard"]
+layout_mode = 0
+offset_left = 47.0
+offset_top = 294.0
+offset_right = 257.0
+offset_bottom = 328.0
+texture = ExtResource("13_fvadl")
+expand_mode = 1
+
+[node name="AbilityZoomText" type="Label" parent="BasicCard/AbilityZoomBorderTexture"]
+layout_mode = 2
+anchor_left = 0.507
+anchor_top = 0.5
+anchor_right = 0.507
+anchor_bottom = 0.5
+offset_left = -98.47
+offset_top = -14.0
+offset_right = 94.53
+offset_bottom = 14.0
+theme_override_font_sizes/font_size = 18
+text = "Nombre habilidad"
+horizontal_alignment = 1
+
+[node name="EnergyZoomBorderTexture" type="TextureRect" parent="BasicCard"]
+layout_mode = 0
+offset_left = 182.0
+offset_top = 194.0
+offset_right = 261.0
+offset_bottom = 228.0
+texture = ExtResource("13_fvadl")
+expand_mode = 1
+
+[node name="EnergyZoomText" type="Label" parent="BasicCard/EnergyZoomBorderTexture"]
+layout_mode = 2
+offset_left = 7.0
+offset_top = -5.0
+offset_right = 47.0
+offset_bottom = 37.0
+theme_override_font_sizes/font_size = 30
+text = "99"
+horizontal_alignment = 1
+
+[node name="ThunderZoomTexture" type="TextureRect" parent="BasicCard/EnergyZoomBorderTexture"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.725
+anchor_top = 0.524
+anchor_right = -0.725
+anchor_bottom = 0.524
+offset_left = 103.275
+offset_top = -13.816
+offset_right = 130.275
+offset_bottom = 12.184
+texture = ExtResource("8_2sihe")
+expand_mode = 1
+
+[node name="AttackZoomBorderTexture" type="TextureRect" parent="BasicCard"]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 251.0
+offset_right = 105.0
+offset_bottom = 285.0
+texture = ExtResource("13_fvadl")
+expand_mode = 1
+
+[node name="AttackZoomText" type="Label" parent="BasicCard/AttackZoomBorderTexture"]
+layout_mode = 2
+offset_left = 32.0
+offset_top = -5.0
+offset_right = 72.0
+offset_bottom = 37.0
+theme_override_font_sizes/font_size = 30
+text = "99"
+horizontal_alignment = 1
+
+[node name="SwordZoomTexture" type="TextureRect" parent="BasicCard/AttackZoomBorderTexture"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 4.0
+offset_right = 36.0
+offset_bottom = 34.0
+texture = ExtResource("7_0wn3j")
+expand_mode = 1
+
+[node name="DefenseZoomBorderTexture" type="TextureRect" parent="BasicCard"]
+layout_mode = 0
+offset_left = 184.0
+offset_top = 249.0
+offset_right = 263.0
+offset_bottom = 283.0
+texture = ExtResource("13_fvadl")
+expand_mode = 1
+
+[node name="DefenseZoomText" type="Label" parent="BasicCard/DefenseZoomBorderTexture"]
+layout_mode = 2
+offset_left = 5.0
+offset_top = -5.0
+offset_right = 45.0
+offset_bottom = 37.0
+theme_override_font_sizes/font_size = 30
+text = "99"
+horizontal_alignment = 1
+
+[node name="ShieldZoomTexture" type="TextureRect" parent="BasicCard/DefenseZoomBorderTexture"]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 4.0
+offset_right = 72.0
+offset_bottom = 30.0
+texture = ExtResource("6_3dik3")
+expand_mode = 1
+
+[node name="CooldownZoomBorderTexture" type="TextureRect" parent="BasicCard"]
+layout_mode = 0
+offset_left = 105.0
+offset_top = 220.0
+offset_right = 184.0
+offset_bottom = 254.0
+texture = ExtResource("13_fvadl")
+expand_mode = 1
+
+[node name="CooldownZoomText" type="Label" parent="BasicCard/CooldownZoomBorderTexture"]
+layout_mode = 2
+offset_left = 34.0
+offset_top = -5.0
+offset_right = 74.0
+offset_bottom = 37.0
+theme_override_font_sizes/font_size = 30
+text = "99"
+horizontal_alignment = 1
+
+[node name="CooldownZoomTexture" type="TextureRect" parent="BasicCard/CooldownZoomBorderTexture"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 4.0
+offset_right = 35.0
+offset_bottom = 30.0
+texture = ExtResource("10_aod86")
+expand_mode = 1
 
 [node name="Details" type="Panel" parent="."]
 layout_mode = 0
@@ -437,6 +624,7 @@ theme_override_constants/shadow_offset_y = 3
 theme_override_font_sizes/font_size = 30
 text = "Nombre habilidad"
 horizontal_alignment = 1
+vertical_alignment = 2
 
 [node name="HPNumDetail" type="Label" parent="Details"]
 layout_mode = 1
@@ -445,11 +633,13 @@ anchor_left = 0.053371
 anchor_top = 0.1675
 anchor_right = 0.125
 anchor_bottom = 0.2725
+offset_left = 6.99985
+offset_right = 33.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 3
 theme_override_font_sizes/font_size = 25
-text = "99"
+text = "99 (99)"
 horizontal_alignment = 1
 
 [node name="EnergyNumDetail" type="Label" parent="Details"]
@@ -480,20 +670,6 @@ theme_override_font_sizes/font_size = 25
 text = "99"
 horizontal_alignment = 1
 
-[node name="CooldownNumDetail" type="Label" parent="Details"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.907303
-anchor_top = 0.615
-anchor_right = 0.978933
-anchor_bottom = 0.685
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 3
-theme_override_font_sizes/font_size = 20
-text = "99"
-horizontal_alignment = 1
-
 [node name="DEFNumDetail" type="Label" parent="Details"]
 layout_mode = 1
 anchors_preset = -1
@@ -515,9 +691,13 @@ anchor_left = 0.898876
 anchor_top = 0.05
 anchor_right = 0.955056
 anchor_bottom = 0.12
+offset_left = -200.0
+offset_top = -10.0
+offset_right = -4.99988
+offset_bottom = -10.0
 theme_override_font_sizes/font_size = 20
 text = "Era"
-horizontal_alignment = 1
+horizontal_alignment = 2
 
 [node name="HPDetailText" type="Label" parent="Details"]
 layout_mode = 1
@@ -537,8 +717,12 @@ anchor_left = 0.644663
 anchor_top = 0.2675
 anchor_right = 0.849719
 anchor_bottom = 0.3375
+offset_left = -32.0
+offset_top = -2.00001
+offset_right = 37.0001
+offset_bottom = -2.0
 theme_override_font_sizes/font_size = 18
-text = "Coste de Energía"
+text = "BASE_COST_DETAIL_TEXT"
 horizontal_alignment = 1
 
 [node name="AttackDetailText" type="Label" parent="Details"]
@@ -548,8 +732,12 @@ anchor_left = 0.18118
 anchor_top = 0.48
 anchor_right = 0.339888
 anchor_bottom = 0.55
+offset_left = -52.0002
+offset_top = 2.0
+offset_right = 37.9997
+offset_bottom = 2.0
 theme_override_font_sizes/font_size = 18
-text = "Ataque (ATK)"
+text = "BASE_ATK_DETAIL_TEXT"
 horizontal_alignment = 1
 
 [node name="AbilityDetailText" type="Label" parent="Details"]
@@ -559,9 +747,14 @@ anchor_left = 0.039326
 anchor_top = 0.5875
 anchor_right = 0.198034
 anchor_bottom = 0.6575
+offset_left = -24.0001
+offset_top = 10.0
+offset_right = 97.9998
+offset_bottom = 10.0
 theme_override_font_sizes/font_size = 18
-text = "Habilidad:"
+text = "BASE_ABILITY_DETAIL_TEXT"
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="CooldownDetailText" type="Label" parent="Details"]
 layout_mode = 1
@@ -571,7 +764,22 @@ anchor_top = 0.6175
 anchor_right = 0.912921
 anchor_bottom = 0.6875
 theme_override_font_sizes/font_size = 18
-text = "Enfriamiento:"
+text = "BASE_COOLDOWN_DETAIL_TEXT"
+horizontal_alignment = 1
+
+[node name="CooldownNumDetail" type="Label" parent="Details"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.907303
+anchor_top = 0.615
+anchor_right = 0.978933
+anchor_bottom = 0.685
+offset_right = -13.0006
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 20
+text = "99"
 horizontal_alignment = 1
 
 [node name="StateText" type="Label" parent="Details"]
@@ -582,7 +790,7 @@ anchor_top = 0.5575
 anchor_right = 0.985955
 anchor_bottom = 0.6125
 theme_override_font_sizes/font_size = 15
-text = "Activa"
+text = "Pasiva"
 horizontal_alignment = 1
 
 [node name="DefenseDetailText" type="Label" parent="Details"]
@@ -592,9 +800,28 @@ anchor_left = 0.660112
 anchor_top = 0.4775
 anchor_right = 0.855337
 anchor_bottom = 0.5475
+offset_left = -34.9998
+offset_top = 2.0
+offset_right = 28.0001
+offset_bottom = 2.0
 theme_override_font_sizes/font_size = 18
-text = "Defensa (DEF)"
+text = "BASE_DEF_DETAIL_TEXT"
 horizontal_alignment = 1
+
+[node name="CooldownDetailTexture" type="TextureRect" parent="Details"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.978
+anchor_top = 0.65
+anchor_right = 0.978
+anchor_bottom = 0.65
+offset_left = -18.3361
+offset_top = -23.0
+offset_right = 12.6639
+offset_bottom = 14.0
+texture = ExtResource("10_aod86")
+expand_mode = 1
 
 [node name="TextureRect" type="TextureRect" parent="Details"]
 layout_mode = 1
@@ -617,6 +844,7 @@ anchor_bottom = 1.0
 [node name="DescriptionDetailText" type="RichTextLabel" parent="Details/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/normal_font_size = 20
 text = "bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
 fit_content = true
 

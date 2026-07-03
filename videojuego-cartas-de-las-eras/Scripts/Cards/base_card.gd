@@ -3,11 +3,9 @@ extends Control
 # Atributos de la carta.
 @export var card_name: String
 @export var ability: Dictionary # Diccionario que describe la habilidad.
-@export var ability_detailed: String # Explica la habilidad completa al hacer zoom.
-@export var card_texture: Texture2D # Varía según cada carta.
-@export var era_texture: Texture2D # Varía según la era designada.
 @export var era_name: String
-@export var hp: int
+@export var current_hp: int # Vida actual de la carta.
+@export var max_hp: int
 @export var energy_cost: int
 @export var attack: int
 @export var defense: int
@@ -15,15 +13,34 @@ extends Control
 
 # Nodos de la carta.
 @onready var card_panel = $BasicCard
-@onready var cart_art = $BasicCard/CardTexture
-@onready var era_art = $BasicCard/EraTexture
 @onready var name_text = $BasicCard/NameText
 @onready var energy_cost_text = $BasicCard/EnergyText
+@onready var energy_cost_texture = $BasicCard/ThunderTexture
+@onready var energy_cost_border_texture = $BasicCard/EnergyTexture
 @onready var ability_text = $BasicCard/AbilityText
 @onready var hp_text = $BasicCard/HpText
+@onready var hp_texture = $BasicCard/HeartTexture
+@onready var hp_border_texture = $BasicCard/HpTexture
 @onready var attack_text = $BasicCard/AttackText
+@onready var attack_texture = $BasicCard/SwordTexture
 @onready var defense_text = $BasicCard/DefenseText
+@onready var defense_texture = $BasicCard/ShieldTexture
 @onready var cooldown_text = $BasicCard/CooldownText
+@onready var cooldown_texture = $BasicCard/CooldownTexture
+
+# Textos en zoom.
+@onready var hp_zoom_texture = $BasicCard/HpZoomBorderTexture
+@onready var hp_zoom_text = $BasicCard/HpZoomBorderTexture/HpZoomText
+@onready var energy_cost_zoom_texture = $BasicCard/EnergyZoomBorderTexture
+@onready var energy_cost_zoom_text = $BasicCard/EnergyZoomBorderTexture/EnergyZoomText
+@onready var attack_zoom_texture = $BasicCard/AttackZoomBorderTexture
+@onready var attack_zoom_text = $BasicCard/AttackZoomBorderTexture/AttackZoomText
+@onready var defense_zoom_texture = $BasicCard/DefenseZoomBorderTexture
+@onready var defense_zoom_text = $BasicCard/DefenseZoomBorderTexture/DefenseZoomText
+@onready var cooldown_zoom_texture = $BasicCard/CooldownZoomBorderTexture
+@onready var cooldown_zoom_text = $BasicCard/CooldownZoomBorderTexture/CooldownZoomText
+@onready var ability_zoom_texture = $BasicCard/AbilityZoomBorderTexture
+@onready var ability_zoom_text = $BasicCard/AbilityZoomBorderTexture/AbilityZoomText
 
 # Detalles de la carta.
 @onready var detail_panel = $Details
@@ -45,6 +62,9 @@ extends Control
 @onready var cancel_text = $BasicCard/CancelButton/CancelText
 @onready var atk_btn = $BasicCard/ATKBtn
 @onready var def_btn = $BasicCard/DefBtn
+
+# Obtener el tablero.
+@onready var board = get_parent()
 
 # Tamaño de la carta.
 var card_size = Vector2(300, 400)
@@ -75,11 +95,20 @@ var detail_panel_appeared: bool = false
 var actions_showed: bool = false
 # Guardar distancia entre cursor y esquina de la carta.
 var drag_offset = null
+# Comprobar que la carta está en un slot (y el zoom).
+var is_in_slot: bool = false
+var was_zoomed_in_slot: bool = false
+# Slot en el que está colocada la carta actualmente (null si no está en ninguno).
+var current_slot = null
 
 # Estado de arrastre/click.
 var press_position: Vector2 = Vector2.ZERO
 var is_dragging: bool = false
 const DRAG_THRESHOLD := 15.0  # Píxeles que hay que mover el ratón para que cuente como arrastre.
+
+# Guardar la posición y escala del slot.
+var slot_pos: Vector2
+var slot_scale: Vector2
 
 
 func _ready() -> void:
@@ -90,12 +119,6 @@ func _ready() -> void:
 
 # Base de las cartas.
 func init_card():
-	if card_texture:
-		cart_art.texture = card_texture
-		cart_art.stretch_mode = TextureRect.STRETCH_SCALE
-	if era_texture:
-		era_art.texture = era_texture
-		era_art.stretch_mode = TextureRect.STRETCH_SCALE
 	name_text.text = card_name
 	name_detail.text = card_name
 	era_detail.text = era_name
@@ -105,14 +128,29 @@ func init_card():
 	ability_detail.text = ability.get("name", "")
 	state_text_detail.text = ability.get("state", "")
 	ability_description.text = ability.get("description", "")
-	hp_text.text = str(hp)
+	hp_text.text = str(current_hp)
 	attack_text.text = str(attack)
 	defense_text.text = str(defense)
 	cooldown_text.text = str(cooldown)
-	hp_num_detail.text = str(hp)
+	hp_num_detail.text = str(max_hp, " (", current_hp, ")")
 	atk_num_detail.text = str(attack)
 	def_num_detail.text = str(defense)
 	cooldown_num_detail.text = str(cooldown)
+	
+	hp_zoom_text.text = str(current_hp)
+	energy_cost_zoom_text.text = str(energy_cost)
+	attack_zoom_text.text = str(attack)
+	defense_zoom_text.text = str(defense)
+	cooldown_zoom_text.text = str(cooldown)
+	ability_zoom_text.text = ability.get("name", "")
+	
+	# Ocultar stats de zoom.
+	hp_zoom_texture.visible = false
+	energy_cost_zoom_texture.visible = false
+	attack_zoom_texture.visible = false
+	defense_zoom_texture.visible = false
+	cooldown_zoom_texture.visible = false
+	ability_zoom_texture.visible = false
 	
 	# Ocultar botones de acciones.
 	atk_btn.visible = false
@@ -137,6 +175,50 @@ func init_card():
 
 # Zoom de la carta.
 func _show_zoom() -> void:
+	# Crear animación.
+	var tween = create_tween()
+	
+	if is_in_slot:
+		# Posiciones destino originales (relativas al 300x400 de la carta).
+		var original_pos = {
+			hp_zoom_texture:           Vector2(26, 195),          
+			energy_cost_zoom_texture:  Vector2(182, 194),        
+			attack_zoom_texture:       Vector2(26, 251),        
+			defense_zoom_texture:      Vector2(184, 249),       
+			cooldown_zoom_texture:     Vector2(105, 220),
+			ability_zoom_texture:      Vector2(47, 294),
+		}
+
+		for stat_zoom in original_pos:
+			tween.tween_property(stat_zoom, "modulate:a", 0.0, 0.1)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			tween.parallel().tween_property(stat_zoom, "scale", Vector2.ONE, 0.1)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+			tween.parallel().tween_property(stat_zoom, "position", original_pos[stat_zoom], 0.1)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		
+		# Ocultar al terminar.
+		tween.tween_callback(func():
+			hp_zoom_texture.visible = false
+			energy_cost_zoom_texture.visible = false
+			attack_zoom_texture.visible = false
+			defense_zoom_texture.visible = false
+			cooldown_zoom_texture.visible = false
+			ability_zoom_texture.visible = false
+		)
+		
+		# Volver a mostrar stats normales.
+		for stat in [hp_border_texture, hp_text, hp_texture, 
+		energy_cost_text, energy_cost_texture, energy_cost_border_texture,
+		ability_text, attack_text, attack_texture, defense_text, defense_texture, 
+		cooldown_text, cooldown_texture]:
+			stat.modulate.a = 0.0
+			tween.parallel().tween_property(stat, "modulate:a", 1.0, 0.1)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		
+		is_in_slot = false
+		was_zoomed_in_slot = true
+	
 	# Activar los botones para detalles (y cancelar).
 	plus_button.visible = true
 	plus_button.disabled = false
@@ -149,9 +231,7 @@ func _show_zoom() -> void:
 	var target_pos = viewport_size / 2 - card_zoom_size / 2
 	var target_scale = card_zoom_size / card_size
 	
-	# Crear animación.
-	var tween = create_tween()
-	card_panel.pivot_offset = card_size / 2 # Escala desde el centro.
+	card_panel.pivot_offset = Vector2.ZERO # Escala desde el centro.
 	
 	# Posición y escala a la vez.
 	tween.tween_property(card_panel, "global_position", target_pos, 0.3)\
@@ -178,10 +258,14 @@ func _hide_zoom() -> void:
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 		tween.tween_callback(func(): detail_panel.visible = false)
 	
+	# Volver al slot o a la posición original según corresponda.
+	var target_pos = slot_pos if was_zoomed_in_slot else original_position_global
+	var target_scale = slot_scale if was_zoomed_in_slot else Vector2.ONE
+	
 	# Posición y escala de la carta a la vez.
-	tween.tween_property(card_panel, "global_position", original_position_global, 0.3)\
+	tween.tween_property(card_panel, "global_position", target_pos, 0.3)\
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.parallel().tween_property(card_panel, "scale", Vector2.ONE, 0.3)\
+	tween.parallel().tween_property(card_panel, "scale", target_scale, 0.3)\
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	
 	for text in [name_text, ability_text, attack_text, cooldown_text, 
@@ -204,12 +288,45 @@ func _hide_zoom() -> void:
 	)
 	
 	tween.tween_callback(func(): plus_text.text = "+")
+	
+	if was_zoomed_in_slot:
+		# Ocultar stats normales (se ven mal).
+		for stat in [hp_border_texture, hp_text, hp_texture, 
+		energy_cost_text, energy_cost_texture, energy_cost_border_texture,
+		ability_text, attack_text, attack_texture, defense_text, defense_texture, 
+		cooldown_text, cooldown_texture]:
+			tween.parallel().tween_property(stat, "modulate:a", 0.0, 0.2)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		
+		# Posiciones destino en esquinas (relativas al 300x400 de la carta).
+		var corners = {
+			hp_zoom_texture:           Vector2(-80, -15),      # Esquina superior izquierda.
+			energy_cost_zoom_texture:  Vector2(220, -15),      # Esquina superior derecha.
+			attack_zoom_texture:       Vector2(-80, 350),      # Esquina inferior izquierda.
+			defense_zoom_texture:      Vector2(220, 350),      # Esquina inferior derecha.
+			cooldown_zoom_texture:     Vector2(70, 130),       # Centro.
+			ability_zoom_texture:      Vector2(-60, 210),      # Centro un poco más abajo.
+		}
+
+		for stat_zoom in corners:
+			stat_zoom.visible = true
+			stat_zoom.modulate.a = 0.0
+			tween.tween_property(stat_zoom, "modulate:a", 1.0, 0.1)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			tween.parallel().tween_property(stat_zoom, "scale", Vector2(2, 2), 0.1)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+			tween.parallel().tween_property(stat_zoom, "position", corners[stat_zoom], 0.1)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT).set_delay(0.08)
+		
+		
+		is_in_slot = true
+		was_zoomed_in_slot = false
 
 func _process(delta: float) -> void:
 	# Calcular hover en tiempo real en vez de depender de señales.
 	var mouse_over = card_panel.get_global_rect().has_point(get_global_mouse_position())
 	
-	if not mouse_over or zoom_active or cannot_zoom or hold_card:
+	if not mouse_over or zoom_active or cannot_zoom or hold_card or board.card_is_dragging:
 		mouse_time = 0.0
 		if not mouse_over:
 			mouse_hovering = false
@@ -314,6 +431,7 @@ func _on_basic_card_gui_input(event: InputEvent) -> void:
 			if is_dragging:
 				hold_card = false
 				is_dragging = false
+				board.card_is_dragging = false
 				_try_drop_on_slot()
 			else:
 				# El ratón nunca superó el umbral: fue un click.
@@ -324,6 +442,7 @@ func _on_basic_card_gui_input(event: InputEvent) -> void:
 			if press_position.distance_to(get_global_mouse_position()) >= DRAG_THRESHOLD:
 				is_dragging = true
 				hold_card = true
+				board.card_is_dragging = true
 				print("Arrastrando carta...")
 
 func _input(event: InputEvent) -> void:
@@ -372,9 +491,77 @@ func _try_drop_on_slot() -> void:
 	var slots = get_tree().get_nodes_in_group("slots")
 	for slot in slots:
 		if slot.contains_point(mouse_pos):
+			if slot == current_slot:
+				# Se soltó sobre el mismo slot donde ya estaba: no hay
+				# movimiento real, se queda tal cual (sigue ocupado por ella).
+				card_panel.global_position = original_position_global
+				return
 			if slot.try_place_card(self):
+				# El movimiento tuvo éxito: AHORA sí liberamos el slot antiguo
+				# (si la carta venía de otro slot), nunca antes de saber que
+				# el nuevo slot la aceptó.
+				var previous_slot = current_slot
+
+				# Crear animaciones.
+				var tween = create_tween()
+
+				# Mover la carta al centro del slot.
+				# Usar get_global_rect() para obtener posición y tamaño reales del slot.
+				var slot_rect = slot.get_global_rect()
+
+				var target_scale = slot_rect.size / card_size
+				slot_scale = target_scale
+				card_panel.pivot_offset = Vector2.ZERO
+
+				tween.tween_property(card_panel, "scale", target_scale, 0.3)\
+				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+				tween.parallel().tween_property(card_panel, "global_position", slot_rect.position, 0.3)\
+				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+				
+				slot_pos = slot_rect.position
+				
+				# Ocultar stats normales (se ven mal).
+				for stat in [hp_border_texture, hp_text, hp_texture, 
+				energy_cost_text, energy_cost_texture, energy_cost_border_texture,
+				ability_text, attack_text, attack_texture, defense_text, defense_texture, 
+				cooldown_text, cooldown_texture]:
+					tween.parallel().tween_property(stat, "modulate:a", 0.0, 0.2)\
+					.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+				
+				# Posiciones destino en esquinas (relativas al 300x400 de la carta).
+				var corners = {
+					hp_zoom_texture:           Vector2(-80, -15),           # Esquina superior izquierda.
+					energy_cost_zoom_texture:  Vector2(220, -15),         # Esquina superior derecha.
+					attack_zoom_texture:       Vector2(-80, 350),         # Esquina inferior izquierda.
+					defense_zoom_texture:      Vector2(220, 350),       # Esquina inferior derecha.
+					cooldown_zoom_texture:     Vector2(70, 130),       # Centro.
+					ability_zoom_texture:      Vector2(-60, 210),      # Centro un poco más abajo.
+				}
+
+				for stat_zoom in corners:
+					stat_zoom.visible = true
+					stat_zoom.modulate.a = 0.0
+					tween.tween_property(stat_zoom, "modulate:a", 1.0, 0.1)\
+					.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+					tween.parallel().tween_property(stat_zoom, "scale", Vector2(2, 2), 0.1)\
+					.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+					tween.parallel().tween_property(stat_zoom, "position", corners[stat_zoom], 0.1)\
+					.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT).set_delay(0.08)
+
+				# Actualizar la posición original por si se deselecciona después.
+				tween.tween_callback(func():
+					original_position_global = card_panel.global_position
+				)
+				is_in_slot = true
+				current_slot = slot
+
+				# Liberar el slot anterior ahora que la carta ya está oficialmente
+				# en el nuevo. Si no existía (venía de la mano), no hace nada.
+				if previous_slot != null:
+					previous_slot.remove_card()
 				return
 	# Si no cayó en ningún slot válido, volver a la posición anterior.
+	# Si la carta venía de un slot, ese slot sigue ocupado (no se tocó).
 	card_panel.global_position = original_position_global
 	
 

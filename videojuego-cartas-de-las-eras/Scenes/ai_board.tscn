@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://0qv0xluy23g7"]
+[gd_scene load_steps=5 format=3 uid="uid://0qv0xluy23g7"]
 
-[ext_resource type="PackedScene" uid="uid://cqni8h8tmukl8" path="res://Scenes/Cards/base_card.tscn" id="1_abaw6"]
-[ext_resource type="PackedScene" uid="uid://cyiswfk3x07np" path="res://Scenes/slot.tscn" id="2_t2wnw"]
+[ext_resource type="Script" uid="uid://buk5gympwj3cx" path="res://Scripts/ai_board.gd" id="1_6uulp"]
+[ext_resource type="PackedScene" uid="uid://chh4k82ga16uh" path="res://Scenes/Cards/Prehistory/reckless_hunter.tscn" id="2_ks1o3"]
+[ext_resource type="PackedScene" uid="uid://bjjdw6s0nihmw" path="res://Scenes/slot.tscn" id="2_t2wnw"]
+[ext_resource type="PackedScene" uid="uid://dqihx6tiiujq3" path="res://Scenes/Cards/Future/combat_drone.tscn" id="3_ks1o3"]
 
 [node name="AiBoard" type="Control"]
 texture_filter = 1
@@ -11,13 +13,32 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_6uulp")
 
 [node name="Slot" parent="." instance=ExtResource("2_t2wnw")]
-position = Vector2(371, 621)
-
-[node name="BaseCard" parent="." instance=ExtResource("1_abaw6")]
 layout_mode = 1
-offset_left = 813.0
-offset_top = 305.0
-offset_right = 813.0
-offset_bottom = -75.0
+offset_left = 229.0
+offset_top = 427.0
+offset_right = -1559.0
+offset_bottom = -420.0
+
+[node name="Slot2" parent="." instance=ExtResource("2_t2wnw")]
+layout_mode = 1
+offset_left = 523.0
+offset_top = 182.0
+offset_right = -1265.0
+offset_bottom = -665.0
+
+[node name="BaseCard" parent="." instance=ExtResource("2_ks1o3")]
+layout_mode = 1
+offset_left = 313.0
+offset_top = 856.0
+offset_right = 313.0
+offset_bottom = 476.0
+
+[node name="BaseCard2" parent="." instance=ExtResource("3_ks1o3")]
+layout_mode = 1
+offset_left = 778.0
+offset_top = 854.0
+offset_right = 778.0
+offset_bottom = 474.0

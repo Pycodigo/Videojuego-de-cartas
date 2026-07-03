@@ -1,2 +1,20 @@
 keys,es,en,gl
 BASE_HP_DETAIL_TEXT,Puntos de Salud (PS),Health Points (HP),Puntos de Saúde (PS)
+BASE_COST_DETAIL_TEXT,Coste de Energía,Energy Cost,Coste de Enerxía
+BASE_ATK_DETAIL_TEXT,Ataque (ATK),Attack (ATK),Ataque (ATK)
+BASE_DEF_DETAIL_TEXT,Defensa (DEF),Defense (DEF),Defensa (DEF)
+BASE_ABILITY_DETAIL_TEXT,Habilidad:,Ability:,Habilidade:
+BASE_COOLDOWN_DETAIL_TEXT,Enfriamiento:,Cooldown:,Enfriamento:
+CARD_RECKLESS_HUNTER_NAME,Cazador Impulsivo,Reckless Hunter,Cazador Impulsivo
+CARD_RECKLESS_HUNTER_ABILITY,Arremetida Temeraria,Reckless Headlong,Ataque Imprudente
+CARD_RECKLESS_HUNTER_ABILITY_DESCRIPTION,"Durante este turno, recibe +3 ATK. Tras finalizar el turno, esta carta recibe 2 de daño y -1 DEF permanente (no se recupera entre turnos).","During this turn, this card gains +3 ATK. At the end of the turn, this card takes 2 damage and loses 1 DEF permanently (doesn´t recover between turns).","Durante este turno, recibe +3 ATK. Ao remate do turno, esta carta recibe 2 de dano e -1 DEF permanente (non se recupera entre turnos)."
+CARD_ABILITY_ACTIVE_TYPE,Activa,Active,Activa
+CARD_ABILITY_PASSIVE_TYPE,Pasiva,Passive,Pasiva
+CARD_PREHISTORY_ERA,Prehistoria,Prehistory,Prehistoria
+CARD_ANCIENT_ERA,Antigüedad,Ancient Age,Antigüidade
+CARD_MIDDLE_ERA,Edad Media,Middle Ages,Idade Media
+CARD_REVOLUTION_ERA,Revolución Industrial,Industrial Revolution,Revolución Industrial
+CARD_FUTURE_ERA,Futuro,Future,Futuro
+CARD_COMBAT_DRONE_NAME,Dron de Combate,Combat Drone,Dron de Combate
+CARD_COMBAT_DRONE_ABILITY,Unidad Sincronizada,Synchronized Unit,Unidade Sincronizada
+CARD_COMBAT_DRONE_ABILITY_DESCRIPTION,"Inflige 3 de daño a todas las cartas enemigas en campo, ignorando DEF. Esta carta recibe 2 de daño por el recalentamiento del sistema de armas.","Deals 3 damage to all enemy cards in play, ignoring DEF. This card takes 2 damage for the reheating of the system.","Inflixe 3 de dano a todas as cartas inimigas no campo, ignorando DEF. Esta carta recibe 2 de dano polo recalentamento do sistema de armas."
