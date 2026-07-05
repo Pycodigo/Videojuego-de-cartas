@@ -15,5 +15,5 @@ func _ready() -> void:
 	defense = 2
 	cooldown = 2
 	
-	
-	init_card()
+	# Ejecutar la inicialización de la base.
+	super._ready()

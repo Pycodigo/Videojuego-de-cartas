@@ -27,6 +27,7 @@ extends Control
 @onready var defense_texture = $BasicCard/ShieldTexture
 @onready var cooldown_text = $BasicCard/CooldownText
 @onready var cooldown_texture = $BasicCard/CooldownTexture
+@onready var action_bg = $BasicCard/ActionBG
 
 # Textos en zoom.
 @onready var hp_zoom_texture = $BasicCard/HpZoomBorderTexture
@@ -41,6 +42,7 @@ extends Control
 @onready var cooldown_zoom_text = $BasicCard/CooldownZoomBorderTexture/CooldownZoomText
 @onready var ability_zoom_texture = $BasicCard/AbilityZoomBorderTexture
 @onready var ability_zoom_text = $BasicCard/AbilityZoomBorderTexture/AbilityZoomText
+@onready var action_texture = $BasicCard/ActionTexture
 
 # Detalles de la carta.
 @onready var detail_panel = $Details
@@ -100,6 +102,10 @@ var is_in_slot: bool = false
 var was_zoomed_in_slot: bool = false
 # Slot en el que está colocada la carta actualmente (null si no está en ninguno).
 var current_slot = null
+# Comprobar si se usó una acción.
+var card_action_clicked: bool = false
+# Controlar los clicks.
+var click_timer: Timer
 
 # Estado de arrastre/click.
 var press_position: Vector2 = Vector2.ZERO
@@ -110,12 +116,22 @@ const DRAG_THRESHOLD := 15.0  # Píxeles que hay que mover el ratón para que cu
 var slot_pos: Vector2
 var slot_scale: Vector2
 
+# Guardar que acción (ataque, defensa...) se hizo click.
+var action_clicked: int = 0  # 1 (ATK), 2 (DEF), 3 (HABILIDAD).
+
 
 func _ready() -> void:
 	init_card()
 	# Conectar las funciones del ratón a la carta de panel.
 	if not card_panel.gui_input.is_connected(_on_basic_card_gui_input):
 		card_panel.gui_input.connect(_on_basic_card_gui_input)
+	
+	# Timer para no abrir los botones hasta confirmar que no es un doble click.
+	click_timer = Timer.new()
+	click_timer.one_shot = true
+	click_timer.wait_time = 0.3  
+	add_child(click_timer)
+	click_timer.timeout.connect(_on_card_left_clicked)
 
 # Base de las cartas.
 func init_card():
@@ -144,13 +160,15 @@ func init_card():
 	cooldown_zoom_text.text = str(cooldown)
 	ability_zoom_text.text = ability.get("name", "")
 	
-	# Ocultar stats de zoom.
+	# Ocultar stats de zoom (e iconos).
 	hp_zoom_texture.visible = false
 	energy_cost_zoom_texture.visible = false
 	attack_zoom_texture.visible = false
 	defense_zoom_texture.visible = false
 	cooldown_zoom_texture.visible = false
 	ability_zoom_texture.visible = false
+	action_texture.visible = false
+	action_bg.visible = false
 	
 	# Ocultar botones de acciones.
 	atk_btn.visible = false
@@ -421,6 +439,14 @@ func _on_basic_card_gui_input(event: InputEvent) -> void:
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
+			# Cualquier pulsación nueva cancela un click simple pendiente.
+			click_timer.stop()
+			if event.double_click:
+				if actions_showed:
+					_deselect_card()
+				_shake_card_effect()
+				return
+			
 			# Aún no se arrastra, solo guardar dónde se pulsó.
 			press_position = get_global_mouse_position()
 			drag_offset = press_position - card_panel.global_position
@@ -434,8 +460,9 @@ func _on_basic_card_gui_input(event: InputEvent) -> void:
 				board.card_is_dragging = false
 				_try_drop_on_slot()
 			else:
-				# El ratón nunca superó el umbral: fue un click.
-				_on_card_left_clicked()
+				# Esperar a ver si llega un segundo click.
+				click_timer.start()
+				
 
 	elif event is InputEventMouseMotion:
 		if event.button_mask & MOUSE_BUTTON_MASK_LEFT and not is_dragging:
@@ -566,7 +593,7 @@ func _try_drop_on_slot() -> void:
 	
 
 func _on_card_left_clicked() -> void:
-	if actions_showed:
+	if actions_showed or card_action_clicked:
 		return
 	
 	print("Click izquierdo sobre la carta...")
@@ -592,3 +619,96 @@ func _on_card_left_clicked() -> void:
 	def_btn.disabled = false
 	
 	actions_showed = true
+
+# Efecto de sacudida en cartas para las habilidades.
+func _shake_card_effect() -> void:
+	if card_action_clicked:
+		return
+	
+	print("Activando habilidad de carta...")
+	
+	card_action_clicked = true
+	cannot_zoom = true
+	
+	var tween = create_tween()
+	
+	var duration: float = 0.5
+	var intensity: float = 8.0
+	var num_shakes = 8
+	var time_per_shake = duration / num_shakes
+	
+	var base_pos = card_panel.global_position
+	
+	for i in num_shakes:
+		# Generar desplazamiento aleatorio en X e Y, definido por la intensidad.
+		var offset = Vector2(
+			randf_range(-intensity, intensity),
+			randf_range(-intensity, intensity)
+		)
+		tween.tween_property(card_panel, "global_position", base_pos + offset, time_per_shake)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
+	# Al final, vuelve a la posición original, de forma repentina.
+	tween.tween_callback(func():
+		card_panel.global_position = base_pos
+	)
+	
+	action_clicked = 3
+	_activate_action()
+
+func _activate_action() -> void:
+	action_texture.visible = true
+	action_bg.visible = true
+	
+	# Color e icono varían según la acción.
+	var target_color = null
+	var target_icon = null
+	
+	action_texture.position = Vector2(125, -20)
+	# Hacer el icono invisible al principio.
+	action_texture.scale = Vector2(0, 0)
+	
+	# Crear animaciones.
+	var tween = create_tween()
+	
+	# Cambiar icono y color dependiendo de la acción pulsada.
+	match action_clicked:
+		1:
+			target_color = Color("#ff0a06")
+			target_icon = preload("res://Images/Icono ataque.png")
+		2:
+			target_color = Color("#0065df")
+			target_icon = preload("res://Images/Icono defensa.png")
+		3:
+			target_color = Color("#e3c500")
+			target_icon = preload("res://Images/Icono habilidad.png")
+		_:
+			return # Acción no válida, regresa.
+	
+	action_texture.texture = target_icon
+	action_bg.modulate.a = 0.0
+	action_bg.color = target_color
+	tween.tween_property(action_bg, "modulate:a", 1.0, 0.4)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.chain().tween_property(action_bg, "modulate:a", 0.4, 0.2)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(action_bg, "color", target_color, 0.5)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# Hacerlo enorme para efecto.
+	tween.parallel().tween_property(action_texture, "scale", Vector2(2.5, 2.5), 0.3)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.chain().tween_property(action_texture, "scale", Vector2(2, 2), 0.2)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+func _on_atk_btn_pressed() -> void:
+	action_clicked = 1
+	card_action_clicked = true
+	_deselect_card()
+	_activate_action()
+
+
+func _on_def_btn_pressed() -> void:
+	action_clicked = 2
+	card_action_clicked = true
+	_deselect_card()
+	_activate_action()

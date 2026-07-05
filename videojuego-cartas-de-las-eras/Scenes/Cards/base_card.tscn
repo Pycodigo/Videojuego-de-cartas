@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cqni8h8tmukl8"]
+[gd_scene load_steps=21 format=3 uid="uid://cqni8h8tmukl8"]
 
 [ext_resource type="Script" uid="uid://b5lqa63fswvko" path="res://Scripts/Cards/base_card.gd" id="1_x5hng"]
 [ext_resource type="Texture2D" uid="uid://myue64h8ybjx" path="res://Images/Polígono.png" id="2_rfn2n"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://ctq85w115fk3r" path="res://Images/Enfriamiento.png" id="10_aod86"]
 [ext_resource type="Texture2D" uid="uid://13rn04bcy7yx" path="res://Images/Boton.png" id="10_qcxs8"]
 [ext_resource type="Texture2D" uid="uid://dmxs75a103jmw" path="res://Images/Boton Atacar.png" id="11_2w3gi"]
+[ext_resource type="Texture2D" uid="uid://bu6q6sqgqgw23" path="res://Images/Icono ataque.png" id="11_3dik3"]
 [ext_resource type="Texture2D" uid="uid://cltesqibe6806" path="res://Images/Borde PS detalle.png" id="11_vr43h"]
 [ext_resource type="Texture2D" uid="uid://dvh3vrgdob301" path="res://Images/Borde Coste detalle.png" id="12_8cdgg"]
 [ext_resource type="Texture2D" uid="uid://d0ekkxl0u2qc7" path="res://Images/Boton Defender.png" id="12_fvadl"]
@@ -333,6 +334,29 @@ theme_override_colors/font_color = Color(0.752637, 0.104591, 0.108491, 1)
 theme_override_font_sizes/font_size = 30
 text = "X"
 horizontal_alignment = 1
+
+[node name="ActionBG" type="ColorRect" parent="BasicCard"]
+modulate = Color(0.89, 0.771333, 0, 1)
+layout_mode = 0
+offset_right = 300.0
+offset_bottom = 400.0
+mouse_filter = 2
+color = Color(0.359069, 0.359069, 0.359069, 1)
+
+[node name="ActionTexture" type="TextureRect" parent="BasicCard"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.507
+anchor_top = 0.045
+anchor_right = 0.507
+anchor_bottom = 0.045
+offset_left = -15.1
+offset_top = -15.0
+offset_right = 14.9
+offset_bottom = 15.0
+texture = ExtResource("11_3dik3")
+expand_mode = 1
 
 [node name="HpZoomBorderTexture" type="TextureRect" parent="BasicCard"]
 layout_mode = 0
@@ -849,5 +873,7 @@ text = "bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla 
 fit_content = true
 
 [connection signal="gui_input" from="BasicCard" to="." method="_on_basic_card_gui_input"]
+[connection signal="pressed" from="BasicCard/ATKBtn" to="." method="_on_atk_btn_pressed"]
+[connection signal="pressed" from="BasicCard/DefBtn" to="." method="_on_def_btn_pressed"]
 [connection signal="pressed" from="BasicCard/PlusButton" to="." method="_on_plus_button_pressed"]
 [connection signal="pressed" from="BasicCard/CancelButton" to="." method="_on_cancel_button_pressed"]
