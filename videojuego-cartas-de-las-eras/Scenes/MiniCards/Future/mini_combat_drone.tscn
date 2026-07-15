@@ -1,0 +1,15 @@
+[gd_scene load_steps=5 format=3 uid="uid://csqf71lqpiq12"]
+
+[ext_resource type="PackedScene" uid="uid://dfjm8yhqoopyq" path="res://Scenes/MiniCards/mini_base_card.tscn" id="1_2g1ej"]
+[ext_resource type="Script" uid="uid://b0sxld10qj0ax" path="res://Scripts/MiniCards/Future/mini_combat_drone.gd" id="2_870j2"]
+[ext_resource type="Texture2D" uid="uid://be73lnisu6lcv" path="res://Images/EraIcons/Simbolo Futuro.png" id="2_rkbnm"]
+[ext_resource type="Texture2D" uid="uid://de4o8qligf15v" path="res://Images/Prehistory/dron.png" id="3_870j2"]
+
+[node name="MiniBaseCard" instance=ExtResource("1_2g1ej")]
+script = ExtResource("2_870j2")
+
+[node name="EraTexture" parent="MiniBasicCard" index="2"]
+texture = ExtResource("2_rkbnm")
+
+[node name="MiniCardTexture" parent="MiniBasicCard" index="5"]
+texture = ExtResource("3_870j2")

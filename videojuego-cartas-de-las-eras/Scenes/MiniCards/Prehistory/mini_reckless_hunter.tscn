@@ -1,0 +1,15 @@
+[gd_scene load_steps=5 format=3 uid="uid://d25hk6bf843gx"]
+
+[ext_resource type="PackedScene" uid="uid://dfjm8yhqoopyq" path="res://Scenes/MiniCards/mini_base_card.tscn" id="1_21bk1"]
+[ext_resource type="Script" uid="uid://cnmcd4xgd5qlk" path="res://Scripts/MiniCards/Prehistory/mini_reckless_hunter.gd" id="2_34thu"]
+[ext_resource type="Texture2D" uid="uid://7rsom41h63x6" path="res://Images/EraIcons/Simbolo Prehistoria.png" id="2_o38mg"]
+[ext_resource type="Texture2D" uid="uid://c2bb5hjd3b1m6" path="res://Images/Prehistory/hunter.png" id="3_34thu"]
+
+[node name="MiniBaseCard" instance=ExtResource("1_21bk1")]
+script = ExtResource("2_34thu")
+
+[node name="EraTexture" parent="MiniBasicCard" index="2"]
+texture = ExtResource("2_o38mg")
+
+[node name="MiniCardTexture" parent="MiniBasicCard" index="5"]
+texture = ExtResource("3_34thu")

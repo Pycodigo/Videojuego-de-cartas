@@ -1,0 +1,47 @@
+[gd_scene load_steps=3 format=3 uid="uid://dlc0krg1fektf"]
+
+[ext_resource type="Script" uid="uid://bx8gincn2sw8q" path="res://Scripts/filter_tag.gd" id="1_hcg7k"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hcg7k"]
+bg_color = Color(0.396078, 0.396078, 0.396078, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="FilterTag" type="Control"]
+custom_minimum_size = Vector2(222, 48)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1698.0
+offset_bottom = -1032.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hcg7k")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_right = 210.0
+offset_bottom = 48.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_hcg7k")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 25
+
+[node name="FilterTagText" type="Label" parent="PanelContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Nombre filtro"
+
+[node name="DeleteBtn" type="Button" parent="PanelContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "X"
+flat = true
+
+[connection signal="pressed" from="PanelContainer/HBoxContainer/DeleteBtn" to="." method="_on_delete_btn_pressed"]

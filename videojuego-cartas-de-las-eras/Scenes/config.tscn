@@ -56,7 +56,7 @@ offset_left = -403.464
 offset_top = -223.704
 offset_right = 403.536
 offset_bottom = 223.296
-current_tab = 2
+current_tab = 1
 
 [node name="UI_TAB_GENERAL" type="TabBar" parent="opc"]
 visible = false
@@ -90,7 +90,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="UI_TAB_GRAPHICS" type="TabBar" parent="opc"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
@@ -173,6 +172,7 @@ alignment = 1
 expand_icon = true
 
 [node name="UI_TAB_SOUND" type="TabBar" parent="opc"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 

@@ -4,18 +4,38 @@ UI_CONFIG_TITLE,Configuración,Settings,Configuración
 UI_LANGUAGE_ES,Español,Spanish,Castelán
 UI_LANGUAGE_EN,Inglés,English,Inglés
 UI_LANGUAGE_GL,Gallego,Galician,Galego
-UI_LANGUAGE_TITLE,Idioma,Language,Lingua
-UI_TAB_GENERAL,General,General,Xeral
+UI_CARD_TYPE_BASIC,Básica,Basic,Básica
+UI_TAB_GENERAL,General,General,Xeneral
 UI_TAB_GRAPHICS,Gráficos,Graphics,Gráficos
 UI_TAB_SOUND,Sonido,Sound,Son
+UI_LANGUAGE_TITLE,Idioma,Language,Lingua
 UI_RESOLUTION,Resolución,Resolution,Resolución
 UI_WINDOW_MODE,Modo ventana,Window mode,Modo ventá
-UI_WINDOW_BORDERED,Con bordes,With borders,Con bordes
-UI_WINDOW_BORDERLESS,Sin bordes,Borderless,Sen bordes
-UI_VSYNC,Sincronización vertical,VSync,Sincronización vertical
-UI_FULL_SCREEN,Pantalla completa,Full Screen,Pantalla completa
-UI_MASTER,Volumen General,Master Volume,Volume Xeral
+UI_VSYNC,Sincro. Vertical,VSync,Sincro. Vertical
+UI_FULL_SCREEN,Pantalla completa,Full screen,Pantalla completa
+UI_MASTER,General,Master,Xeneral
 UI_MUSIC,Música,Music,Música
-UI_SFX,Efectos de Sonido,SFX ,Efectos de Son
-UI_TEST_SFX,Probar Efectos,Test SFX,Probar Efectos
-UI_PLAY,Jugar contra\n la IA,Play against\n AI,Xogar contra\n a IA
+UI_SFX,Efectos,SFX,Efectos
+UI_TEST_SFX,Probar efectos,Test SFX,Probar efectos
+UI_PLAY,Jugar contra\nla IA,Play against\nAI,Xogar contra\na IA
+UI_WINDOW_BORDERED,Con bordes,With borders,Con bordes
+UI_WINDOW_BORDERLESS,Sin bordes,Boderless,Sen bordes
+UI_DECK,Baraja,Deck,Baralla
+UI_DECK_NAME,Nombre de la baraja...,Deck name...,Nome da baralla...
+UI_NEW,Nuevo,New,Novo
+UI_YOUR_DECKS,Tus barajas,Your decks,As túas barallas
+UI_DELETE,Eliminar,Delete,Eliminar
+UI_SAVE,Guardar,Save,Gardar
+UI_COLECTION,Colección,Colection,Colección
+UI_SEARCH_CARD,Buscar carta...,Search card...,Buscar carta...
+UI_GENERAL_DECK,Baraja general,General deck,Baralla xeneral
+UI_ALL_TEXT,Todas,All,Todas
+UI_ADD_TO_DECK,Añadir a la baraja +,Add to deck +,Engadir a baralla +
+UI_ACTUAL_DECK,Baraja actual,Actual deck,Baralla actual
+UI_MAX_DECK_LIMIT,La baraja ya alcanzó el máximo de %d cartas.,This deck already reached the maximum of %d cards.,A baralla xa alcanzou o máximo de %d cartas.
+UI_NEED_SIXTY,La baraja tiene que ir con 60 cartas.,The deck has to go with 60 cards.,A baralla ten que ir con 60 cartas.
+UI_WITHOUT_NAME,La baraja no puede ir sin nombre.,The deck can´t be saved without a name.,A baralla non pode ir sen nome.
+UI_CANNOT_SAVE,La baraja no se pudo guardar.,The deck couldn´t be saved.,A baralla non pudo ser gardada.
+UI_CARD_TYPE_FILTER,Tipo de carta,Card type,Tipo de carta
+UI_ABILITY_TYPE_FILTER,Tipo de habilidad,Ability type,Tipo de habilidade
+UI_DECK_SAVED,Baraja guardada.,Deck saved.,Baralla gardada.

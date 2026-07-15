@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=3 uid="uid://c2fha45ymypir"]
+
+[ext_resource type="Script" uid="uid://bifjcn4537018" path="res://Scripts/era_count.gd" id="1_0yur3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6pihw"]
+bg_color = Color(0.427493, 0.427493, 0.427493, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[node name="EraCount" type="Control"]
+custom_minimum_size = Vector2(400, 40)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1520.0
+offset_bottom = -1040.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0yur3")
+
+[node name="EraColorBG" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 11.0
+offset_right = 21.0
+offset_bottom = 31.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_6pihw")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 40.0
+offset_right = 272.0
+offset_bottom = 40.0
+theme_override_constants/separation = 15
+
+[node name="EraNameText" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Nombre era"
+
+[node name="NumCardsEraText" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "x99"
+horizontal_alignment = 1
+vertical_alignment = 1
