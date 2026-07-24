@@ -39,3 +39,10 @@ UI_CANNOT_SAVE,La baraja no se pudo guardar.,The deck couldn´t be saved.,A bara
 UI_CARD_TYPE_FILTER,Tipo de carta,Card type,Tipo de carta
 UI_ABILITY_TYPE_FILTER,Tipo de habilidad,Ability type,Tipo de habilidade
 UI_DECK_SAVED,Baraja guardada.,Deck saved.,Baralla gardada.
+UI_FINISH,Terminar,Finish,Rematar
+UI_DRAFT,Guardar como borrador,Save as draft,Gardar como borrador
+UI_WINDOW_ICON,Iconos,Icons,Iconos
+UI_DECK_COLOR,Color de la baraja,Deck color,Color da baralla
+UI_DECK_ICON,Icono de la baraja,Deck icon,Icono da baralla
+UI_CHOOSE_ICON,Elegir icono,Choose icon,Elexir icono
+UI_CARDS,Cartas,Cards,Cartas

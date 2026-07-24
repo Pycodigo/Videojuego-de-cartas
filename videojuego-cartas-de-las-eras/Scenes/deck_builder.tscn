@@ -86,7 +86,6 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -3.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_muq8c")
@@ -123,7 +122,7 @@ anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = 12.0
 offset_top = -515.0
-offset_right = -859.0
+offset_right = -1010.0
 offset_bottom = -449.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -146,9 +145,9 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 1268.0
+offset_left = 999.0
 offset_top = -515.0
-offset_right = 12.0
+offset_right = 26.0
 offset_bottom = -449.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -159,10 +158,15 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "UI_DELETE"
 
-[node name="BtnSave" type="Button" parent="TopBarActions"]
+[node name="BtnFinish" type="Button" parent="TopBarActions"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
-text = "UI_SAVE"
+text = "UI_FINISH"
+
+[node name="BtnDraft" type="Button" parent="TopBarActions"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "UI_DRAFT"
 
 [node name="BtnInfo" type="Button" parent="TopBarActions"]
 custom_minimum_size = Vector2(60, 0)
@@ -180,51 +184,62 @@ icon = ExtResource("5_wcor1")
 icon_alignment = 1
 expand_icon = true
 
-[node name="MainBar" type="HBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 8.0
+[node name="VSeparator" type="VSeparator" parent="."]
+layout_mode = 0
+offset_left = 965.0
+offset_top = 113.0
+offset_right = 1029.0
+offset_bottom = 1084.0
+
+[node name="ColectionBar" type="VBoxContainer" parent="."]
+clip_contents = true
+layout_mode = 2
+offset_left = 1.0
 offset_top = 114.0
-offset_right = -48.0
-offset_bottom = 2.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 40
-
-[node name="ColectionBar" type="VBoxContainer" parent="MainBar"]
-layout_mode = 2
+offset_right = 996.0
+offset_bottom = 1082.0
 size_flags_horizontal = 3
-size_flags_vertical = 13
-theme_override_constants/separation = 40
+theme_override_constants/separation = 30
 
-[node name="HeaderColection" type="HBoxContainer" parent="MainBar/ColectionBar"]
+[node name="HeaderColection" type="HBoxContainer" parent="ColectionBar"]
 layout_mode = 2
+theme_override_constants/separation = 500
 
-[node name="HSeparator4" type="HSeparator" parent="MainBar/ColectionBar"]
+[node name="TitleColection" type="Label" parent="ColectionBar/HeaderColection"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "UI_COLECTION"
 
-[node name="LineEdit" type="LineEdit" parent="MainBar/ColectionBar"]
+[node name="CountColection" type="Label" parent="ColectionBar/HeaderColection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "999"
+horizontal_alignment = 2
+
+[node name="HSeparator4" type="HSeparator" parent="ColectionBar"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="LineEdit" type="LineEdit" parent="ColectionBar"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 35
 placeholder_text = "UI_SEARCH_CARD"
 
-[node name="TagFilter" type="FlowContainer" parent="MainBar/ColectionBar"]
+[node name="TagFilter" type="FlowContainer" parent="ColectionBar"]
 layout_mode = 2
 
-[node name="HSeparator3" type="HSeparator" parent="MainBar/ColectionBar"]
+[node name="HSeparator3" type="HSeparator" parent="ColectionBar"]
 layout_mode = 2
 
-[node name="Filter" type="VBoxContainer" parent="MainBar/ColectionBar"]
+[node name="Filter" type="VBoxContainer" parent="ColectionBar"]
 layout_mode = 2
 theme_override_constants/separation = 25
 
-[node name="ButtonFilters" type="HBoxContainer" parent="MainBar/ColectionBar/Filter"]
+[node name="ButtonFilters" type="HBoxContainer" parent="ColectionBar/Filter"]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="CardTypeOption" type="OptionButton" parent="MainBar/ColectionBar/Filter/ButtonFilters"]
+[node name="CardTypeOption" type="OptionButton" parent="ColectionBar/Filter/ButtonFilters"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 30
@@ -233,7 +248,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_g6ur6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_txkiy")
 theme_override_styles/normal = SubResource("StyleBoxFlat_pcjk0")
 
-[node name="EraOption" type="OptionButton" parent="MainBar/ColectionBar/Filter/ButtonFilters"]
+[node name="EraOption" type="OptionButton" parent="ColectionBar/Filter/ButtonFilters"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 30
@@ -242,7 +257,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_g6ur6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_txkiy")
 theme_override_styles/normal = SubResource("StyleBoxFlat_pcjk0")
 
-[node name="AbilityTypeOption" type="OptionButton" parent="MainBar/ColectionBar/Filter/ButtonFilters"]
+[node name="AbilityTypeOption" type="OptionButton" parent="ColectionBar/Filter/ButtonFilters"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 30
@@ -251,48 +266,61 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_g6ur6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_txkiy")
 theme_override_styles/normal = SubResource("StyleBoxFlat_pcjk0")
 
-[node name="HSeparator5" type="HSeparator" parent="MainBar/ColectionBar"]
+[node name="HSeparator5" type="HSeparator" parent="ColectionBar"]
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MainBar/ColectionBar"]
+[node name="ScrollContainer" type="ScrollContainer" parent="ColectionBar"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="MainBar/ColectionBar/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="ColectionBar/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 70
 theme_override_constants/v_separation = 20
 columns = 3
 
-[node name="MiniBaseCard" parent="MainBar/ColectionBar/ScrollContainer/GridContainer" instance=ExtResource("6_cp21t")]
+[node name="MiniBaseCard" parent="ColectionBar/ScrollContainer/GridContainer" instance=ExtResource("6_cp21t")]
 layout_mode = 2
 
-[node name="MiniBaseCard2" parent="MainBar/ColectionBar/ScrollContainer/GridContainer" instance=ExtResource("7_ohrxf")]
+[node name="MiniBaseCard2" parent="ColectionBar/ScrollContainer/GridContainer" instance=ExtResource("7_ohrxf")]
 layout_mode = 2
 
-[node name="VSeparator" type="VSeparator" parent="MainBar"]
+[node name="MiniBaseCard3" parent="ColectionBar/ScrollContainer/GridContainer" instance=ExtResource("7_ohrxf")]
 layout_mode = 2
 
-[node name="DeckBar" type="VBoxContainer" parent="MainBar"]
+[node name="MiniBaseCard4" parent="ColectionBar/ScrollContainer/GridContainer" instance=ExtResource("7_ohrxf")]
 layout_mode = 2
+
+[node name="DeckBar" type="VBoxContainer" parent="."]
+layout_mode = 2
+offset_left = 1032.0
+offset_top = 114.0
+offset_right = 1894.0
+offset_bottom = 1063.0
 size_flags_horizontal = 3
 theme_override_constants/separation = 40
 
-[node name="Header" type="VBoxContainer" parent="MainBar/DeckBar"]
+[node name="Header" type="VBoxContainer" parent="DeckBar"]
 layout_mode = 2
 
-[node name="HeaderDeck" type="HBoxContainer" parent="MainBar/DeckBar/Header"]
+[node name="HeaderDeck" type="HBoxContainer" parent="DeckBar/Header"]
 layout_mode = 2
-theme_override_constants/separation = 450
+theme_override_constants/separation = 400
 
-[node name="TitleDeck" type="Label" parent="MainBar/DeckBar/Header/HeaderDeck"]
+[node name="TitleDeck" type="Label" parent="DeckBar/Header/HeaderDeck"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 35
 text = "UI_ACTUAL_DECK"
 
-[node name="ProgressBar" type="ProgressBar" parent="MainBar/DeckBar/Header"]
+[node name="CountDeck" type="Label" parent="DeckBar/Header/HeaderDeck"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "0/60"
+horizontal_alignment = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="DeckBar/Header"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.219608, 0.509804, 1)
 theme_override_styles/background = SubResource("StyleBoxFlat_7ta10")
@@ -300,68 +328,37 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_q6pgw")
 max_value = 60.0
 show_percentage = false
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MainBar/DeckBar"]
+[node name="HSeparator2" type="HSeparator" parent="DeckBar"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="DeckBar"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="DeckList" type="VBoxContainer" parent="MainBar/DeckBar/ScrollContainer"]
+[node name="DeckList" type="VBoxContainer" parent="DeckBar/ScrollContainer"]
 clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 10
 
-[node name="Info" type="Label" parent="MainBar/DeckBar"]
+[node name="Info" type="Label" parent="DeckBar"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
 text = "aaaaaa"
 
-[node name="HSeparator6" type="HSeparator" parent="MainBar/DeckBar"]
+[node name="HSeparator6" type="HSeparator" parent="DeckBar"]
 layout_mode = 2
 size_flags_stretch_ratio = 20.0
 
-[node name="CardsResume" type="FlowContainer" parent="MainBar/DeckBar"]
+[node name="CardsResume" type="FlowContainer" parent="DeckBar"]
 layout_mode = 2
-
-[node name="TitleColection" type="Label" parent="."]
-layout_mode = 2
-offset_left = 19.0
-offset_top = 110.0
-offset_right = 784.0
-offset_bottom = 159.0
-theme_override_font_sizes/font_size = 35
-text = "UI_COLECTION"
-
-[node name="CountColection" type="Label" parent="."]
-layout_mode = 2
-offset_left = 839.0
-offset_top = 114.0
-offset_right = 936.0
-offset_bottom = 156.0
-theme_override_font_sizes/font_size = 30
-text = "999"
-horizontal_alignment = 1
-
-[node name="CountDeck" type="Label" parent="."]
-layout_mode = 2
-offset_left = 1720.0
-offset_top = 117.0
-offset_right = 1852.0
-offset_bottom = 159.0
-theme_override_font_sizes/font_size = 30
-text = "0/60"
-horizontal_alignment = 1
-
-[node name="HSeparator2" type="HSeparator" parent="."]
-layout_mode = 2
-offset_left = 944.0
-offset_top = 191.0
-offset_right = 1920.0
-offset_bottom = 196.0
 
 [connection signal="pressed" from="TopBarActions/BtnDelete" to="." method="_on_btn_delete_pressed"]
-[connection signal="pressed" from="TopBarActions/BtnSave" to="." method="_on_btn_save_pressed"]
-[connection signal="text_changed" from="MainBar/ColectionBar/LineEdit" to="." method="_on_line_edit_text_changed"]
-[connection signal="item_selected" from="MainBar/ColectionBar/Filter/ButtonFilters/CardTypeOption" to="." method="_on_card_type_option_item_selected"]
-[connection signal="item_selected" from="MainBar/ColectionBar/Filter/ButtonFilters/EraOption" to="." method="_on_era_option_item_selected"]
-[connection signal="item_selected" from="MainBar/ColectionBar/Filter/ButtonFilters/AbilityTypeOption" to="." method="_on_ability_type_option_item_selected"]
+[connection signal="pressed" from="TopBarActions/BtnFinish" to="." method="_on_btn_finish_pressed"]
+[connection signal="pressed" from="TopBarActions/BtnDraft" to="." method="_on_btn_draft_pressed"]
+[connection signal="pressed" from="TopBarActions/BtnBack" to="." method="_on_btn_back_pressed"]
+[connection signal="text_changed" from="ColectionBar/LineEdit" to="." method="_on_line_edit_text_changed"]
+[connection signal="item_selected" from="ColectionBar/Filter/ButtonFilters/CardTypeOption" to="." method="_on_card_type_option_item_selected"]
+[connection signal="item_selected" from="ColectionBar/Filter/ButtonFilters/EraOption" to="." method="_on_era_option_item_selected"]
+[connection signal="item_selected" from="ColectionBar/Filter/ButtonFilters/AbilityTypeOption" to="." method="_on_ability_type_option_item_selected"]

@@ -1,0 +1,80 @@
+[gd_scene load_steps=5 format=3 uid="uid://c8e2t5kwi8ky5"]
+
+[ext_resource type="Script" uid="uid://b7lhbegvryo1" path="res://Scripts/your_decks.gd" id="1_4n861"]
+[ext_resource type="Texture2D" uid="uid://cof0taepfw88" path="res://Images/Fondo editor 2.png" id="1_a7i6v"]
+[ext_resource type="Texture2D" uid="uid://c6cqntc4n5aj6" path="res://Images/Fondo editor 1.png" id="2_h83kp"]
+[ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/Test/volver.png" id="3_4n861"]
+
+[node name="YourDecks" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4n861")
+
+[node name="TopBG" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.072
+anchor_right = 0.5
+anchor_bottom = 0.072
+offset_left = -959.0
+offset_top = -76.76
+offset_right = 960.0
+offset_bottom = 77.24
+texture = ExtResource("1_a7i6v")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 21.0
+offset_top = 13.0
+offset_right = 1909.0
+offset_bottom = 142.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 60
+text = "UI_YOUR_DECKS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainBG" type="TextureRect" parent="."]
+offset_left = 1.0
+offset_top = 154.0
+offset_right = 1921.0
+offset_bottom = 1081.0
+texture = ExtResource("2_h83kp")
+expand_mode = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.471
+anchor_top = 0.5
+anchor_right = 0.471
+anchor_bottom = 0.5
+offset_left = -864.32
+offset_top = -366.0
+offset_right = 865.68
+offset_bottom = 506.0
+
+[node name="DeckContainer" type="GridContainer" parent="ScrollContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 500
+columns = 5
+
+[node name="BackBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1798.0
+offset_top = 956.0
+offset_right = 1905.0
+offset_bottom = 1063.0
+icon = ExtResource("3_4n861")
+flat = true
+expand_icon = true
+
+[connection signal="pressed" from="BackBtn" to="." method="_on_back_btn_pressed"]

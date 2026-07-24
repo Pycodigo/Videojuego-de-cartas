@@ -4,6 +4,7 @@ func _ready() -> void:
 	mini_card_color = "#220869c0"
 	era_color = "#0c437d"
 	card_name = "CARD_COMBAT_DRONE_NAME"
+	card_img = preload("res://Images/Future/dron.png")
 	card_type = "UI_CARD_TYPE_BASIC"
 	era_name = "CARD_FUTURE_ERA"
 	ability_name = "CARD_COMBAT_DRONE_ABILITY"

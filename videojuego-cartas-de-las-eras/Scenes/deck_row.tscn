@@ -30,7 +30,7 @@ script = ExtResource("1_6pihw")
 
 [node name="DeckRowBG" type="Panel" parent="."]
 layout_mode = 0
-offset_right = 800.0
+offset_right = 798.0
 offset_bottom = 40.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_8qxud")
 
@@ -50,12 +50,14 @@ offset_right = 646.0
 offset_bottom = 33.0
 theme_override_font_sizes/font_size = 20
 text = "Nombre carta"
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="NumCardsText" type="Label" parent="DeckRowBG"]
 layout_mode = 0
-offset_left = 706.0
+offset_left = 675.0
 offset_top = 5.0
-offset_right = 739.0
+offset_right = 706.0
 offset_bottom = 33.0
 theme_override_font_sizes/font_size = 15
 text = "x99"
@@ -64,9 +66,9 @@ vertical_alignment = 1
 
 [node name="MinusBtn" type="Button" parent="DeckRowBG"]
 layout_mode = 0
-offset_left = 744.0
+offset_left = 714.0
 offset_top = 1.0
-offset_right = 759.0
+offset_right = 743.0
 offset_bottom = 37.0
 theme_override_font_sizes/font_size = 20
 text = "-"
@@ -74,9 +76,9 @@ flat = true
 
 [node name="DeleteBtn" type="Button" parent="DeckRowBG"]
 layout_mode = 0
-offset_left = 767.0
+offset_left = 750.0
 offset_top = 1.0
-offset_right = 788.0
+offset_right = 774.0
 offset_bottom = 38.0
 theme_override_font_sizes/font_size = 20
 text = "X"

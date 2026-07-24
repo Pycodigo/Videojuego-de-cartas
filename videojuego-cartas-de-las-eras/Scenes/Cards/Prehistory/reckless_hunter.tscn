@@ -26,7 +26,6 @@ offset_right = 300.0
 offset_left = -99.47
 offset_top = -13.0
 offset_right = 95.53
-clip_text = true
 
 [node name="NameDetail" parent="Details" index="9"]
 offset_left = 22.0

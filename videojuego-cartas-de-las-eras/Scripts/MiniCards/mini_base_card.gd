@@ -2,6 +2,7 @@ extends Control
 
 # Atributos de la mini carta.
 @export var card_name: String
+@export var card_img: Texture2D
 @export var ability_name: String # No necesita ser un diccionario aquí.
 @export var ability_type: String
 @export var era_name: String
@@ -19,6 +20,7 @@ extends Control
 @onready var mini_card_bg = $MiniBasicCard/MiniCardBG
 @onready var era_color_bg = $MiniBasicCard/EraColorBG
 @onready var mini_card_name = $MiniBasicCard/MiniCardName
+@onready var mini_card_texture = $MiniBasicCard/MiniCardTexture
 @onready var stats_text = $MiniBasicCard/StatsText
 @onready var ability_name_text = $MiniBasicCard/AbilityName
 @onready var ability_type_text = $MiniBasicCard/AbilityTypeText
@@ -41,6 +43,7 @@ func init_card():
 	_set_panel_color(mini_card_bg, mini_card_color)
 	_set_panel_color(era_color_bg, era_color)
 	mini_card_name.text = card_name
+	mini_card_texture.texture = card_img
 	stats_text.text = str("❤ ", max_hp, "    ⚡ ", energy_cost, "          ⚔ ", attack, "    🛡 ", defense)
 	ability_name_text.text = ability_name
 	ability_type_text.text = ability_type

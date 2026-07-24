@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://de4o8qligf15v"
-path="res://.godot/imported/dron.png-1dbc3746891d72ffb92ce4318fa4f069.ctex"
+uid="uid://bvltnt8vjs2qr"
+path="res://.godot/imported/Editar btn.png-b08dbac16b59b594adb4933ac4ddb647.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Prehistory/dron.png"
-dest_files=["res://.godot/imported/dron.png-1dbc3746891d72ffb92ce4318fa4f069.ctex"]
+source_file="res://Images/Editar btn.png"
+dest_files=["res://.godot/imported/Editar btn.png-b08dbac16b59b594adb4933ac4ddb647.ctex"]
 
 [params]
 

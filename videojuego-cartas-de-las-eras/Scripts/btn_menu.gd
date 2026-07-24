@@ -74,3 +74,17 @@ func _on_config_pressed() -> void:
 	await $"../ButtonSound".finished
 	get_tree().change_scene_to_file("res://Scenes/config.tscn")
 	Global.music = $"../MenuChill".get_playback_position()
+
+
+func _on_deck_builder_btn_pressed() -> void:
+	$"../ButtonSound".play()
+	await $"../ButtonSound".finished
+	get_tree().change_scene_to_file("res://Scenes/deck_builder.tscn")
+	Global.music = $"../MenuChill".get_playback_position()
+
+
+func _on_your_decks_btn_pressed() -> void:
+	$"../ButtonSound".play()
+	await $"../ButtonSound".finished
+	get_tree().change_scene_to_file("res://Scenes/your_decks.tscn")
+	Global.music = $"../MenuChill".get_playback_position()

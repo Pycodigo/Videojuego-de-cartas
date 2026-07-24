@@ -1,0 +1,263 @@
+[gd_scene load_steps=8 format=3 uid="uid://cicrvxwxhy0s"]
+
+[ext_resource type="Script" uid="uid://c5jhssky1nust" path="res://Scripts/deck_builder_2.gd" id="1_1img4"]
+[ext_resource type="Texture2D" uid="uid://chi5vg0ejenqd" path="res://Images/Portada baraja - fondo nombre.png" id="1_gh66y"]
+[ext_resource type="Texture2D" uid="uid://bieotg22v3wkg" path="res://Images/favorito sin marcar.png" id="2_yyvls"]
+[ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/Test/volver.png" id="3_1img4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3iv38"]
+bg_color = Color(0.370364, 0.370365, 0.370364, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cir5j"]
+bg_color = Color(0.169245, 0.169245, 0.169245, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m8gwd"]
+bg_color = Color(0.851956, 0.891208, 0.982313, 1)
+
+[node name="DeckBuilder2" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1img4")
+
+[node name="DeckBG" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.275
+anchor_top = 0.484
+anchor_right = 0.275
+anchor_bottom = 0.484
+offset_left = -425.0
+offset_top = -449.72
+offset_right = 425.0
+offset_bottom = 450.28
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3iv38")
+
+[node name="Panel" type="Panel" parent="DeckBG"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 25.0
+offset_right = 818.0
+offset_bottom = 618.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_cir5j")
+
+[node name="IconBG" type="TextureRect" parent="DeckBG"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.349
+anchor_right = 0.5
+anchor_bottom = 0.349
+offset_left = -383.0
+offset_top = -276.1
+offset_right = 380.0
+offset_bottom = 276.9
+expand_mode = 1
+
+[node name="DeckNameBG" type="TextureRect" parent="DeckBG"]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 592.0
+offset_right = 838.0
+offset_bottom = 682.0
+texture = ExtResource("1_gh66y")
+expand_mode = 1
+
+[node name="DeckName" type="Label" parent="DeckBG"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.707
+anchor_right = 0.5
+anchor_bottom = 0.707
+offset_left = -390.0
+offset_top = -42.3
+offset_right = 390.0
+offset_bottom = 42.7
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 58
+text = "Nombre baraja"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SaveBtn" type="Button" parent="DeckBG"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.24
+anchor_top = 0.889
+anchor_right = 0.24
+anchor_bottom = 0.889
+offset_left = -80.0
+offset_top = -38.1
+offset_right = 80.0
+offset_bottom = 37.9
+theme_override_font_sizes/font_size = 35
+text = "UI_SAVE"
+expand_icon = true
+
+[node name="BackBtn" type="Button" parent="DeckBG"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.889
+anchor_right = 0.5
+anchor_bottom = 0.889
+offset_left = -53.0
+offset_top = -54.1
+offset_right = 54.0
+offset_bottom = 54.9
+icon = ExtResource("3_1img4")
+flat = true
+expand_icon = true
+
+[node name="FavoriteBtn" type="Button" parent="DeckBG"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.733
+anchor_top = 0.883
+anchor_right = 0.733
+anchor_bottom = 0.883
+offset_left = -62.05
+offset_top = -59.7
+offset_right = 61.95
+offset_bottom = 60.3
+icon = ExtResource("2_yyvls")
+flat = true
+expand_icon = true
+
+[node name="EditPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.744
+anchor_top = 0.484
+anchor_right = 0.744
+anchor_bottom = 0.484
+offset_left = -425.48
+offset_top = -449.72
+offset_right = 424.52
+offset_bottom = 450.28
+theme_override_styles/panel = SubResource("StyleBoxFlat_m8gwd")
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="EditPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.766
+anchor_top = 0.098
+anchor_right = 0.766
+anchor_bottom = 0.098
+offset_left = -146.1
+offset_top = -39.2
+offset_right = 146.9
+offset_bottom = 38.8
+
+[node name="DeckColorText" type="Label" parent="EditPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.279
+anchor_top = 0.098
+anchor_right = 0.279
+anchor_bottom = 0.098
+offset_left = -221.15
+offset_top = -36.2
+offset_right = 221.85
+offset_bottom = 35.8
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0.521141, 0.521141, 0.521141, 1)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 30
+text = "UI_DECK_COLOR"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="IconDeckText" type="Label" parent="EditPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.279
+anchor_top = 0.242
+anchor_right = 0.279
+anchor_bottom = 0.242
+offset_left = -221.15
+offset_top = -35.8
+offset_right = 221.85
+offset_bottom = 36.2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0.521141, 0.521141, 0.521141, 1)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 30
+text = "UI_DECK_ICON"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DeckIconSelector" type="Button" parent="EditPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.766
+anchor_top = 0.247
+anchor_right = 0.766
+anchor_bottom = 0.247
+offset_left = -146.1
+offset_top = -31.3
+offset_right = 146.9
+offset_bottom = 31.7
+theme_override_font_sizes/font_size = 30
+text = "UI_CHOOSE_ICON"
+
+[node name="CoverSelector" type="Window" parent="EditPanel"]
+title = "UI_WINDOW_ICON"
+position = Vector2i(1050, 420)
+size = Vector2i(750, 500)
+
+[node name="TabContainer" type="TabContainer" parent="EditPanel/CoverSelector"]
+offset_right = 749.0
+offset_bottom = 498.0
+current_tab = 0
+
+[node name="UI_CARDS" type="TabBar" parent="EditPanel/CoverSelector/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="EditPanel/CoverSelector/TabContainer/UI_CARDS"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -361.5
+offset_top = -221.5
+offset_right = 364.5
+offset_bottom = 225.5
+
+[node name="CardsContainer" type="GridContainer" parent="EditPanel/CoverSelector/TabContainer/UI_CARDS/ScrollContainer"]
+layout_mode = 2
+columns = 3
+
+[node name="Eras" type="TabBar" parent="EditPanel/CoverSelector/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[connection signal="pressed" from="DeckBG/SaveBtn" to="." method="_on_save_btn_pressed"]
+[connection signal="pressed" from="DeckBG/BackBtn" to="." method="_on_back_btn_pressed"]
+[connection signal="color_changed" from="EditPanel/ColorPickerButton" to="." method="_on_color_picker_button_color_changed"]
+[connection signal="pressed" from="EditPanel/DeckIconSelector" to="." method="_on_deck_icon_selector_pressed"]
+[connection signal="close_requested" from="EditPanel/CoverSelector" to="." method="_on_cover_selector_close_requested"]

@@ -6,21 +6,22 @@ const MAX_DECK_SIZE: int = 60
 const FILTER_TAG_SCENE := preload("res://Scenes/filter_tag.tscn")
 
 # Nodos.
-@onready var collection_grid: GridContainer = $MainBar/ColectionBar/ScrollContainer/GridContainer
-@onready var deck_list: VBoxContainer = $MainBar/DeckBar/ScrollContainer/DeckList
+@onready var collection_grid: GridContainer = $ColectionBar/ScrollContainer/GridContainer
+@onready var deck_list: VBoxContainer = $DeckBar/ScrollContainer/DeckList
 @onready var deck_name: LineEdit = $TopBarName/DeckNameInput
-@onready var count_deck_label: Label = $CountDeck
-@onready var progress_bar: ProgressBar = $MainBar/DeckBar/Header/ProgressBar
-@onready var tag_filter: FlowContainer = $MainBar/ColectionBar/TagFilter
-@onready var search_bar: LineEdit = $MainBar/ColectionBar/LineEdit
-@onready var cards_resume: FlowContainer = $MainBar/DeckBar/CardsResume
-@onready var info_deck: Label = $MainBar/DeckBar/Info
-@onready var count_colection: Label = $CountColection
+@onready var count_deck_label: Label = $DeckBar/Header/HeaderDeck/CountDeck
+@onready var progress_bar: ProgressBar = $DeckBar/Header/ProgressBar
+@onready var tag_filter: FlowContainer = $ColectionBar/TagFilter
+@onready var search_bar: LineEdit = $ColectionBar/LineEdit
+@onready var cards_resume: FlowContainer = $DeckBar/CardsResume
+@onready var cards_resume_separator: HSeparator = $DeckBar/HSeparator6
+@onready var info_deck: Label = $DeckBar/Info
+@onready var count_colection: Label = $ColectionBar/HeaderColection/CountColection
 
 # Botones de filtros.
-@onready var card_type_btn = $MainBar/ColectionBar/Filter/ButtonFilters/CardTypeOption
-@onready var era_option_btn = $MainBar/ColectionBar/Filter/ButtonFilters/EraOption
-@onready var ability_type_btn = $MainBar/ColectionBar/Filter/ButtonFilters/AbilityTypeOption
+@onready var card_type_btn = $ColectionBar/Filter/ButtonFilters/CardTypeOption
+@onready var era_option_btn = $ColectionBar/Filter/ButtonFilters/EraOption
+@onready var ability_type_btn = $ColectionBar/Filter/ButtonFilters/AbilityTypeOption
 
 # Filas del mazo actual, indexadas por el nombre de la carta (card_name).
 var deck_rows: Dictionary = {}
@@ -61,6 +62,7 @@ const ABILITY_TYPES := [
 
 func _ready() -> void:
 	info_deck.visible = false
+	cards_resume_separator.visible = false
 	count_colection.text = str(collection_grid.get_child_count())
 	_setup_filters()
 	
@@ -73,7 +75,22 @@ func _ready() -> void:
 		}
 		if not era_color_by_key.has(mini_card.era_name):
 			era_color_by_key[mini_card.era_name] = mini_card.era_color
+	
+	if DeckDraft.has_draft:
+		_load_deck()
 
+
+func _load_deck():
+	deck_name.text = DeckDraft.current_deck["name"]
+	
+	for card_key in DeckDraft.current_deck["cards"]:
+		var amount = DeckDraft.current_deck["cards"][card_key]["amount"]
+		
+		for mini_card in collection_grid.get_children():
+			if mini_card.card_name == card_key:
+				for i in range(amount):
+					_on_mini_card_add_requested(mini_card)
+				break
 
 # Conectar la señal "add_requested" de una mini carta de la colección.
 func _connect_mini_card(mini_card: Control) -> void:
@@ -81,7 +98,7 @@ func _connect_mini_card(mini_card: Control) -> void:
 		mini_card.add_requested.connect(_on_mini_card_add_requested)
 
 
-# Llamar al pulsar añadir al mazo.
+# Llamar al pulsar 'añadir al mazo'.
 func _on_mini_card_add_requested(mini_card: Control) -> void:
 	if total_cards >= MAX_DECK_SIZE:
 		print("El mazo ya tiene el máximo de %d cartas." % MAX_DECK_SIZE)
@@ -151,6 +168,7 @@ func _refresh_era_counts() -> void:
 		if era_key == "":
 			continue
 		totals[era_key] = totals.get(era_key, 0) + row.count
+		cards_resume_separator.visible = true
 
 	# Vaciar el resumen actual.
 	for child in cards_resume.get_children():
@@ -318,9 +336,10 @@ func _on_btn_delete_pressed() -> void:
 	total_cards = 0
 	_update_deck_counters()
 	info_deck.visible = false
+	cards_resume_separator.visible = false
 
 
-func _on_btn_save_pressed() -> void:
+func _on_btn_finish_pressed() -> void:
 	# Comprobar que el mazo tiene 60 cartas.
 	if total_cards < MAX_DECK_SIZE:
 		info_deck.visible = true
@@ -335,31 +354,51 @@ func _on_btn_save_pressed() -> void:
 		info_deck.set("theme_override_colors/font_color", Color("#e30010"))
 		return
 	
+	'''Usa un ID único de la baraja (así se puede editar aunque cambie el nombre).
+	Si ya existe, usa el mismo.'''
 	var deck_data := {
+		"id": DeckDraft.current_deck.get("id", Time.get_unix_time_from_system()),
 		"name": deck_name.text,
 		"cards": {},
+		"color": DeckDraft.current_deck.get("color", Color("#5e5e5e").to_html()),
+		"icon": DeckDraft.current_deck.get("icon", ""),
 	}
 	
 	# Guardar cada carta con su cantidad.
-	for card_name in deck_rows:
-		deck_data["cards"][card_name] = deck_rows[card_name].count
+	for mini_card in collection_grid.get_children():
+		if deck_rows.has(mini_card.card_name):
+			deck_data["cards"][mini_card.card_name] = {
+				"amount": deck_rows[mini_card.card_name].count,
+				"texture": mini_card.card_img.resource_path
+			}
 	
-	# Crear carpeta si no existe.
-	DirAccess.make_dir_recursive_absolute("res://UserDecks")
+	DeckDraft.set_draft(deck_data)
+	get_tree().change_scene_to_file("res://Scenes/deck_builder_2.tscn")
+
+
+func _on_btn_draft_pressed() -> void:
+	'''Usa un ID único de la baraja (así se puede editar aunque cambie el nombre).
+	Si ya existe, usa el mismo.'''
+	var deck_data := {
+		"id": DeckDraft.current_deck.get("id", Time.get_unix_time_from_system()),
+		"name": deck_name.text,
+		"cards": {},
+		"color": DeckDraft.current_deck.get("color", Color("#5e5e5e").to_html()),
+		"icon": DeckDraft.current_deck.get("icon", ""),
+	}
 	
-	var path := "res://UserDecks/%s.json" % deck_name.text
-	var file := FileAccess.open(path, FileAccess.WRITE)
+	# Guardar cada carta con su cantidad.
+	for mini_card in collection_grid.get_children():
+		if deck_rows.has(mini_card.card_name):
+			deck_data["cards"][mini_card.card_name] = {
+				"amount": deck_rows[mini_card.card_name].count,
+				"texture": mini_card.card_img.resource_path
+			}
 	
-	if file == null:
-		print("Error en ", file)
-		info_deck.visible = true
-		info_deck.text = "UI_CANNOT_SAVE"
-		info_deck.set("theme_override_colors/font_color", Color("#e30010"))
-		return
-	
-	file.store_string(JSON.stringify(deck_data, "\t"))
-	file.close()
-	print("Mazo creado con éxito en: ", path)
-	info_deck.visible = true
-	info_deck.text = "UI_DECK_SAVED"
-	info_deck.set("theme_override_colors/font_color", Color("#3b9d00"))
+	DeckDraft.set_draft(deck_data)
+	get_tree().change_scene_to_file("res://Scenes/main.tscn")
+
+
+func _on_btn_back_pressed() -> void:
+	DeckDraft.clear_draft()
+	get_tree().change_scene_to_file("res://Scenes/main.tscn")

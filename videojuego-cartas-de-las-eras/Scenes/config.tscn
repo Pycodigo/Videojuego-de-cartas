@@ -48,14 +48,14 @@ script = ExtResource("2_6u63q")
 [node name="opc" type="TabContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.457
-anchor_top = 0.623
-anchor_right = 0.457
-anchor_bottom = 0.623
-offset_left = -403.464
-offset_top = -223.704
-offset_right = 403.536
-offset_bottom = 223.296
+anchor_left = 0.47
+anchor_top = 0.657
+anchor_right = 0.47
+anchor_bottom = 0.657
+offset_left = -681.4
+offset_top = -260.56
+offset_right = 680.6
+offset_bottom = 261.44
 current_tab = 1
 
 [node name="UI_TAB_GENERAL" type="TabBar" parent="opc"]
