@@ -2,20 +2,23 @@ extends Control
 
 @export var deck_color: Color
 
-# Señal para poder editar la baraja pedida.
+# Señal para poder editar, o eliminar, la baraja pedida.
 signal edit_requested(deck_data: Dictionary)
+signal delete_requested(deck_data: Dictionary)
 
 # Nodos.
 @onready var deck_bg = $DeckBG
 @onready var icon_deck = $DeckBG/IconBG
 @onready var deck_name_text = $DeckBG/DeckName
 @onready var edit_btn = $DeckBG/EditBtn
+@onready var delete_btn = $DeckBG/DeleteBtn
 
 var deck_data: Dictionary = {}
 
 
 func _ready() -> void:
 	edit_btn.pressed.connect(_on_edit_btn_pressed)
+	delete_btn.pressed.connect(_on_delete_btn_pressed)
 
 # Permitir cambiar color en los paneles.
 func _set_panel_color(panel: Panel, p_deck_color: Color) -> void:
@@ -34,3 +37,7 @@ func deck_setup(p_deck_data: Dictionary) -> void:
 
 func _on_edit_btn_pressed() -> void:
 	edit_requested.emit(deck_data)
+
+
+func _on_delete_btn_pressed() -> void:
+	delete_requested.emit(deck_data)

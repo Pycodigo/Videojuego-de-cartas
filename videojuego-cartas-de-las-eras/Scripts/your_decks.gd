@@ -27,7 +27,7 @@ func _load_all_decks() -> void:
 	while file_name != "":
 		if not dir.current_is_dir() and file_name.ends_with(".json"):
 			_add_deck_panel(deck_scene, "user://UserDecks/" + file_name)
-			file_name = dir.get_next()
+		file_name = dir.get_next()
 	
 	dir.list_dir_end()
 
@@ -46,11 +46,24 @@ func _add_deck_panel(deck_scene: PackedScene, path: String) -> void:
 	deck_container.add_child(panel)
 	panel.deck_setup(data)
 	panel.edit_requested.connect(_on_deck_edit_requested)
+	panel.delete_requested.connect(_on_deck_delete_requested)
 
 func _on_deck_edit_requested(deck_data: Dictionary) -> void:
 	# Enviamos los datos de la baraja al 'borrador'.
 	DeckDraft.set_draft(deck_data)
 	get_tree().change_scene_to_file("res://Scenes/deck_builder.tscn")
+
+func _on_deck_delete_requested(deck_data: Dictionary) -> void:
+	# Pillar la ruta de la baraja a eliminar.
+	var path := "user://UserDecks/%s.json" % str(deck_data["id"])
+
+	var error := DirAccess.remove_absolute(path)
+
+	if error == OK:
+		print("Baraja ", path, " eliminada.")
+		_load_all_decks() # Recargar la lista.
+	else:
+		push_error("No se pudo eliminar la baraja.")
 
 
 func _on_back_btn_pressed() -> void:
