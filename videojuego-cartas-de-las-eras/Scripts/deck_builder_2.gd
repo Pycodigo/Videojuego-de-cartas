@@ -16,7 +16,9 @@ func _ready() -> void:
 	cover_selector.visible = false
 	if DeckDraft.has_draft:
 		deck_name.text = DeckDraft.current_deck["name"]
-		_set_panel_color(deck_bg, Color(DeckDraft.current_deck["color"]))
+		var color = Color(DeckDraft.current_deck["color"])
+		_set_panel_color(deck_bg, color)
+		color_deck_btn.color = color
 		var icon_path: String = DeckDraft.current_deck.get("icon", "")
 
 		if icon_path != "" and ResourceLoader.exists(icon_path):

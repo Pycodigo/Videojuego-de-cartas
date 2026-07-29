@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://bhv68ga71uery"]
 
 [ext_resource type="Texture2D" uid="uid://dbo0by8ch577f" path="res://Images/Test/hoja.png" id="1_344ge"]
-[ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/btn_menu.gd" id="2_ynf5e"]
+[ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/main.gd" id="2_ynf5e"]
 [ext_resource type="Texture2D" uid="uid://dc50b0udohe0h" path="res://Images/Test/config.png" id="3_hptm8"]
 [ext_resource type="Texture2D" uid="uid://dbjmuyg4pmhjr" path="res://Images/Test/reglas.png" id="4_d1ilt"]
 [ext_resource type="Texture2D" uid="uid://c5od8lr5gv00j" path="res://Images/Test/creditos.png" id="5_6iyac"]
@@ -16,6 +16,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("2_ynf5e")
 
 [node name="Title" type="Label" parent="."]
 layout_mode = 1
@@ -44,7 +45,6 @@ offset_right = 99.912
 offset_bottom = 111.208
 icon = ExtResource("1_344ge")
 expand_icon = true
-script = ExtResource("2_ynf5e")
 
 [node name="Label" type="Label" parent="Play"]
 layout_mode = 1
@@ -77,7 +77,6 @@ offset_right = 45.736
 offset_bottom = 44.896
 icon = ExtResource("3_hptm8")
 expand_icon = true
-script = ExtResource("2_ynf5e")
 
 [node name="Rules" type="Button" parent="."]
 layout_mode = 1
@@ -120,7 +119,6 @@ offset_right = 46.2479
 offset_bottom = 45.32
 icon = ExtResource("6_fdnlq")
 expand_icon = true
-script = ExtResource("2_ynf5e")
 
 [node name="ButtonSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_jkdf5")
@@ -144,7 +142,6 @@ offset_right = 74.08
 offset_bottom = 37.48
 theme_override_font_sizes/font_size = 30
 text = "DIECK"
-script = ExtResource("2_ynf5e")
 
 [node name="YourDecksBtn" type="Button" parent="."]
 layout_mode = 1
@@ -159,10 +156,9 @@ offset_right = 119.6
 offset_bottom = 38.24
 theme_override_font_sizes/font_size = 30
 text = "UI_YOUR_DECKS"
-script = ExtResource("2_ynf5e")
 
-[connection signal="pressed" from="Play" to="Play" method="_on_play_pressed"]
-[connection signal="pressed" from="Config" to="Play" method="_on_config_pressed"]
-[connection signal="pressed" from="Exit" to="Play" method="_on_exit_pressed"]
-[connection signal="pressed" from="DeckBuilderBtn" to="Play" method="_on_deck_builder_btn_pressed"]
-[connection signal="pressed" from="YourDecksBtn" to="Play" method="_on_your_decks_btn_pressed"]
+[connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Config" to="." method="_on_config_pressed"]
+[connection signal="pressed" from="Exit" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="DeckBuilderBtn" to="." method="_on_deck_builder_btn_pressed"]
+[connection signal="pressed" from="YourDecksBtn" to="." method="_on_your_decks_btn_pressed"]

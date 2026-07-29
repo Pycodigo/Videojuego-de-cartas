@@ -92,3 +92,10 @@ func _on_check_button_full_screen_toggled(toggled_on: bool) -> void:
 
 func _on_btn_test_pressed() -> void:
 	$ButtonSound.play()
+
+func _on_back_btn_pressed() -> void:
+	# Volver desde configuración.
+	$"ButtonSound".play()
+	await $"ButtonSound".finished
+	get_tree().change_scene_to_file("res://Scenes/main.tscn")
+	Global.music = $"MenuChill".get_playback_position()

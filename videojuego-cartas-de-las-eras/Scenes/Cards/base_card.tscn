@@ -37,6 +37,7 @@ texture_filter = 1
 layout_mode = 0
 offset_right = 300.0
 offset_bottom = 400.0
+pivot_offset = Vector2(150, 400)
 
 [node name="CardBG" type="ColorRect" parent="BasicCard"]
 layout_mode = 0

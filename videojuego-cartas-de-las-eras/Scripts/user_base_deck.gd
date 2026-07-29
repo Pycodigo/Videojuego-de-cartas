@@ -5,6 +5,7 @@ extends Control
 # Señal para poder editar, o eliminar, la baraja pedida.
 signal edit_requested(deck_data: Dictionary)
 signal delete_requested(deck_data: Dictionary)
+signal play_requested(deck_id: float)
 
 # Nodos.
 @onready var deck_bg = $DeckBG
@@ -12,13 +13,26 @@ signal delete_requested(deck_data: Dictionary)
 @onready var deck_name_text = $DeckBG/DeckName
 @onready var edit_btn = $DeckBG/EditBtn
 @onready var delete_btn = $DeckBG/DeleteBtn
+@onready var use_btn = $DeckBG/UseBtn
+
 
 var deck_data: Dictionary = {}
+var deck_id: float = 0.0
 
 
 func _ready() -> void:
 	edit_btn.pressed.connect(_on_edit_btn_pressed)
 	delete_btn.pressed.connect(_on_delete_btn_pressed)
+	use_btn.pressed.connect(_on_use_btn_pressed)
+	
+	if Global.want_to_select:
+		use_btn.visible = true
+		edit_btn.visible = false
+		delete_btn.visible = false
+	else:
+		use_btn.visible = false
+		edit_btn.visible = true
+		delete_btn.visible = true
 
 # Permitir cambiar color en los paneles.
 func _set_panel_color(panel: Panel, p_deck_color: Color) -> void:
@@ -41,3 +55,8 @@ func _on_edit_btn_pressed() -> void:
 
 func _on_delete_btn_pressed() -> void:
 	delete_requested.emit(deck_data)
+
+
+func _on_use_btn_pressed() -> void:
+	deck_id = deck_data["id"]
+	play_requested.emit(deck_id)

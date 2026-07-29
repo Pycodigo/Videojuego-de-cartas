@@ -21,6 +21,8 @@ GlobalTest="*res://Scripts/Test/global_prueba.gd"
 GlobalConfigFile="*res://Scripts/config_file.gd"
 Global="*res://Scripts/global.gd"
 DeckDraft="*res://Scripts/deck_draft.gd"
+CardsDatabase="*res://Scripts/cards_database.gd"
+PlayDeck="*res://Scripts/play_deck.gd"
 
 [display]
 

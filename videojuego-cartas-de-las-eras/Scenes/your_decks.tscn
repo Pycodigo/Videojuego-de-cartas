@@ -28,7 +28,7 @@ offset_bottom = 77.24
 texture = ExtResource("1_a7i6v")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="."]
+[node name="DeckText" type="Label" parent="."]
 layout_mode = 0
 offset_left = 21.0
 offset_top = 13.0
@@ -38,7 +38,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 3
 theme_override_font_sizes/font_size = 60
-text = "UI_YOUR_DECKS"
+text = "barajas"
 horizontal_alignment = 1
 vertical_alignment = 1
 

@@ -1,4 +1,7 @@
-extends Button
+extends Control
+
+@onready var play_btn = $Play
+@onready var your_decks_btn = $YourDecksBtn
 
 var distance: float = 10     # Distancia horizontal.
 var zoom: float = 0.1    # Ampliar si pasa el ratón.
@@ -9,14 +12,7 @@ var cicle_zoom:Tween  # Objeto que ejecuta la animación de zoom.
 
 func _ready() -> void:
 	# Iniciamos música.
-	$"../MenuChill".play(Global.music)
-	
-	_start_animation()
-	# Detectar que el ratón entró.
-	connect("mouse_entered", Callable(self, "_on_mouse_entered"))
-	# Detectar que el ratón salió.
-	connect("mouse_exited", Callable(self, "_on_mouse_exited"))
-	
+	$MenuChill.play(Global.music)
 	# Forzar tamaño mínimo.
 	DisplayServer.window_set_min_size(Vector2i(1024, 600))
 
@@ -50,41 +46,36 @@ func _on_mouse_exited():
 	_start_animation()
 
 func _on_play_pressed() -> void:
-	$"../ButtonSound".play()
-	await $"../ButtonSound".finished
-	get_tree().change_scene_to_file("res://Scenes/ai_board.tscn")
-	Global.music = $"../MenuChill".get_playback_position()
+	$"ButtonSound".play()
+	await $"ButtonSound".finished
+	Global.want_to_select = true
+	get_tree().change_scene_to_file("res://Scenes/your_decks.tscn")
+	Global.music = $"MenuChill".get_playback_position()
 
 
 func _on_exit_pressed() -> void:
-	$"../ButtonSound".play()
-	await $"../ButtonSound".finished
+	$"ButtonSound".play()
+	await $"ButtonSound".finished
 	get_tree().quit()
-
-# Volver desde configuración.
-func _on_volver_config_pressed() -> void:
-	$"../ButtonSound".play()
-	await $"../ButtonSound".finished
-	get_tree().change_scene_to_file("res://Scenes/main.tscn")
-	Global.music = $"../MenuChill".get_playback_position()
 
 
 func _on_config_pressed() -> void:
-	$"../ButtonSound".play()
-	await $"../ButtonSound".finished
+	$"ButtonSound".play()
+	await $"ButtonSound".finished
 	get_tree().change_scene_to_file("res://Scenes/config.tscn")
-	Global.music = $"../MenuChill".get_playback_position()
+	Global.music = $"MenuChill".get_playback_position()
 
 
 func _on_deck_builder_btn_pressed() -> void:
-	$"../ButtonSound".play()
-	await $"../ButtonSound".finished
+	$"ButtonSound".play()
+	await $"ButtonSound".finished
 	get_tree().change_scene_to_file("res://Scenes/deck_builder.tscn")
-	Global.music = $"../MenuChill".get_playback_position()
+	Global.music = $"MenuChill".get_playback_position()
 
 
 func _on_your_decks_btn_pressed() -> void:
-	$"../ButtonSound".play()
-	await $"../ButtonSound".finished
+	$"ButtonSound".play()
+	await $"ButtonSound".finished
+	Global.want_to_select = false
 	get_tree().change_scene_to_file("res://Scenes/your_decks.tscn")
-	Global.music = $"../MenuChill".get_playback_position()
+	Global.music = $"MenuChill".get_playback_position()

@@ -2,9 +2,17 @@ extends Control
 
 # Contenedor de las barajas.
 @onready var deck_container: GridContainer = $ScrollContainer/DeckContainer
+# Texto principal (cambia).
+@onready var deck_text: Label = $DeckText
+
 
 func _ready() -> void:
 	_load_all_decks()
+	
+	if Global.want_to_select:
+		deck_text.text = "UI_SELECT_DECK"
+	else:
+		deck_text.text = "UI_YOUR_DECKS"
 
 func _load_all_decks() -> void:
 	# Limpiar el contenedor por si se vuelve a llamar.
@@ -12,7 +20,7 @@ func _load_all_decks() -> void:
 		deck.queue_free()
 	
 	# Cargar una vez la escena de baraja.
-	var deck_scene := preload("res://Scenes/user_deck.tscn")
+	var deck_scene := preload("res://Scenes/user_base_deck.tscn")
 	
 	# Ir a la carpeta del usuario.
 	var dir := DirAccess.open("user://UserDecks")
@@ -47,6 +55,7 @@ func _add_deck_panel(deck_scene: PackedScene, path: String) -> void:
 	panel.deck_setup(data)
 	panel.edit_requested.connect(_on_deck_edit_requested)
 	panel.delete_requested.connect(_on_deck_delete_requested)
+	panel.play_requested.connect(_on_use_deck_requested)
 
 func _on_deck_edit_requested(deck_data: Dictionary) -> void:
 	# Enviamos los datos de la baraja al 'borrador'.
@@ -65,6 +74,9 @@ func _on_deck_delete_requested(deck_data: Dictionary) -> void:
 	else:
 		push_error("No se pudo eliminar la baraja.")
 
+func _on_use_deck_requested(deck_id: float) -> void:
+	PlayDeck.set_actual_deck(deck_id)
+	get_tree().change_scene_to_file("res://Scenes/ai_board.tscn")
 
 func _on_back_btn_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/main.tscn")

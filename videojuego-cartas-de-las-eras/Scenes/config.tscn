@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://xrc2gvhblmqb"]
+[gd_scene load_steps=6 format=3 uid="uid://xrc2gvhblmqb"]
 
 [ext_resource type="Script" uid="uid://e0xl2f3rvud6" path="res://Scripts/config.gd" id="1_6u63q"]
 [ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/Test/volver.png" id="1_gyli8"]
-[ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/btn_menu.gd" id="2_6u63q"]
 [ext_resource type="PackedScene" uid="uid://mp8x3lwf3mq0" path="res://Scenes/sound.tscn" id="4_lrmn4"]
 [ext_resource type="AudioStream" uid="uid://bmthy11a5bnsc" path="res://Sound effects/Test/button sound.wav" id="5_p4uu7"]
 [ext_resource type="AudioStream" uid="uid://kf1c3t0v75k0" path="res://Music/Test/menu_chill.wav" id="6_a7ocr"]
@@ -31,7 +30,7 @@ theme_override_font_sizes/font_size = 50
 text = "UI_CONFIG_TITLE"
 horizontal_alignment = 1
 
-[node name="volver" type="Button" parent="."]
+[node name="BackBtn" type="Button" parent="."]
 layout_mode = 2
 anchor_left = 0.921
 anchor_top = 0.878
@@ -43,7 +42,6 @@ offset_right = 46.0079
 offset_bottom = 48.056
 icon = ExtResource("1_gyli8")
 expand_icon = true
-script = ExtResource("2_6u63q")
 
 [node name="opc" type="TabContainer" parent="."]
 layout_mode = 1
@@ -248,7 +246,7 @@ bus = &"SFX"
 stream = ExtResource("6_a7ocr")
 bus = &"Music"
 
-[connection signal="pressed" from="volver" to="volver" method="_on_volver_config_pressed"]
+[connection signal="pressed" from="BackBtn" to="." method="_on_back_btn_pressed"]
 [connection signal="item_selected" from="opc/UI_TAB_GENERAL/VBoxContainer/idioma/idioma" to="." method="_on_idioma_item_selected"]
 [connection signal="item_selected" from="opc/UI_TAB_GRAPHICS/VBoxContainer/resolución/opc" to="." method="_on_opc_item_selected"]
 [connection signal="item_selected" from="opc/UI_TAB_GRAPHICS/VBoxContainer/modo/ventana" to="." method="_on_vindow_item_selected"]
