@@ -10,6 +10,8 @@ var start_draw: int = 7
 # Evita que se haga zoom en las cartas cuando se arrastra.
 var card_is_dragging: bool = false
 var last_total_angle: float = 0.0
+# Pausar las acciones del jugador mientras esté en zoom.
+var pause_while_zoom: bool = false
 
 
 func _ready() -> void:

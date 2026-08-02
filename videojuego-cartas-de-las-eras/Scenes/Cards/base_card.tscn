@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cqni8h8tmukl8"]
+[gd_scene load_steps=20 format=3 uid="uid://cqni8h8tmukl8"]
 
 [ext_resource type="Script" uid="uid://b5lqa63fswvko" path="res://Scripts/Cards/base_card.gd" id="1_x5hng"]
 [ext_resource type="Texture2D" uid="uid://myue64h8ybjx" path="res://Images/Polígono.png" id="2_rfn2n"]
@@ -10,7 +10,6 @@
 [ext_resource type="Texture2D" uid="uid://dap2g0pwheym" path="res://Images/Rayo.png" id="8_2sihe"]
 [ext_resource type="Texture2D" uid="uid://byxauoe3tvc8m" path="res://Images/Habilidad-borde.png" id="9_opvx1"]
 [ext_resource type="Texture2D" uid="uid://ctq85w115fk3r" path="res://Images/Enfriamiento.png" id="10_aod86"]
-[ext_resource type="Texture2D" uid="uid://13rn04bcy7yx" path="res://Images/Boton.png" id="10_qcxs8"]
 [ext_resource type="Texture2D" uid="uid://dmxs75a103jmw" path="res://Images/Boton Atacar.png" id="11_2w3gi"]
 [ext_resource type="Texture2D" uid="uid://bu6q6sqgqgw23" path="res://Images/Icono ataque.png" id="11_3dik3"]
 [ext_resource type="Texture2D" uid="uid://cltesqibe6806" path="res://Images/Borde PS detalle.png" id="11_vr43h"]
@@ -298,48 +297,23 @@ icon = ExtResource("12_fvadl")
 flat = true
 expand_icon = true
 
-[node name="PlusButton" type="TextureButton" parent="BasicCard"]
+[node name="PlusBtn" type="Button" parent="BasicCard"]
 layout_mode = 0
-offset_left = 101.0
-offset_top = 113.0
-offset_right = 143.0
-offset_bottom = 155.0
-texture_normal = ExtResource("10_qcxs8")
-texture_pressed = ExtResource("10_qcxs8")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="PlusText" type="Label" parent="BasicCard/PlusButton"]
-layout_mode = 0
-offset_left = 11.0
-offset_top = -2.0
-offset_right = 32.0
-offset_bottom = 40.0
+offset_top = 150.0
+offset_right = 150.0
+offset_bottom = 200.0
 theme_override_font_sizes/font_size = 30
 text = "+"
-horizontal_alignment = 1
 
-[node name="CancelButton" type="TextureButton" parent="BasicCard"]
+[node name="CancelBtn" type="Button" parent="BasicCard"]
 layout_mode = 0
-offset_left = 151.0
-offset_top = 113.0
-offset_right = 193.0
-offset_bottom = 155.0
-texture_normal = ExtResource("10_qcxs8")
-texture_pressed = ExtResource("10_qcxs8")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="CancelText" type="Label" parent="BasicCard/CancelButton"]
-layout_mode = 0
-offset_left = 8.0
-offset_top = -2.0
-offset_right = 38.0
-offset_bottom = 40.0
-theme_override_colors/font_color = Color(0.752637, 0.104591, 0.108491, 1)
+offset_left = 150.0
+offset_top = 150.0
+offset_right = 300.0
+offset_bottom = 200.0
+theme_override_colors/font_color = Color(0.637963, 0.0472057, 0.155284, 1)
 theme_override_font_sizes/font_size = 30
 text = "X"
-horizontal_alignment = 1
 
 [node name="ActionBG" type="ColorRect" parent="BasicCard"]
 visible = false
@@ -366,6 +340,7 @@ texture = ExtResource("11_3dik3")
 expand_mode = 1
 
 [node name="HpZoomBorderTexture" type="TextureRect" parent="BasicCard"]
+visible = false
 layout_mode = 0
 offset_left = 26.0
 offset_top = 195.0
@@ -394,6 +369,7 @@ texture = ExtResource("5_aod86")
 expand_mode = 1
 
 [node name="AbilityZoomBorderTexture" type="TextureRect" parent="BasicCard"]
+visible = false
 layout_mode = 0
 offset_left = 47.0
 offset_top = 294.0
@@ -419,6 +395,7 @@ clip_text = true
 text_overrun_behavior = 3
 
 [node name="EnergyZoomBorderTexture" type="TextureRect" parent="BasicCard"]
+visible = false
 layout_mode = 0
 offset_left = 182.0
 offset_top = 194.0
@@ -452,6 +429,7 @@ texture = ExtResource("8_2sihe")
 expand_mode = 1
 
 [node name="AttackZoomBorderTexture" type="TextureRect" parent="BasicCard"]
+visible = false
 layout_mode = 0
 offset_left = 26.0
 offset_top = 251.0
@@ -480,6 +458,7 @@ texture = ExtResource("7_0wn3j")
 expand_mode = 1
 
 [node name="DefenseZoomBorderTexture" type="TextureRect" parent="BasicCard"]
+visible = false
 layout_mode = 0
 offset_left = 184.0
 offset_top = 249.0
@@ -508,6 +487,7 @@ texture = ExtResource("6_3dik3")
 expand_mode = 1
 
 [node name="CooldownZoomBorderTexture" type="TextureRect" parent="BasicCard"]
+visible = false
 layout_mode = 0
 offset_left = 105.0
 offset_top = 220.0
@@ -887,5 +867,5 @@ fit_content = true
 [connection signal="gui_input" from="BasicCard" to="." method="_on_basic_card_gui_input"]
 [connection signal="pressed" from="BasicCard/ATKBtn" to="." method="_on_atk_btn_pressed"]
 [connection signal="pressed" from="BasicCard/DefBtn" to="." method="_on_def_btn_pressed"]
-[connection signal="pressed" from="BasicCard/PlusButton" to="." method="_on_plus_button_pressed"]
-[connection signal="pressed" from="BasicCard/CancelButton" to="." method="_on_cancel_button_pressed"]
+[connection signal="pressed" from="BasicCard/PlusBtn" to="." method="_on_plus_btn_pressed"]
+[connection signal="pressed" from="BasicCard/CancelBtn" to="." method="_on_cancel_btn_pressed"]

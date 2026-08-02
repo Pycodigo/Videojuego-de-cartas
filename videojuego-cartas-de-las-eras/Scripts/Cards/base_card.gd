@@ -58,10 +58,8 @@ extends Control
 @onready var state_text_detail = $Details/StateText
 
 # Botones.
-@onready var plus_button = $BasicCard/PlusButton
-@onready var plus_text = $BasicCard/PlusButton/PlusText
-@onready var cancel_button = $BasicCard/CancelButton
-@onready var cancel_text = $BasicCard/CancelButton/CancelText
+@onready var plus_btn = $BasicCard/PlusBtn
+@onready var cancel_btn = $BasicCard/CancelBtn
 @onready var atk_btn = $BasicCard/ATKBtn
 @onready var def_btn = $BasicCard/DefBtn
 
@@ -188,12 +186,10 @@ func init_card():
 	
 	# Ocultar el panel de la info al principio (y desactivar el botón).
 	detail_panel.visible = false
-	plus_button.visible = false
-	plus_button.disabled = true
-	plus_text.visible = false
-	cancel_button.visible = false
-	cancel_button.disabled = true
-	cancel_text.visible = false
+	plus_btn.visible = false
+	plus_btn.disabled = true
+	cancel_btn.visible = false
+	cancel_btn.disabled = true
 	
 	# Guardar la posición inicial global de la carta.
 	original_position_global = card_panel.global_position
@@ -203,8 +199,14 @@ func init_card():
 
 # Zoom de la carta.
 func _show_zoom() -> void:
+	if in_hand:
+		return
+	
 	# Crear animación.
 	var tween = create_tween()
+	
+	# Ponerlo por encima del resto.
+	self.z_index = 1
 	
 	if is_in_slot:
 		# Posiciones destino originales (relativas al 300x400 de la carta).
@@ -244,16 +246,13 @@ func _show_zoom() -> void:
 			tween.parallel().tween_property(stat, "modulate:a", 1.0, 0.1)\
 			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 		
-		is_in_slot = false
 		was_zoomed_in_slot = true
 	
 	# Activar los botones para detalles (y cancelar).
-	plus_button.visible = true
-	plus_button.disabled = false
-	plus_text.visible = true
-	cancel_button.visible = true
-	cancel_button.disabled = false
-	cancel_text.visible = true
+	plus_btn.visible = true
+	plus_btn.disabled = false
+	cancel_btn.visible = true
+	cancel_btn.disabled = false
 	
 	var viewport_size = get_viewport().get_visible_rect().size
 	var target_pos = viewport_size / 2 - card_zoom_size / 2
@@ -269,7 +268,7 @@ func _show_zoom() -> void:
 	
 	# Los textos (y botones) tardan medio segundo más en aparecer (Para hacerlo más bonito).
 	for text in [name_text, ability_text, attack_text, cooldown_text, 
-	defense_text, energy_cost_text, hp_text, plus_text, cancel_text, plus_button, cancel_button]:
+	defense_text, energy_cost_text, hp_text, plus_btn, cancel_btn]:
 		text.modulate.a = 0.0
 		tween.parallel().tween_property(text, "modulate:a", 1.0, 0.3)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT).set_delay(0.5)
@@ -278,6 +277,8 @@ func _show_zoom() -> void:
 func _hide_zoom() -> void:
 	# Crear animación.
 	var tween = create_tween()
+	
+	self.z_index = 0
 	
 	# Primero desvanece el panel de detalles si estaba visible.
 	if detail_panel_appeared:
@@ -301,21 +302,19 @@ func _hide_zoom() -> void:
 		tween.parallel().tween_property(text, "modulate:a", 1.0, 0.0)
 		
 	# Desvanecer botones en paralelo con la animación.
-	for button in [plus_button, plus_text, cancel_button, cancel_text]:
+	for button in [plus_btn, cancel_btn]:
 		tween.parallel().tween_property(button, "modulate:a", 0.0, 0.3)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	
 	# Ocultar y desactivar al terminar.
 	tween.tween_callback(func():
-		plus_button.visible = false
-		plus_button.disabled = true
-		plus_text.visible = false
-		cancel_button.visible = false
-		cancel_button.disabled = true
-		cancel_text.visible = false
+		plus_btn.visible = false
+		plus_btn.disabled = true
+		cancel_btn.visible = false
+		cancel_btn.disabled = true
 	)
 	
-	tween.tween_callback(func(): plus_text.text = "+")
+	tween.tween_callback(func(): plus_btn.text = "+")
 	
 	if was_zoomed_in_slot:
 		# Ocultar stats normales (se ven mal).
@@ -347,10 +346,12 @@ func _hide_zoom() -> void:
 			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT).set_delay(0.08)
 		
 		
-		is_in_slot = true
 		was_zoomed_in_slot = false
 
 func _process(delta: float) -> void:
+	if board.pause_while_zoom:
+		return
+	
 	var mouse_pos = get_global_mouse_position()
 	var mouse_over = card_panel.get_global_rect().has_point(mouse_pos)
 
@@ -381,7 +382,6 @@ func _process(delta: float) -> void:
 			if not in_hand:
 				zoom_active = true
 				restore_rotation(0.2)
-				_show_zoom()
 
 	# Control de levantar carta.
 	var should_raise = (
@@ -391,6 +391,7 @@ func _process(delta: float) -> void:
 		and not hold_card
 		and not zoom_active
 		and not board.card_is_dragging
+		and not zoom_active
 	)
 
 	if should_raise:
@@ -401,7 +402,7 @@ func _process(delta: float) -> void:
 			go_back_to_position(0.1)
 
 	# Movimiento de arrastre.
-	if hold_card:
+	if hold_card and not zoom_active:
 		card_panel.global_position = card_panel.global_position.lerp(
 			mouse_pos - drag_offset,
 			0.2
@@ -445,7 +446,7 @@ func restore_rotation(duration: float):
 	if zoom_active or cannot_zoom or hold_card or board.card_is_dragging or not in_hand:
 		create_tween().tween_property(self, "rotation_degrees", original_rotation, duration)
 
-func _on_plus_button_pressed() -> void:
+func _on_plus_btn_pressed() -> void:
 	if detail_panel_appeared:
 		detail_panel_appeared = false
 		
@@ -463,10 +464,10 @@ func _on_plus_button_pressed() -> void:
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 		
 		# Cambiar el texto de - a +.
-		tween.tween_property(plus_text, "modulate:a", 0.0, 0.15)\
+		tween.tween_property(plus_btn, "modulate:a", 0.0, 0.15)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-		tween.tween_callback(func(): plus_text.text = "+")
-		tween.tween_property(plus_text, "modulate:a", 1.0, 0.15)\
+		tween.tween_callback(func(): plus_btn.text = "+")
+		tween.tween_property(plus_btn, "modulate:a", 1.0, 0.15)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 		
 		return
@@ -498,10 +499,10 @@ func _on_plus_button_pressed() -> void:
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	
 	# Cambiar el texto de + a -.
-	tween.tween_property(plus_text, "modulate:a", 0.0, 0.15)\
+	tween.tween_property(plus_btn, "modulate:a", 0.0, 0.15)\
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_callback(func(): plus_text.text = "-")
-	tween.tween_property(plus_text, "modulate:a", 1.0, 0.15)\
+	tween.tween_callback(func(): plus_btn.text = "-")
+	tween.tween_property(plus_btn, "modulate:a", 1.0, 0.15)\
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	
 	# Hacer aparecer el panel con retraso.
@@ -509,18 +510,20 @@ func _on_plus_button_pressed() -> void:
 	tween.parallel().tween_property(detail_panel, "modulate:a", 1.0, 0.8)\
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT).set_delay(0.5)
 
-func _on_cancel_button_pressed() -> void:
+func _on_cancel_btn_pressed() -> void:
+	print("Cancelar pulsado. zoom_active = ", zoom_active)
 	mouse_hovering = false
 	# Reiniciar el tiempo al cancelar.
 	mouse_time = 0.0
 	# Quitar el zoom.
 	if zoom_active:
 		zoom_active = false
+		board.pause_while_zoom = false
 		_hide_zoom()
 
 
 func _on_basic_card_gui_input(event: InputEvent) -> void:
-	if zoom_active:
+	if zoom_active or board.pause_while_zoom:
 		return
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -547,10 +550,13 @@ func _on_basic_card_gui_input(event: InputEvent) -> void:
 				board.card_is_dragging = false
 				_try_drop_on_slot()
 			else:
-				in_hand = true
 				# Esperar a ver si llega un segundo click.
 				click_timer.start()
-				
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
+		if event.pressed:
+			zoom_active = true
+			board.pause_while_zoom = true
+			_show_zoom()
 
 	elif event is InputEventMouseMotion:
 		if event.button_mask & MOUSE_BUTTON_MASK_LEFT and not is_dragging:
@@ -683,37 +689,36 @@ func _try_drop_on_slot() -> void:
 	
 
 func _on_card_left_clicked() -> void:
-	if actions_showed or card_action_clicked:
+	if actions_showed or card_action_clicked or in_hand:
 		return
 	
-	print("Click izquierdo sobre la carta...")
+	print("Click izquierdo sobre la carta...\nClick on hand: ", in_hand)
 	cannot_zoom = true
 	
 	# Crear animaciones.
 	var tween = create_tween()
 	# Mover en vertical los botones, y que aparezcan de forma suave (si no está en la mano).
-	if not in_hand:
-		tween.tween_property(atk_btn, "position:y", atk_btn.position.y - 150, 0.5)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-		tween.parallel().tween_property(def_btn, "position:y", def_btn.position.y + 150, 0.5)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-		atk_btn.modulate.a = 0.0
-		tween.parallel().tween_property(atk_btn, "modulate:a", 1.0, 0.4)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-		def_btn.modulate.a = 0.0
-		tween.parallel().tween_property(def_btn, "modulate:a", 1.0, 0.4)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(atk_btn, "position:y", atk_btn.position.y - 150, 0.5)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.parallel().tween_property(def_btn, "position:y", def_btn.position.y + 150, 0.5)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	atk_btn.modulate.a = 0.0
+	tween.parallel().tween_property(atk_btn, "modulate:a", 1.0, 0.4)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	def_btn.modulate.a = 0.0
+	tween.parallel().tween_property(def_btn, "modulate:a", 1.0, 0.4)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	atk_btn.visible = true
+	def_btn.visible = true
+	atk_btn.disabled = false
+	def_btn.disabled = false
 	
-		atk_btn.visible = true
-		def_btn.visible = true
-		atk_btn.disabled = false
-		def_btn.disabled = false
-		
-		actions_showed = true
+	actions_showed = true
 
 # Efecto de sacudida en cartas para las habilidades.
 func _shake_card_effect() -> void:
-	if card_action_clicked:
+	if card_action_clicked or in_hand:
 		return
 	
 	print("Activando habilidad de carta...")
