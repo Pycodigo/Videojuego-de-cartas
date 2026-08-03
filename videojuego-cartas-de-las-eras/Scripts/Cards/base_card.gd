@@ -108,6 +108,8 @@ var card_action_clicked: bool = false
 var click_timer: Timer
 # Rotación original.
 var original_rotation: float = 0.0
+# Rotación de carta en mano.
+var hand_rotation: float = 0.0
 # La carta ya subió.
 var is_raised: bool = false
 var raise_tween: Tween
@@ -123,6 +125,8 @@ var slot_scale: Vector2
 
 # Comprobar si la carta está en la mano.
 var in_hand: bool = true
+# Obtener posición de la carta en la mano.
+var hand_index: int = -1
 
 # Guardar que acción (ataque, defensa...) se hizo click.
 var action_clicked: int = 0  # 1 (ATK), 2 (DEF), 3 (HABILIDAD).
@@ -207,6 +211,8 @@ func _show_zoom() -> void:
 	
 	# Ponerlo por encima del resto.
 	self.z_index = 1
+	plus_btn.z_index = 1
+	cancel_btn.z_index = 1
 	
 	if is_in_slot:
 		# Posiciones destino originales (relativas al 300x400 de la carta).
@@ -236,6 +242,24 @@ func _show_zoom() -> void:
 			cooldown_zoom_texture.visible = false
 			ability_zoom_texture.visible = false
 		)
+		
+		# Ocultar botones.
+		if actions_showed:
+			tween.tween_property(atk_btn, "position:y", atk_btn_original_pos.y, 0.2)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			tween.parallel().tween_property(def_btn, "position:y", def_btn_original_pos.y, 0.2)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			tween.parallel().tween_property(atk_btn, "modulate:a", 0.0, 0.15)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			tween.parallel().tween_property(def_btn, "modulate:a", 0.0, 0.15)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			
+			tween.tween_callback(func():
+				atk_btn.visible = false
+				def_btn.visible = false
+				atk_btn.disabled = true
+				def_btn.disabled = true
+			)
 		
 		# Volver a mostrar stats normales.
 		for stat in [hp_border_texture, hp_text, hp_texture, 
@@ -315,6 +339,24 @@ func _hide_zoom() -> void:
 	)
 	
 	tween.tween_callback(func(): plus_btn.text = "+")
+	
+	if actions_showed:
+		# Mover en vertical los botones, y que aparezcan de forma suave (si no está en la mano).
+		tween.tween_property(atk_btn, "position:y", atk_btn.position.y - 150, 0.25)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		tween.parallel().tween_property(def_btn, "position:y", def_btn.position.y + 150, 0.25)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		atk_btn.modulate.a = 0.0
+		tween.parallel().tween_property(atk_btn, "modulate:a", 1.0, 0.2)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		def_btn.modulate.a = 0.0
+		tween.parallel().tween_property(def_btn, "modulate:a", 1.0, 0.2)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+		atk_btn.visible = true
+		def_btn.visible = true
+		atk_btn.disabled = false
+		def_btn.disabled = false
 	
 	if was_zoomed_in_slot:
 		# Ocultar stats normales (se ven mal).
@@ -544,27 +586,31 @@ func _on_basic_card_gui_input(event: InputEvent) -> void:
 			mouse_time = 0.0
 		else:
 			if is_dragging:
-				in_hand = false
 				hold_card = false
 				is_dragging = false
 				board.card_is_dragging = false
+				restore_rotation(0.2)
 				_try_drop_on_slot()
+				# Organizar mano.
+				board.organize_hand()
 			else:
 				# Esperar a ver si llega un segundo click.
 				click_timer.start()
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
-		if event.pressed:
+		if not in_hand and event.pressed:
 			zoom_active = true
 			board.pause_while_zoom = true
 			_show_zoom()
 
 	elif event is InputEventMouseMotion:
-		if event.button_mask & MOUSE_BUTTON_MASK_LEFT and not is_dragging:
-			if press_position.distance_to(get_global_mouse_position()) >= DRAG_THRESHOLD:
-				is_dragging = true
-				hold_card = true
-				board.card_is_dragging = true
-				print("Arrastrando carta...")
+		if not is_in_slot:
+			if event.button_mask & MOUSE_BUTTON_MASK_LEFT and not is_dragging:
+				if press_position.distance_to(get_global_mouse_position()) >= DRAG_THRESHOLD:
+					is_dragging = true
+					hold_card = true
+					board.card_is_dragging = true
+					board.organize_hand()
+					print("Arrastrando carta...")
 
 
 func _input(event: InputEvent) -> void:
@@ -676,6 +722,7 @@ func _try_drop_on_slot() -> void:
 				)
 				is_in_slot = true
 				in_hand = false
+				board.organize_hand()
 				current_slot = slot
 
 				# Liberar el slot anterior ahora que la carta ya está oficialmente
@@ -683,11 +730,18 @@ func _try_drop_on_slot() -> void:
 				if previous_slot != null:
 					previous_slot.remove_card()
 				return
-	# Si no cayó en ningún slot válido, volver a la posición anterior.
-	# Si la carta venía de un slot, ese slot sigue ocupado (no se tocó).
-	card_panel.global_position = original_position_global
+	'''Si no cayó en ningún slot válido, volver a la posición anterior.
+	Si la carta venía de un slot, ese slot sigue ocupado (no se tocó).
+	Poner self, porque si se pone card_panel, 
+	no funciona correctamente al solo afectar el panel en vez de todo.'''
+	var tween = create_tween()
+	tween.tween_property(card_panel, "global_position", original_position_global, 0.3)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	if in_hand:
+		tween.parallel().tween_property(self, "rotation_degrees", hand_rotation, 0.3)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	
-
+	
 func _on_card_left_clicked() -> void:
 	if actions_showed or card_action_clicked or in_hand:
 		return

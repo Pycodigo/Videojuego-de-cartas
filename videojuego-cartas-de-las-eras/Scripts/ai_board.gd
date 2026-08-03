@@ -73,6 +73,11 @@ func draw_starting_hand(n: int):
 func organize_hand() -> void:
 	# Pillar todas las cartas de la mano.
 	var player_total = player_hand.get_child_count()
+	# Cartas que quedan en la mano.
+	var valid_total: int = 0
+	# Índices de las cartas (para reorganizar).
+	var j: int = 0
+	
 	if player_total == 0:
 		print("La mano del jugador está vacía.")
 		return
@@ -93,12 +98,19 @@ func organize_hand() -> void:
 	if (player_total - 1) * base_spacing_cards > hand_width and player_total > 1:
 		spacing_cards = hand_width / (player_total - 1)
 	
+	# Primero averiguar cuántas cartas hay realmente.
+	for card in player_hand.get_children():
+		if card.in_hand and not card.is_dragging:
+			valid_total += 1
+	
 	for i in range(player_total):
 		# Obtener una carta.
 		var card = player_hand.get_child(i)
-		if not card.in_hand:
+		if not card.in_hand or card.is_dragging or card.is_in_slot:
+			print("If not: In hand ", card.in_hand, " Is dragging ", card.is_dragging)
 			continue # Solo ajustar cartas que siguen en la mano.
 		
+		print("If: In hand ", card.in_hand, " Is dragging ", card.is_dragging)
 		print("Steal: ", card.in_hand)
 		
 		# Rotación de la carta en la mano. Va de 0 a 1, por lo que la primera iría, en un principio, en 0.5
@@ -112,12 +124,12 @@ func organize_hand() -> void:
 		# Rotación del 'abanico'.
 		var rot: float = 0.0
 		
-		if player_total > 1:
+		if valid_total > 1:
 			# Recalculamos la rotación de cada carta dependiendo de cuántas hayan.
-			hand_ratio = float(i) / (float(player_total) - 1.0)
+			hand_ratio = float(j) / (float(valid_total) - 1.0)
 			# Calcular posición.
-			x = center_x + (i - (player_total-1)/2.0) * spacing_cards
-			print(i, " -> ", hand_ratio)
+			x = center_x + (j - (valid_total-1)/2.0) * spacing_cards
+			print(j, " -> ", hand_ratio)
 			# Calcular altura.
 			y = -sin(hand_ratio * PI) * curve_hand_height
 			print("Card height: ", y)
@@ -127,6 +139,8 @@ func organize_hand() -> void:
 		
 		var local_pos = Vector2(x, y)
 		print(local_pos)
+		print(card.card_name, " actual: ", card.position)
+		print(card.card_name, " destino: ", local_pos)
 		# Mover las cartas a la mano de forma fluida.
 		var tween = create_tween()
 		tween.tween_property(card, "position", local_pos, 0.3)\
@@ -134,4 +148,12 @@ func organize_hand() -> void:
 		tween.set_parallel().tween_property(card, "rotation_degrees", rot, 0.3)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		
+		card.hand_index = j
+		j += 1
+		
 		card.hand_position = local_pos
+		# Al final, guarda la posición y rotación.
+		tween.tween_callback(func():
+			card.original_position_global = card.global_position
+			card.hand_rotation = rot
+		)

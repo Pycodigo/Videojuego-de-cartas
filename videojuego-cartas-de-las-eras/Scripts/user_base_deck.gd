@@ -21,10 +21,6 @@ var deck_id: float = 0.0
 
 
 func _ready() -> void:
-	edit_btn.pressed.connect(_on_edit_btn_pressed)
-	delete_btn.pressed.connect(_on_delete_btn_pressed)
-	use_btn.pressed.connect(_on_use_btn_pressed)
-	
 	if Global.want_to_select:
 		use_btn.visible = true
 		edit_btn.visible = false
