@@ -1,4 +1,4 @@
-# Videojuego-de-cartas
+# Dominio Cronológico
 <p align="left">🚧<img src="https://img.shields.io/badge/Estado%20-%20En%20desarrollo-red"/>🚧</p>
 
 <h3><u>Índice</u></h3>
@@ -16,7 +16,6 @@
 <hr/>
 <p>Este proyecto consiste en un juego de cartas por turnos donde los jugadores usan cartas de distintas épocas de la historia para dominar la línea temporal y expulsar/derrotar al oponente.</p>
 <p>Se está llevando a cabo con el objetivo de aprender campos que no domino muy bien, como el backend.</p>
-<p>El nombre del proyecto no es definitivo. Se cambiará en un futuro.</p>
 <br/>
 <h3>⚒️<u>Modos de juego</u>🛠️</h3>
 <hr/>
@@ -24,7 +23,7 @@
   <li>Duelo rápido contra IA y/o jugador online.</li>
   <li>Campaña de Eras corta (3-4 niveles).</li>
   <li>Modo desafío con 1 o 2 reglas locas.</li>
-  <li>Modo alocado</li>li>
+  <li>Modo alocado</li>
   <li>Editor de mazos.</li>
 </ul>
 <br/>
@@ -92,25 +91,26 @@
 - [ ] Crear cartas inmunes a las eras.
 - [ ] Poner cronómetro en las partidas.
 
-<p><b>DEMO:</b></p>
+<p><b>DEMO-BETA1:</b></p>
 
 - [x] Meter más de un idioma.
 - [x] Crear constructor de mazos.
-- [x] Guardar mazos creados.
+- [x] Guardar barajas creadas.
+- [x] Poder editar y eliminar las barajas creadas.
 - [x] Guardar ajustes de la configuración.
 - [x] Crear buscador de cartas. Filtrar por era, tipo...
+- [x] Usar las barajas que quiera el jugador en una partida.
 - [ ] Crear cartas inmunes a las eras.
 - [ ] Poner cronómetro en las partidas.
-- [ ] Hacer bien el tablero de juego.
+- [ ] Hacer bien y montar el tablero de juego con, al menos, lo básico.
 - [ ] Definir un aproximado de 50-60 cartas (normales).
 - [ ] Definir las 5 cartas de era.
 - [ ] Programar nuevas habilidades introducidas.
-- [ ] Poner dificultad fácil y normal.
-- [ ] Tener diseño artístico de las cartas, escenarios, y opciones.
+- [ ] Tener diseño artístico de las cartas, escenarios, y opciones (Opcional en esta DEMO).
 - [ ] Tener música.
-- [ ] Hacer mejores animaciones.
+- [ ] Hacer mejores animaciones (Opcional en esta DEMO).
 - [ ] Conectar todas las escenas.
-- [ ] Hacer el ejecutable.
+- [ ] Hacer el primer ejecutable.
 
 
 <br/>
