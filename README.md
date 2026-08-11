@@ -100,6 +100,9 @@
 - [x] Guardar ajustes de la configuración.
 - [x] Crear buscador de cartas. Filtrar por era, tipo...
 - [x] Usar las barajas que quiera el jugador en una partida.
+- [ ] Mejorar el menú.
+- [ ] Hacer un menú rápido.
+- [ ] Guardar la configuración (resolución, idiomas...).
 - [ ] Crear cartas inmunes a las eras.
 - [ ] Poner cronómetro en las partidas.
 - [ ] Hacer bien y montar el tablero de juego con, al menos, lo básico.
@@ -110,6 +113,7 @@
 - [ ] Tener música.
 - [ ] Hacer mejores animaciones (Opcional en esta DEMO).
 - [ ] Conectar todas las escenas.
+- [ ] Rehacer todo lo de 'tareas básicas'.
 - [ ] Hacer el primer ejecutable.
 
 
