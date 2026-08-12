@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://dc5ca6k7xppjq"]
+
+[ext_resource type="PackedScene" uid="uid://bgcy6kpol5bny" path="res://Scenes/MenuBtns/btn_menu_base.tscn" id="1_yy1ex"]
+[ext_resource type="Script" uid="uid://cn2qf0o32riae" path="res://Scripts/MenuBtns/btn_menu_play.gd" id="2_2ph1a"]
+[ext_resource type="Texture2D" uid="uid://dya1dyuvlsp1w" path="res://Images/Test/Carta reversa.png" id="2_x3qdy"]
+
+[node name="BtnMenuPlay" instance=ExtResource("1_yy1ex")]
+script = ExtResource("2_2ph1a")
+
+[node name="TextureIcon" parent="BtnMenu/IconBG" index="0"]
+texture = ExtResource("2_x3qdy")

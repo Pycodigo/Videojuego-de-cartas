@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://c50kma1r2bivt"]
+[gd_scene load_steps=15 format=3 uid="uid://c50kma1r2bivt"]
 
 [ext_resource type="Script" uid="uid://cujvsx6bnmhj8" path="res://Scripts/deck_builder.gd" id="1_muq8c"]
 [ext_resource type="Texture2D" uid="uid://c6cqntc4n5aj6" path="res://Images/Fondo editor 1.png" id="2_cqfg8"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/Test/volver.png" id="5_wcor1"]
 [ext_resource type="PackedScene" uid="uid://d25hk6bf843gx" path="res://Scenes/MiniCards/Prehistory/mini_reckless_hunter.tscn" id="6_cp21t"]
 [ext_resource type="PackedScene" uid="uid://csqf71lqpiq12" path="res://Scenes/MiniCards/Future/mini_combat_drone.tscn" id="7_ohrxf"]
+[ext_resource type="PackedScene" uid="uid://b0ex2dmq4qxlc" path="res://Scenes/quick_menu.tscn" id="8_cqfg8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8gw8v"]
 bg_color = Color(0, 0, 0, 0.698039)
@@ -93,7 +94,7 @@ script = ExtResource("1_muq8c")
 [node name="TopBarBG" type="TextureRect" parent="."]
 layout_mode = 0
 offset_left = 1.0
-offset_right = 1921.0
+offset_right = 1784.0
 offset_bottom = 112.0
 texture = ExtResource("2_cqfg8")
 expand_mode = 1
@@ -109,7 +110,7 @@ offset_bottom = 123.0
 layout_mode = 0
 offset_left = 1.0
 offset_top = 113.0
-offset_right = 1920.0
+offset_right = 1783.0
 offset_bottom = 1084.0
 texture = ExtResource("3_flrao")
 expand_mode = 1
@@ -147,7 +148,7 @@ anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = 999.0
 offset_top = -515.0
-offset_right = 26.0
+offset_right = -5.0
 offset_bottom = -449.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -353,6 +354,9 @@ size_flags_stretch_ratio = 20.0
 
 [node name="CardsResume" type="FlowContainer" parent="DeckBar"]
 layout_mode = 2
+
+[node name="QuickMenu" parent="." instance=ExtResource("8_cqfg8")]
+layout_mode = 1
 
 [connection signal="pressed" from="TopBarActions/BtnDelete" to="." method="_on_btn_delete_pressed"]
 [connection signal="pressed" from="TopBarActions/BtnFinish" to="." method="_on_btn_finish_pressed"]

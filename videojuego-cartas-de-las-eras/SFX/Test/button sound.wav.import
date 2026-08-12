@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://bmthy11a5bnsc"
-path="res://.godot/imported/button sound.wav-3004e04471ea27c36df5cf0c0c535aad.sample"
+path="res://.godot/imported/button sound.wav-42857281f44c9d77cc5ea5f7e22e4481.sample"
 
 [deps]
 
-source_file="res://Sound effects/Test/button sound.wav"
-dest_files=["res://.godot/imported/button sound.wav-3004e04471ea27c36df5cf0c0c535aad.sample"]
+source_file="res://SFX/Test/button sound.wav"
+dest_files=["res://.godot/imported/button sound.wav-42857281f44c9d77cc5ea5f7e22e4481.sample"]
 
 [params]
 

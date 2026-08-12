@@ -1,0 +1,103 @@
+[gd_scene load_steps=7 format=3 uid="uid://bgcy6kpol5bny"]
+
+[ext_resource type="Script" uid="uid://01jwjr1uhmm" path="res://Scripts/MenuBtns/btn_menu_base.gd" id="1_4euox"]
+[ext_resource type="AudioStream" uid="uid://bmthy11a5bnsc" path="res://SFX/Test/button sound.wav" id="2_wsj32"]
+[ext_resource type="AudioStream" uid="uid://kf1c3t0v75k0" path="res://Music/Test/menu_chill.wav" id="3_l66re"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dk2dt"]
+bg_color = Color(0.396078, 0.396078, 0.376471, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7sfnl"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i27ep"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="BtnMenuBase" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 700.0
+offset_top = 300.0
+offset_right = -970.0
+offset_bottom = -480.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4euox")
+
+[node name="BtnMenu" type="Button" parent="."]
+layout_mode = 0
+offset_right = 250.0
+offset_bottom = 300.0
+pivot_offset = Vector2(125, 150)
+theme_override_styles/normal = SubResource("StyleBoxFlat_dk2dt")
+
+[node name="IconBG" type="Panel" parent="BtnMenu"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.362
+anchor_right = 0.5
+anchor_bottom = 0.362
+offset_left = -100.0
+offset_top = -92.4
+offset_right = 100.0
+offset_bottom = 77.6
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_7sfnl")
+
+[node name="TextureIcon" type="TextureRect" parent="BtnMenu/IconBG"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -85.0
+offset_right = 100.0
+offset_bottom = 85.0
+expand_mode = 1
+
+[node name="NameBG" type="Panel" parent="BtnMenu"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 210.0
+offset_right = 225.0
+offset_bottom = 260.0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_i27ep")
+
+[node name="Name" type="Label" parent="BtnMenu/NameBG"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.502
+anchor_top = 0.51
+anchor_right = 0.502
+anchor_bottom = 0.51
+offset_left = -100.4
+offset_top = -25.5
+offset_right = 98.6
+offset_bottom = 23.5
+theme_override_font_sizes/font_size = 28
+text = "Nombre"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="BtnSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_wsj32")
+volume_db = 15.0
+bus = &"SFX"
+
+[node name="MenuChill" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_l66re")
+bus = &"Music"
+
+[connection signal="mouse_entered" from="BtnMenu" to="." method="_on_btn_menu_mouse_entered"]
+[connection signal="mouse_exited" from="BtnMenu" to="." method="_on_btn_menu_mouse_exited"]
+[connection signal="pressed" from="BtnMenu" to="." method="_on_btn_menu_pressed"]

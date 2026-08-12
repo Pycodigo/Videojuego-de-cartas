@@ -39,6 +39,9 @@ const window_mode: Array[String] = [
 ]
 
 func _ready() -> void:
+	if $QuickMenu.quick_menu_showed:
+		return
+	
 	# Iniciar música.
 	$MenuChill.play(Global.music)
 	
@@ -57,6 +60,8 @@ func _ready() -> void:
 	# Seleccionar la resolución guardada.
 	var saved_res = GlobalConfigFile.config.get_value("settings", "resolution", Vector2i(1280, 720))
 	var res_index = resolutions.find(saved_res)
+	print(saved_res, " - tipo: ", typeof(saved_res))
+	print("res_index: ", res_index)
 	if res_index != -1:
 		resolution_type.select(res_index)
 	
@@ -74,26 +79,40 @@ func _ready() -> void:
 
 
 func _on_idioma_item_selected(index: int) -> void:
+	if $QuickMenu.quick_menu_showed:
+		return
 	GlobalConfigFile.set_locale(locales[index])
 
 func _on_opc_item_selected(index: int) -> void:
+	if $QuickMenu.quick_menu_showed:
+		return
 	GlobalConfigFile.set_resolution(resolutions[index])
 
 func _on_vindow_item_selected(mode: int) -> void:
+	if $QuickMenu.quick_menu_showed:
+		return
 	GlobalConfigFile.set_window_mode(mode)
 
 func _on_check_button_v_sync_toggled(toggled_on: bool) -> void:
+	if $QuickMenu.quick_menu_showed:
+		return
 	GlobalConfigFile.set_vsync(toggled_on)
 
 func _on_check_button_full_screen_toggled(toggled_on: bool) -> void:
+	if $QuickMenu.quick_menu_showed:
+		return
 	GlobalConfigFile.set_fullscreen(toggled_on)
 	resolution_type.disabled = toggled_on
 	window_type.disabled = toggled_on
 
 func _on_btn_test_pressed() -> void:
+	if $QuickMenu.quick_menu_showed:
+		return
 	$ButtonSound.play()
 
 func _on_back_btn_pressed() -> void:
+	if $QuickMenu.quick_menu_showed:
+		return
 	# Volver desde configuración.
 	$"ButtonSound".play()
 	await $"ButtonSound".finished

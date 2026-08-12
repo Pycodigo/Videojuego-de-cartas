@@ -17,7 +17,7 @@ UI_MASTER,General,Master,Xeneral
 UI_MUSIC,Música,Music,Música
 UI_SFX,Efectos,SFX,Efectos
 UI_TEST_SFX,Probar efectos,Test SFX,Probar efectos
-UI_PLAY,Jugar contra\nla IA,Play against\nAI,Xogar contra\na IA
+UI_PLAY,Partida IA,Match AI,Partida IA
 UI_WINDOW_BORDERED,Con bordes,With borders,Con bordes
 UI_WINDOW_BORDERLESS,Sin bordes,Boderless,Sen bordes
 UI_DECK,Baraja,Deck,Baralla
@@ -48,3 +48,8 @@ UI_CHOOSE_ICON,Elegir icono,Choose icon,Elexir icono
 UI_CARDS,Cartas,Cards,Cartas
 UI_USE,Usar,Use,Usar
 UI_SELECT_DECK,Selecciona una baraja,Select a deck,Selecciona unha baralla
+UI_RULES,Reglas,Rules,Regras
+UI_EXIT,Salir,Exit,Saír
+UI_CREDITS,Créditos,Credits,Créditos
+UI_DECK_BUILDER,Constructor de barajas,Deck builder,Construtor de barallas
+UI_HOME,Inicio,Beginning,Comezo

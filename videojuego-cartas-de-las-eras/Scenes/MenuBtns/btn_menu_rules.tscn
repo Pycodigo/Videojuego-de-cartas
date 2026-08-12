@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://dkchyuaofw6vq"]
+
+[ext_resource type="PackedScene" uid="uid://bgcy6kpol5bny" path="res://Scenes/MenuBtns/btn_menu_base.tscn" id="1_wivs4"]
+[ext_resource type="Texture2D" uid="uid://dbjmuyg4pmhjr" path="res://Images/Test/reglas.png" id="2_8e2sn"]
+[ext_resource type="Script" uid="uid://cpbmdtffofxr7" path="res://Scripts/MenuBtns/btn_menu_rules.gd" id="2_8rul8"]
+
+[node name="BtnMenuRules" instance=ExtResource("1_wivs4")]
+script = ExtResource("2_8rul8")
+
+[node name="TextureIcon" parent="BtnMenu/IconBG" index="0"]
+texture = ExtResource("2_8e2sn")

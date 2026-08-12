@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://bxskywbxjlw8g"]
+
+[ext_resource type="PackedScene" uid="uid://bgcy6kpol5bny" path="res://Scenes/MenuBtns/btn_menu_base.tscn" id="1_30bwd"]
+[ext_resource type="Texture2D" uid="uid://c5od8lr5gv00j" path="res://Images/Test/creditos.png" id="2_8n8p3"]
+[ext_resource type="Script" uid="uid://ddiismgnsny2e" path="res://Scripts/MenuBtns/btn_menu_credits.gd" id="2_xfs7s"]
+
+[node name="BtnMenuCredits" instance=ExtResource("1_30bwd")]
+script = ExtResource("2_xfs7s")
+
+[node name="TextureIcon" parent="BtnMenu/IconBG" index="0"]
+texture = ExtResource("2_8n8p3")

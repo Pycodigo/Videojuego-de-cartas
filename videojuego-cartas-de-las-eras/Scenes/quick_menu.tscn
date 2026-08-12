@@ -1,0 +1,124 @@
+[gd_scene load_steps=9 format=3 uid="uid://b0ex2dmq4qxlc"]
+
+[ext_resource type="Script" uid="uid://ctik5cwoiubqk" path="res://Scripts/quick_menu.gd" id="1_du1fg"]
+[ext_resource type="Texture2D" uid="uid://br7bvonxxwybx" path="res://Images/home.png" id="2_3vjyv"]
+[ext_resource type="Texture2D" uid="uid://dc50b0udohe0h" path="res://Images/Test/config.png" id="2_p5ltd"]
+[ext_resource type="Texture2D" uid="uid://dbjmuyg4pmhjr" path="res://Images/Test/reglas.png" id="4_mvcqw"]
+[ext_resource type="Texture2D" uid="uid://bvltnt8vjs2qr" path="res://Images/Editar btn.png" id="5_8dv6b"]
+[ext_resource type="Texture2D" uid="uid://cm0lmkmt4kde3" path="res://Images/your_decks.png" id="6_du1fg"]
+[ext_resource type="Texture2D" uid="uid://cyloah0bpjr17" path="res://Images/Test/salir.png" id="7_bw4en"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_naqwq"]
+bg_color = Color(0.286275, 0.286275, 0.286275, 1)
+
+[node name="QuickMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_du1fg")
+
+[node name="QuickMenuPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.333
+anchor_top = 0.5
+anchor_right = 1.333
+anchor_bottom = 0.5
+offset_left = -799.36
+offset_top = -540.0
+offset_right = -239.36
+offset_bottom = 540.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_naqwq")
+
+[node name="BtnHome" type="Button" parent="QuickMenuPanel"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 20.0
+offset_right = 524.0
+offset_bottom = 165.0
+mouse_filter = 1
+theme_override_font_sizes/font_size = 50
+text = "UI_HOME"
+icon = ExtResource("2_3vjyv")
+text_overrun_behavior = 3
+expand_icon = true
+
+[node name="BtnConfig" type="Button" parent="QuickMenuPanel"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 190.0
+offset_right = 524.0
+offset_bottom = 335.0
+mouse_filter = 1
+theme_override_font_sizes/font_size = 50
+text = "UI_CONFIG_TITLE"
+icon = ExtResource("2_p5ltd")
+text_overrun_behavior = 3
+expand_icon = true
+
+[node name="BtnRules" type="Button" parent="QuickMenuPanel"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 360.0
+offset_right = 524.0
+offset_bottom = 505.0
+mouse_filter = 1
+theme_override_font_sizes/font_size = 50
+text = "UI_RULES"
+icon = ExtResource("4_mvcqw")
+text_overrun_behavior = 3
+expand_icon = true
+
+[node name="BtnDeckBuilder" type="Button" parent="QuickMenuPanel"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 530.0
+offset_right = 524.0
+offset_bottom = 675.0
+mouse_filter = 1
+theme_override_font_sizes/font_size = 50
+text = "UI_DECK_BUILDER"
+icon = ExtResource("5_8dv6b")
+text_overrun_behavior = 3
+expand_icon = true
+
+[node name="BtnYourDecks" type="Button" parent="QuickMenuPanel"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 715.0
+offset_right = 524.0
+offset_bottom = 857.0
+mouse_filter = 1
+theme_override_font_sizes/font_size = 50
+text = "UI_YOUR_DECKS"
+icon = ExtResource("6_du1fg")
+text_overrun_behavior = 3
+expand_icon = true
+
+[node name="BtnExit" type="Button" parent="QuickMenuPanel"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 900.0
+offset_right = 524.0
+offset_bottom = 1045.0
+mouse_filter = 1
+theme_override_font_sizes/font_size = 50
+text = "UI_EXIT"
+icon = ExtResource("7_bw4en")
+text_overrun_behavior = 3
+expand_icon = true
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="gui_input" from="QuickMenuPanel" to="." method="_on_quick_menu_panel_gui_input"]
+[connection signal="pressed" from="QuickMenuPanel/BtnHome" to="." method="_on_btn_home_pressed"]
+[connection signal="pressed" from="QuickMenuPanel/BtnConfig" to="." method="_on_btn_config_pressed"]
+[connection signal="pressed" from="QuickMenuPanel/BtnRules" to="." method="_on_btn_rules_pressed"]
+[connection signal="pressed" from="QuickMenuPanel/BtnDeckBuilder" to="." method="_on_btn_deck_builder_pressed"]
+[connection signal="pressed" from="QuickMenuPanel/BtnYourDecks" to="." method="_on_btn_your_decks_pressed"]
+[connection signal="pressed" from="QuickMenuPanel/BtnExit" to="." method="_on_btn_exit_pressed"]

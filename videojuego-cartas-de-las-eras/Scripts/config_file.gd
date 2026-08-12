@@ -33,19 +33,8 @@ func apply_settings() -> void:
 		DisplayServer.VSYNC_ENABLED if vsync else DisplayServer.VSYNC_DISABLED
 	)
 	
-	# Resolución.
-	var res = config.get_value("settings", "resolution", Vector2i(1280, 720))
-	DisplayServer.window_set_size(res)
-	
-	# Modo de ventana.
-	var mode = config.get_value("settings", "window_mode", 0)
-	match mode:
-		0:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
-		1:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
+	# IMPORTANTE el orden.
+	set_all_resolution()
 	
 	# Audio.
 	for bus in ["Master", "Music", "SFX"]:
@@ -54,6 +43,8 @@ func apply_settings() -> void:
 			AudioServer.get_bus_index(bus),
 			linear_to_db(volume)
 		)
+	
+	print("Tamaño aplicado en apply_settings: ", DisplayServer.window_get_size())
 
 # Setters (llamados desde config.gd)
 func set_locale(locale: String) -> void:
@@ -62,10 +53,8 @@ func set_locale(locale: String) -> void:
 	save_settings()
 
 func set_fullscreen(enabled: bool) -> void:
-	DisplayServer.window_set_mode(
-		DisplayServer.WINDOW_MODE_FULLSCREEN if enabled else DisplayServer.WINDOW_MODE_WINDOWED
-	)
 	config.set_value("settings", "fullscreen", enabled)
+	set_all_resolution()
 	save_settings()
 
 func set_vsync(enabled: bool) -> void:
@@ -76,22 +65,39 @@ func set_vsync(enabled: bool) -> void:
 	save_settings()
 
 func set_resolution(res: Vector2i) -> void:
-	DisplayServer.window_set_size(res)
 	config.set_value("settings", "resolution", res)
+	set_all_resolution()
 	save_settings()
 
 func set_window_mode(mode: int) -> void:
-	match mode:
-		0:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
-		1:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
 	config.set_value("settings", "window_mode", mode)
+	set_all_resolution()
 	save_settings()
 
 func set_music_master(volume: float) -> void:
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear_to_db(volume))
 	config.set_value("settings", "music_volume", volume)
 	save_settings()
+
+# Mini función para aplicar las resoluciones (útil para solucionar lo de pantalla completa).
+func set_all_resolution() -> void:
+	# Pantalla completa.
+	var fullscreen = config.get_value("settings", "fullscreen", false)
+	# Modo de ventana.
+	var mode = config.get_value("settings", "window_mode", 0)
+	if fullscreen:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	else:
+		match mode:
+			0:
+				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+				DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
+			1:
+				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+				DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
+	print("Tamaño tras aplicar modo de ventana: ", DisplayServer.window_get_size())
+	
+	# Resolución.
+	var res = config.get_value("settings", "resolution", Vector2i(1280, 720))
+	DisplayServer.window_set_size(res)
+	print("Resolución que voy a aplicar: ", res)

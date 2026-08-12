@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://d5wi6ixsg0dh"]
+
+[ext_resource type="PackedScene" uid="uid://bgcy6kpol5bny" path="res://Scenes/MenuBtns/btn_menu_base.tscn" id="1_nmucn"]
+[ext_resource type="Script" uid="uid://bvooo2dpe15v3" path="res://Scripts/MenuBtns/btn_menu_exit.gd" id="2_wrnkg"]
+[ext_resource type="Texture2D" uid="uid://cyloah0bpjr17" path="res://Images/Test/salir.png" id="3_ilg16"]
+
+[node name="BtnMenuExit" instance=ExtResource("1_nmucn")]
+script = ExtResource("2_wrnkg")
+
+[node name="TextureIcon" parent="BtnMenu/IconBG" index="0"]
+texture = ExtResource("3_ilg16")

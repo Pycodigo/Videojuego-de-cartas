@@ -1,6 +1,5 @@
 extends Control
 
-@onready var play_btn = $Play
 @onready var your_decks_btn = $YourDecksBtn
 
 var distance: float = 10     # Distancia horizontal.

@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/main.gd" id="3_bdjx7"]
 [ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/Test/volver.png" id="4_hjbmg"]
 [ext_resource type="AudioStream" uid="uid://kf1c3t0v75k0" path="res://Music/Test/menu_chill.wav" id="5_heryo"]
-[ext_resource type="AudioStream" uid="uid://bmthy11a5bnsc" path="res://Sound effects/Test/button sound.wav" id="6_chvkp"]
+[ext_resource type="AudioStream" uid="uid://bmthy11a5bnsc" path="res://SFX/Test/button sound.wav" id="6_chvkp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_08qrv"]
 bg_color = Color(3.36915e-07, 0.519728, 0.139152, 1)

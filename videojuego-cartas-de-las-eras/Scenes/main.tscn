@@ -1,13 +1,13 @@
 [gd_scene load_steps=9 format=3 uid="uid://bhv68ga71uery"]
 
-[ext_resource type="Texture2D" uid="uid://dbo0by8ch577f" path="res://Images/Test/hoja.png" id="1_344ge"]
 [ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/main.gd" id="2_ynf5e"]
-[ext_resource type="Texture2D" uid="uid://dc50b0udohe0h" path="res://Images/Test/config.png" id="3_hptm8"]
-[ext_resource type="Texture2D" uid="uid://dbjmuyg4pmhjr" path="res://Images/Test/reglas.png" id="4_d1ilt"]
-[ext_resource type="Texture2D" uid="uid://c5od8lr5gv00j" path="res://Images/Test/creditos.png" id="5_6iyac"]
-[ext_resource type="Texture2D" uid="uid://cyloah0bpjr17" path="res://Images/Test/salir.png" id="6_fdnlq"]
-[ext_resource type="AudioStream" uid="uid://bmthy11a5bnsc" path="res://Sound effects/Test/button sound.wav" id="7_jkdf5"]
+[ext_resource type="PackedScene" uid="uid://dkchyuaofw6vq" path="res://Scenes/MenuBtns/btn_menu_rules.tscn" id="3_6bp64"]
+[ext_resource type="PackedScene" uid="uid://d5wi6ixsg0dh" path="res://Scenes/MenuBtns/btn_menu_exit.tscn" id="7_6bp64"]
+[ext_resource type="PackedScene" uid="uid://bxskywbxjlw8g" path="res://Scenes/MenuBtns/btn_menu_credits.tscn" id="7_344ge"]
+[ext_resource type="AudioStream" uid="uid://bmthy11a5bnsc" path="res://SFX/Test/button sound.wav" id="7_jkdf5"]
+[ext_resource type="PackedScene" uid="uid://lxmvn6uon63y" path="res://Scenes/MenuBtns/btn_menu_config.tscn" id="8_344ge"]
 [ext_resource type="AudioStream" uid="uid://kf1c3t0v75k0" path="res://Music/Test/menu_chill.wav" id="8_wsu2k"]
+[ext_resource type="PackedScene" uid="uid://dc5ca6k7xppjq" path="res://Scenes/MenuBtns/btn_menu_play.tscn" id="8_ynf5e"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -33,92 +33,26 @@ theme_override_font_sizes/font_size = 50
 text = "UI_MAIN_TITLE"
 horizontal_alignment = 1
 
-[node name="Play" type="Button" parent="."]
-layout_mode = 2
-anchor_left = 0.494
-anchor_top = 0.529
-anchor_right = 0.494
-anchor_bottom = 0.529
-offset_left = -99.088
-offset_top = -111.792
-offset_right = 99.912
-offset_bottom = 111.208
-icon = ExtResource("1_344ge")
-expand_icon = true
-
-[node name="Label" type="Label" parent="Play"]
+[node name="BtnMenuConfig" parent="." instance=ExtResource("8_344ge")]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -98.0
-offset_top = -113.5
-offset_right = 98.0
-offset_bottom = 113.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 30
-text = "UI_PLAY"
-horizontal_alignment = 1
-vertical_alignment = 1
+offset_left = 1461.0
+offset_top = 321.0
+offset_right = -209.0
+offset_bottom = -459.0
 
-[node name="Config" type="Button" parent="."]
+[node name="BtnMenuRules" parent="." instance=ExtResource("3_6bp64")]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.857
-anchor_top = 0.423
-anchor_right = 0.857
-anchor_bottom = 0.423
-offset_left = -46.264
-offset_top = -45.104
-offset_right = 45.736
-offset_bottom = 44.896
-icon = ExtResource("3_hptm8")
-expand_icon = true
+offset_left = 236.0
+offset_top = 313.0
+offset_right = -1434.0
+offset_bottom = -467.0
 
-[node name="Rules" type="Button" parent="."]
+[node name="BtnMenuExit" parent="." instance=ExtResource("7_6bp64")]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.129
-anchor_top = 0.437
-anchor_right = 0.129
-anchor_bottom = 0.437
-offset_left = -45.608
-offset_top = -45.176
-offset_right = 46.392
-offset_bottom = 44.824
-icon = ExtResource("4_d1ilt")
-expand_icon = true
-
-[node name="Credits" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.181
-anchor_top = 0.798
-anchor_right = 0.181
-anchor_bottom = 0.798
-offset_left = -45.512
-offset_top = -45.104
-offset_right = 46.488
-offset_bottom = 44.896
-icon = ExtResource("5_6iyac")
-expand_icon = true
-
-[node name="Exit" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.801
-anchor_top = 0.785
-anchor_right = 0.801
-anchor_bottom = 0.785
-offset_left = -45.7521
-offset_top = -44.68
-offset_right = 46.2479
-offset_bottom = 45.32
-icon = ExtResource("6_fdnlq")
-expand_icon = true
+offset_left = 1300.0
+offset_top = 730.0
+offset_right = -370.0
+offset_bottom = -50.0
 
 [node name="ButtonSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_jkdf5")
@@ -157,8 +91,19 @@ offset_bottom = 38.24
 theme_override_font_sizes/font_size = 30
 text = "UI_YOUR_DECKS"
 
-[connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="Config" to="." method="_on_config_pressed"]
-[connection signal="pressed" from="Exit" to="." method="_on_exit_pressed"]
+[node name="BtnMenuCredits" parent="." instance=ExtResource("7_344ge")]
+layout_mode = 1
+offset_left = 390.0
+offset_top = 730.0
+offset_right = -1280.0
+offset_bottom = -50.0
+
+[node name="BtnMenuPlay" parent="." instance=ExtResource("8_ynf5e")]
+layout_mode = 1
+offset_left = 848.0
+offset_top = 370.0
+offset_right = -822.0
+offset_bottom = -410.0
+
 [connection signal="pressed" from="DeckBuilderBtn" to="." method="_on_deck_builder_btn_pressed"]
 [connection signal="pressed" from="YourDecksBtn" to="." method="_on_your_decks_btn_pressed"]
