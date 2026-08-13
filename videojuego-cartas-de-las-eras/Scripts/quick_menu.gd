@@ -31,6 +31,7 @@ func _on_quick_menu_panel_gui_input(event: InputEvent) -> void:
 			
 			await tween.finished
 			quick_menu_showed = true
+			# Bloquear todo lo demás que no sea el menú rápido.
 			mouse_filter = Control.MOUSE_FILTER_STOP
 
 # Pulsar fuera del panel y solo cuando está el menú puesto.
@@ -44,10 +45,11 @@ func _on_gui_input(event: InputEvent) -> void:
 				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 				
 				quick_menu_showed = false
-				mouse_filter = Control.MOUSE_FILTER_PASS
 				await tween.finished
 				# Ponerlo por debajo.
 				quick_menu_panel.z_index = 0
+				# Dejarlo como estaba.
+				mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func _on_btn_home_pressed() -> void:

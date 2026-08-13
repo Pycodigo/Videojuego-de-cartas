@@ -115,61 +115,47 @@ offset_bottom = 1084.0
 texture = ExtResource("3_flrao")
 expand_mode = 1
 
-[node name="TopBarName" type="HBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 12.0
-offset_top = -515.0
-offset_right = -1010.0
-offset_bottom = -449.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="TopBar" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 14.0
+offset_right = 1756.0
+offset_bottom = 108.0
+theme_override_constants/separation = 100
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 50
 
-[node name="DeckLabel" type="Label" parent="TopBarName"]
+[node name="DeckLabel" type="Label" parent="TopBar/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "UI_DECK"
 
-[node name="DeckNameInput" type="LineEdit" parent="TopBarName"]
+[node name="DeckNameInput" type="LineEdit" parent="TopBar/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 35
 placeholder_text = "UI_DECK_NAME"
 
-[node name="TopBarActions" type="HBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 999.0
-offset_top = -515.0
-offset_right = -5.0
-offset_bottom = -449.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 50
-
-[node name="BtnDelete" type="Button" parent="TopBarActions"]
+[node name="BtnDelete" type="Button" parent="TopBar"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "UI_DELETE"
 
-[node name="BtnFinish" type="Button" parent="TopBarActions"]
+[node name="BtnFinish" type="Button" parent="TopBar"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "UI_FINISH"
 
-[node name="BtnDraft" type="Button" parent="TopBarActions"]
+[node name="BtnDraft" type="Button" parent="TopBar"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "UI_DRAFT"
+alignment = 0
 
-[node name="BtnInfo" type="Button" parent="TopBarActions"]
+[node name="BtnInfo" type="Button" parent="TopBar"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
@@ -177,7 +163,7 @@ icon = ExtResource("4_w2dep")
 icon_alignment = 1
 expand_icon = true
 
-[node name="BtnBack" type="Button" parent="TopBarActions"]
+[node name="BtnBack" type="Button" parent="TopBar"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
@@ -187,9 +173,9 @@ expand_icon = true
 
 [node name="VSeparator" type="VSeparator" parent="."]
 layout_mode = 0
-offset_left = 965.0
+offset_left = 954.0
 offset_top = 113.0
-offset_right = 1029.0
+offset_right = 1061.0
 offset_bottom = 1084.0
 
 [node name="ColectionBar" type="VBoxContainer" parent="."]
@@ -197,7 +183,7 @@ clip_contents = true
 layout_mode = 2
 offset_left = 1.0
 offset_top = 114.0
-offset_right = 996.0
+offset_right = 999.0
 offset_bottom = 1082.0
 size_flags_horizontal = 3
 theme_override_constants/separation = 30
@@ -296,9 +282,9 @@ layout_mode = 2
 
 [node name="DeckBar" type="VBoxContainer" parent="."]
 layout_mode = 2
-offset_left = 1032.0
+offset_left = 1014.0
 offset_top = 114.0
-offset_right = 1894.0
+offset_right = 1757.0
 offset_bottom = 1063.0
 size_flags_horizontal = 3
 theme_override_constants/separation = 40
@@ -308,7 +294,7 @@ layout_mode = 2
 
 [node name="HeaderDeck" type="HBoxContainer" parent="DeckBar/Header"]
 layout_mode = 2
-theme_override_constants/separation = 400
+theme_override_constants/separation = 350
 
 [node name="TitleDeck" type="Label" parent="DeckBar/Header/HeaderDeck"]
 layout_mode = 2
@@ -358,10 +344,10 @@ layout_mode = 2
 [node name="QuickMenu" parent="." instance=ExtResource("8_cqfg8")]
 layout_mode = 1
 
-[connection signal="pressed" from="TopBarActions/BtnDelete" to="." method="_on_btn_delete_pressed"]
-[connection signal="pressed" from="TopBarActions/BtnFinish" to="." method="_on_btn_finish_pressed"]
-[connection signal="pressed" from="TopBarActions/BtnDraft" to="." method="_on_btn_draft_pressed"]
-[connection signal="pressed" from="TopBarActions/BtnBack" to="." method="_on_btn_back_pressed"]
+[connection signal="pressed" from="TopBar/BtnDelete" to="." method="_on_btn_delete_pressed"]
+[connection signal="pressed" from="TopBar/BtnFinish" to="." method="_on_btn_finish_pressed"]
+[connection signal="pressed" from="TopBar/BtnDraft" to="." method="_on_btn_draft_pressed"]
+[connection signal="pressed" from="TopBar/BtnBack" to="." method="_on_btn_back_pressed"]
 [connection signal="text_changed" from="ColectionBar/LineEdit" to="." method="_on_line_edit_text_changed"]
 [connection signal="item_selected" from="ColectionBar/Filter/ButtonFilters/CardTypeOption" to="." method="_on_card_type_option_item_selected"]
 [connection signal="item_selected" from="ColectionBar/Filter/ButtonFilters/EraOption" to="." method="_on_era_option_item_selected"]

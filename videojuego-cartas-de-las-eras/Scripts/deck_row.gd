@@ -3,9 +3,11 @@ extends Control
 # Señales para el editor de mazos.
 signal removed(card_key: String) # Si se quedó a 0 copias.
 signal count_changed(card_key: String, new_count: int) # Nº de copias.
+signal max_requested(card_key: String, max_count: int) # Nº de copias máxima.
 
 var card_key: String = ""
 var count: int = 0
+var max_count: int = 31 # Copias máxima de una carta.
 
 @export var era_color: Color
 
@@ -49,3 +51,8 @@ func _on_minus_btn_pressed() -> void:
 func _on_delete_btn_pressed() -> void:
 	removed.emit(card_key)
 	queue_free()
+
+
+func _on_max_btn_pressed() -> void:
+	max_count -= count
+	max_requested.emit(card_key, max_count)

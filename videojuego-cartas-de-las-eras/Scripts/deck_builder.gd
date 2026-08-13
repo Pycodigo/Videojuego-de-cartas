@@ -3,12 +3,13 @@ extends Control
 const DECK_ROW_SCENE: PackedScene = preload("res://Scenes/deck_row.tscn")
 const ERA_COUNT_SCENE: PackedScene = preload("res://Scenes/era_count.tscn")
 const MAX_DECK_SIZE: int = 60
+const MAX_PER_CARD: int = 31 # Máximo de cartas de una misma.
 const FILTER_TAG_SCENE := preload("res://Scenes/filter_tag.tscn")
 
 # Nodos.
 @onready var collection_grid: GridContainer = $ColectionBar/ScrollContainer/GridContainer
 @onready var deck_list: VBoxContainer = $DeckBar/ScrollContainer/DeckList
-@onready var deck_name: LineEdit = $TopBarName/DeckNameInput
+@onready var deck_name: LineEdit = $TopBar/HBoxContainer/DeckNameInput
 @onready var count_deck_label: Label = $DeckBar/Header/HeaderDeck/CountDeck
 @onready var progress_bar: ProgressBar = $DeckBar/Header/ProgressBar
 @onready var tag_filter: FlowContainer = $ColectionBar/TagFilter
@@ -118,10 +119,11 @@ func _on_mini_card_add_requested(mini_card: Control) -> void:
 		deck_list.add_child(row)
 		row.setup(card_key, mini_card.era_color)
 
-		# Estas dos sí son señales: el deck_row avisa "hacia arriba"
+		# Estas tres sí son señales: el deck_row avisa "hacia arriba"
 		# cuando cambia su estado, sin saber quién lo escucha.
 		row.removed.connect(_on_deck_row_removed)
 		row.count_changed.connect(_on_deck_row_count_changed)
+		row.max_requested.connect(_on_deck_row_max_requested)
 
 		deck_rows[card_key] = row
 
@@ -137,9 +139,18 @@ func _on_deck_row_removed(card_key: String) -> void:
 
 
 # Se llama cuando cambia el nº de copias de una fila (sin llegar a 0).
-func _on_deck_row_count_changed(_card_key: String, _new_count: int) -> void:
+func _on_deck_row_count_changed(card_key: String, new_count: int) -> void:
 	_recount_total()
 	_update_deck_counters()
+
+# Se llama cuando se quiere poner al máximo el número de cartas de una misma (sin pasarse de los 60 ni de 4).
+func _on_deck_row_max_requested(card_key: String, max_count: int) -> void:
+	# Calcula cuántos huecos quedan.
+	var remaining := MAX_DECK_SIZE - total_cards
+	var amount_to_add: int = min(max_count, remaining)
+	
+	for i in range (amount_to_add):
+		deck_rows[card_key].add_copy()
 
 
 # Recalcula el total de cartas sumando las copias de cada fila viva.

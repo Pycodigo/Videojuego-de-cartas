@@ -55,9 +55,9 @@ text_overrun_behavior = 3
 
 [node name="NumCardsText" type="Label" parent="DeckRowBG"]
 layout_mode = 0
-offset_left = 675.0
+offset_left = 637.0
 offset_top = 5.0
-offset_right = 706.0
+offset_right = 668.0
 offset_bottom = 33.0
 theme_override_font_sizes/font_size = 15
 text = "x99"
@@ -66,23 +66,34 @@ vertical_alignment = 1
 
 [node name="MinusBtn" type="Button" parent="DeckRowBG"]
 layout_mode = 0
-offset_left = 714.0
+offset_left = 673.0
 offset_top = 1.0
-offset_right = 743.0
+offset_right = 694.0
 offset_bottom = 37.0
 theme_override_font_sizes/font_size = 20
 text = "-"
 flat = true
 
+[node name="MaxBtn" type="Button" parent="DeckRowBG"]
+layout_mode = 0
+offset_left = 699.0
+offset_top = 2.0
+offset_right = 756.0
+offset_bottom = 38.0
+theme_override_font_sizes/font_size = 20
+text = "Max."
+flat = true
+
 [node name="DeleteBtn" type="Button" parent="DeckRowBG"]
 layout_mode = 0
-offset_left = 750.0
+offset_left = 759.0
 offset_top = 1.0
-offset_right = 774.0
+offset_right = 788.0
 offset_bottom = 38.0
 theme_override_font_sizes/font_size = 20
 text = "X"
 flat = true
 
 [connection signal="pressed" from="DeckRowBG/MinusBtn" to="." method="_on_minus_btn_pressed"]
+[connection signal="pressed" from="DeckRowBG/MaxBtn" to="." method="_on_max_btn_pressed"]
 [connection signal="pressed" from="DeckRowBG/DeleteBtn" to="." method="_on_delete_btn_pressed"]
