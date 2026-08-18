@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://bp2gw5bnbtka2"]
+
+[ext_resource type="PackedScene" uid="uid://bgcy6kpol5bny" path="res://Scenes/MenuBtns/btn_menu_base.tscn" id="1_lrdla"]
+[ext_resource type="Script" uid="uid://b1hna6usdgkql" path="res://Scripts/MenuBtns/btn_menu_deck_builder.gd" id="2_24g5r"]
+[ext_resource type="Texture2D" uid="uid://b36yhggvahxp6" path="res://Images/Test/editor.png" id="2_vpu4b"]
+
+[node name="BtnMenuDeckBuilder" instance=ExtResource("1_lrdla")]
+script = ExtResource("2_24g5r")
+
+[node name="TextureIcon" parent="BtnMenu/IconBG" index="0"]
+offset_left = -97.0
+offset_top = -80.0
+offset_right = 97.0
+offset_bottom = 82.0
+texture = ExtResource("2_vpu4b")

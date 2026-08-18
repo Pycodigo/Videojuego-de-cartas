@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cqni8h8tmukl8"]
+[gd_scene load_steps=21 format=3 uid="uid://cqni8h8tmukl8"]
 
 [ext_resource type="Script" uid="uid://b5lqa63fswvko" path="res://Scripts/Cards/base_card.gd" id="1_x5hng"]
 [ext_resource type="Texture2D" uid="uid://myue64h8ybjx" path="res://Images/Polígono.png" id="2_rfn2n"]
@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://cfnasn48tup1v" path="res://Images/Borde ATK detalle.png" id="13_i4kx0"]
 [ext_resource type="Texture2D" uid="uid://bpwr3idxqaeck" path="res://Images/Borde DEF detalle.png" id="14_ho3s0"]
 [ext_resource type="Texture2D" uid="uid://cdafceox73xs8" path="res://Images/linea.png" id="15_bty5r"]
+[ext_resource type="Texture2D" uid="uid://dya1dyuvlsp1w" path="res://Images/Test/Carta reversa.png" id="20_3dik3"]
 
 [node name="BaseCard" type="Control"]
 layout_mode = 3
@@ -864,6 +865,13 @@ size_flags_horizontal = 3
 theme_override_font_sizes/normal_font_size = 20
 text = "bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
 fit_content = true
+
+[node name="Cover" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 300.0
+offset_bottom = 400.0
+texture = ExtResource("20_3dik3")
+expand_mode = 1
 
 [connection signal="gui_input" from="BasicCard" to="." method="_on_basic_card_gui_input"]
 [connection signal="pressed" from="BasicCard/ATKBtn" to="." method="_on_atk_btn_pressed"]

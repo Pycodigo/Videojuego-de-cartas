@@ -66,6 +66,9 @@ extends Control
 # Obtener el tablero (card -> deck -> player -> board).
 @onready var board = get_parent().get_parent().get_parent()
 
+# Cubierta para la IA.
+@onready var cover = $Cover
+
 # Tamaño de la carta.
 var card_size = Vector2(300, 400)
 # Tamaño agrandado.
@@ -128,15 +131,25 @@ var in_hand: bool = true
 # Obtener posición de la carta en la mano.
 var hand_index: int = -1
 
+# Comprobar si está en IA o no.
+var is_in_ai: bool = false
+# Como estas carta son 'básicas', se le manda la info al slot.
+var is_era_type: bool = false
+
 # Guardar que acción (ataque, defensa...) se hizo click.
 var action_clicked: int = 0  # 1 (ATK), 2 (DEF), 3 (HABILIDAD).
 
 
 func _ready() -> void:
+	if is_in_ai:
+		cover.visible = true
+	else:
+		cover.visible = false
 	init_card()
 	# Conectar las funciones del ratón a la carta de panel.
 	if not card_panel.gui_input.is_connected(_on_basic_card_gui_input):
 		card_panel.gui_input.connect(_on_basic_card_gui_input)
+		print("_ready ejecutado en:", card_name)
 	
 	# Timer para no abrir los botones hasta confirmar que no es un doble click.
 	click_timer = Timer.new()
@@ -391,7 +404,7 @@ func _hide_zoom() -> void:
 		was_zoomed_in_slot = false
 
 func _process(delta: float) -> void:
-	if board.pause_while_zoom:
+	if board.pause_while_zoom or is_in_ai:
 		return
 	
 	var mouse_pos = get_global_mouse_position()
@@ -452,6 +465,9 @@ func _process(delta: float) -> void:
 		restore_rotation(0.2)
 
 func move_up(duration: float) -> void:
+	if is_in_ai:
+		return
+	
 	if raise_tween:
 		raise_tween.kill()
 
@@ -467,6 +483,9 @@ func move_up(duration: float) -> void:
 	)
 
 func go_back_to_position(duration: float) -> void:
+	if is_in_ai:
+		return
+	
 	print("VOLVIENDO:", card_name)
 	# Devolvemos a su posición original en la mano.
 	if raise_tween:
@@ -565,7 +584,7 @@ func _on_cancel_btn_pressed() -> void:
 
 
 func _on_basic_card_gui_input(event: InputEvent) -> void:
-	if zoom_active or board.pause_while_zoom:
+	if zoom_active or board.pause_while_zoom or is_in_ai:
 		return
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -614,7 +633,7 @@ func _on_basic_card_gui_input(event: InputEvent) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if not actions_showed:
+	if not actions_showed or is_in_ai:
 		return
 	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
@@ -743,7 +762,7 @@ func _try_drop_on_slot() -> void:
 	
 	
 func _on_card_left_clicked() -> void:
-	if actions_showed or card_action_clicked or in_hand:
+	if actions_showed or card_action_clicked or in_hand or is_in_ai:
 		return
 	
 	print("Click izquierdo sobre la carta...\nClick on hand: ", in_hand)

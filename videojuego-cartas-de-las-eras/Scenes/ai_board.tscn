@@ -27,51 +27,115 @@ offset_bottom = 40.0
 
 [node name="Slot" parent="Player/Slots" instance=ExtResource("2_t2wnw")]
 layout_mode = 1
-offset_left = 265.0
-offset_top = 510.0
-offset_right = 345.0
-offset_bottom = 670.0
+offset_left = 440.0
+offset_top = 580.0
+offset_right = 520.0
+offset_bottom = 740.0
 
 [node name="Slot2" parent="Player/Slots" instance=ExtResource("2_t2wnw")]
 layout_mode = 1
-offset_left = 1291.0
-offset_top = 510.0
-offset_right = 1371.0
-offset_bottom = 670.0
+offset_left = 1350.0
+offset_top = 580.0
+offset_right = 1430.0
+offset_bottom = 740.0
 
 [node name="Slot3" parent="Player/Slots" instance=ExtResource("2_t2wnw")]
 layout_mode = 1
-offset_left = 519.0
-offset_top = 508.0
-offset_right = 599.0
-offset_bottom = 668.0
+offset_left = 670.0
+offset_top = 580.0
+offset_right = 750.0
+offset_bottom = 740.0
 
 [node name="Slot4" parent="Player/Slots" instance=ExtResource("2_t2wnw")]
 layout_mode = 1
-offset_left = 764.0
-offset_top = 505.0
-offset_right = 844.0
-offset_bottom = 665.0
+offset_left = 900.0
+offset_top = 580.0
+offset_right = 980.0
+offset_bottom = 740.0
 
 [node name="Slot5" parent="Player/Slots" instance=ExtResource("2_t2wnw")]
 layout_mode = 1
-offset_left = 1031.0
-offset_top = 510.0
-offset_right = 1111.0
-offset_bottom = 670.0
+offset_left = 1130.0
+offset_top = 580.0
+offset_right = 1210.0
+offset_bottom = 740.0
 
 [node name="Deck" parent="Player" instance=ExtResource("3_ks1o3")]
 layout_mode = 1
-offset_left = 1544.0
-offset_top = 510.0
-offset_right = 1824.0
-offset_bottom = 930.0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 1575.0
+offset_top = 591.0
+offset_right = 1895.0
+offset_bottom = 1051.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="Hand" type="Control" parent="Player"]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 343.0
 offset_top = 920.0
-offset_right = 1343.0
+offset_right = 1313.0
 offset_bottom = 1080.0
+pivot_offset = Vector2(500, 90)
+
+[node name="AI" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Slots" type="Control" parent="AI"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Slot" parent="AI/Slots" instance=ExtResource("2_t2wnw")]
+layout_mode = 1
+offset_left = 440.0
+offset_top = 280.0
+offset_right = 520.0
+offset_bottom = 440.0
+slot_owner = 1
+
+[node name="Slot2" parent="AI/Slots" instance=ExtResource("2_t2wnw")]
+layout_mode = 1
+offset_left = 1350.0
+offset_top = 280.0
+offset_right = 1430.0
+offset_bottom = 440.0
+slot_owner = 1
+
+[node name="Slot3" parent="AI/Slots" instance=ExtResource("2_t2wnw")]
+layout_mode = 1
+offset_left = 670.0
+offset_top = 280.0
+offset_right = 750.0
+offset_bottom = 440.0
+slot_owner = 1
+
+[node name="Slot4" parent="AI/Slots" instance=ExtResource("2_t2wnw")]
+layout_mode = 1
+offset_left = 900.0
+offset_top = 280.0
+offset_right = 980.0
+offset_bottom = 440.0
+slot_owner = 1
+
+[node name="Slot5" parent="AI/Slots" instance=ExtResource("2_t2wnw")]
+layout_mode = 1
+offset_left = 1130.0
+offset_top = 280.0
+offset_right = 1210.0
+offset_bottom = 440.0
+slot_owner = 1
+
+[node name="Hand" type="Control" parent="AI"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 343.0
+offset_right = 1313.0
+offset_bottom = 160.0
 pivot_offset = Vector2(500, 90)

@@ -1,13 +1,15 @@
-[gd_scene load_steps=9 format=3 uid="uid://bhv68ga71uery"]
+[gd_scene load_steps=11 format=3 uid="uid://bhv68ga71uery"]
 
 [ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/main.gd" id="2_ynf5e"]
 [ext_resource type="PackedScene" uid="uid://dkchyuaofw6vq" path="res://Scenes/MenuBtns/btn_menu_rules.tscn" id="3_6bp64"]
 [ext_resource type="PackedScene" uid="uid://d5wi6ixsg0dh" path="res://Scenes/MenuBtns/btn_menu_exit.tscn" id="7_6bp64"]
 [ext_resource type="PackedScene" uid="uid://bxskywbxjlw8g" path="res://Scenes/MenuBtns/btn_menu_credits.tscn" id="7_344ge"]
+[ext_resource type="PackedScene" uid="uid://4v2b60vjr8ek" path="res://Scenes/MenuBtns/btn_menu_your_decks.tscn" id="7_hptm8"]
 [ext_resource type="AudioStream" uid="uid://bmthy11a5bnsc" path="res://SFX/Test/button sound.wav" id="7_jkdf5"]
 [ext_resource type="PackedScene" uid="uid://lxmvn6uon63y" path="res://Scenes/MenuBtns/btn_menu_config.tscn" id="8_344ge"]
 [ext_resource type="AudioStream" uid="uid://kf1c3t0v75k0" path="res://Music/Test/menu_chill.wav" id="8_wsu2k"]
 [ext_resource type="PackedScene" uid="uid://dc5ca6k7xppjq" path="res://Scenes/MenuBtns/btn_menu_play.tscn" id="8_ynf5e"]
+[ext_resource type="PackedScene" uid="uid://bp2gw5bnbtka2" path="res://Scenes/MenuBtns/btn_menu_deck_builder.tscn" id="10_d1ilt"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -35,24 +37,52 @@ horizontal_alignment = 1
 
 [node name="BtnMenuConfig" parent="." instance=ExtResource("8_344ge")]
 layout_mode = 1
-offset_left = 1461.0
-offset_top = 321.0
-offset_right = -209.0
-offset_bottom = -459.0
+offset_left = 1587.0
+offset_top = 404.0
+offset_right = -83.0
+offset_bottom = -376.0
 
 [node name="BtnMenuRules" parent="." instance=ExtResource("3_6bp64")]
 layout_mode = 1
-offset_left = 236.0
-offset_top = 313.0
-offset_right = -1434.0
-offset_bottom = -467.0
+offset_left = 66.0
+offset_top = 409.0
+offset_right = -1604.0
+offset_bottom = -371.0
 
 [node name="BtnMenuExit" parent="." instance=ExtResource("7_6bp64")]
 layout_mode = 1
-offset_left = 1300.0
-offset_top = 730.0
-offset_right = -370.0
-offset_bottom = -50.0
+offset_left = 1263.0
+offset_top = 749.0
+offset_right = -407.0
+offset_bottom = -31.0
+
+[node name="BtnMenuCredits" parent="." instance=ExtResource("7_344ge")]
+layout_mode = 1
+offset_left = 419.0
+offset_top = 745.0
+offset_right = -1251.0
+offset_bottom = -35.0
+
+[node name="BtnMenuPlay" parent="." instance=ExtResource("8_ynf5e")]
+layout_mode = 1
+offset_left = 834.0
+offset_top = 392.0
+offset_right = -836.0
+offset_bottom = -388.0
+
+[node name="BtnMenuYourDecks" parent="." instance=ExtResource("7_hptm8")]
+layout_mode = 1
+offset_left = 382.0
+offset_top = 49.0
+offset_right = -1288.0
+offset_bottom = -731.0
+
+[node name="BtnMenuDeckBuilder" parent="." instance=ExtResource("10_d1ilt")]
+layout_mode = 1
+offset_left = 1257.0
+offset_top = 52.0
+offset_right = -413.0
+offset_bottom = -728.0
 
 [node name="ButtonSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_jkdf5")
@@ -62,48 +92,3 @@ bus = &"SFX"
 [node name="MenuChill" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_wsu2k")
 bus = &"Music"
-
-[node name="DeckBuilderBtn" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.751
-anchor_top = 0.144
-anchor_right = 0.751
-anchor_bottom = 0.144
-offset_left = -74.92
-offset_top = -38.52
-offset_right = 74.08
-offset_bottom = 37.48
-theme_override_font_sizes/font_size = 30
-text = "DIECK"
-
-[node name="YourDecksBtn" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.22
-anchor_top = 0.147
-anchor_right = 0.22
-anchor_bottom = 0.147
-offset_left = -121.4
-offset_top = -37.76
-offset_right = 119.6
-offset_bottom = 38.24
-theme_override_font_sizes/font_size = 30
-text = "UI_YOUR_DECKS"
-
-[node name="BtnMenuCredits" parent="." instance=ExtResource("7_344ge")]
-layout_mode = 1
-offset_left = 390.0
-offset_top = 730.0
-offset_right = -1280.0
-offset_bottom = -50.0
-
-[node name="BtnMenuPlay" parent="." instance=ExtResource("8_ynf5e")]
-layout_mode = 1
-offset_left = 848.0
-offset_top = 370.0
-offset_right = -822.0
-offset_bottom = -410.0
-
-[connection signal="pressed" from="DeckBuilderBtn" to="." method="_on_deck_builder_btn_pressed"]
-[connection signal="pressed" from="YourDecksBtn" to="." method="_on_your_decks_btn_pressed"]

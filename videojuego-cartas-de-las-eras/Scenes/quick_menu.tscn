@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://br7bvonxxwybx" path="res://Images/home.png" id="2_3vjyv"]
 [ext_resource type="Texture2D" uid="uid://dc50b0udohe0h" path="res://Images/Test/config.png" id="2_p5ltd"]
 [ext_resource type="Texture2D" uid="uid://dbjmuyg4pmhjr" path="res://Images/Test/reglas.png" id="4_mvcqw"]
-[ext_resource type="Texture2D" uid="uid://bvltnt8vjs2qr" path="res://Images/Editar btn.png" id="5_8dv6b"]
+[ext_resource type="Texture2D" uid="uid://b36yhggvahxp6" path="res://Images/Test/editor.png" id="5_8dv6b"]
 [ext_resource type="Texture2D" uid="uid://cm0lmkmt4kde3" path="res://Images/your_decks.png" id="6_du1fg"]
 [ext_resource type="Texture2D" uid="uid://cyloah0bpjr17" path="res://Images/Test/salir.png" id="7_bw4en"]
 

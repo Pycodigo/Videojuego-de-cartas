@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://4v2b60vjr8ek"]
+
+[ext_resource type="PackedScene" uid="uid://bgcy6kpol5bny" path="res://Scenes/MenuBtns/btn_menu_base.tscn" id="1_4og2u"]
+[ext_resource type="Script" uid="uid://bcu4xbr7uuprr" path="res://Scripts/MenuBtns/btn_menu_your_decks.gd" id="2_p536x"]
+[ext_resource type="Texture2D" uid="uid://cm0lmkmt4kde3" path="res://Images/your_decks.png" id="2_s8y2t"]
+
+[node name="BtnMenuYourDecks" instance=ExtResource("1_4og2u")]
+script = ExtResource("2_p536x")
+
+[node name="TextureIcon" parent="BtnMenu/IconBG" index="0"]
+offset_left = -95.0
+offset_top = -80.0
+offset_right = 95.0
+offset_bottom = 80.0
+texture = ExtResource("2_s8y2t")

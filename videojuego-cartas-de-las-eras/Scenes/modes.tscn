@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://c1jn1aos7b6xt"]
 
 [ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/Test/volver.png" id="1_bf5c0"]
-[ext_resource type="Script" uid="uid://cpj3j6obh02dr" path="res://Scripts/modes.gd" id="1_mxn7y"]
+[ext_resource type="Script" uid="uid://cpj3j6obh02dr" path="res://Scripts/Test/modes.gd" id="1_mxn7y"]
 [ext_resource type="Script" uid="uid://mo1visyko01i" path="res://Scripts/main.gd" id="2_c3ayc"]
 [ext_resource type="Texture2D" uid="uid://b36yhggvahxp6" path="res://Images/Test/editor.png" id="3_c3ayc"]
 [ext_resource type="Texture2D" uid="uid://3ghyxi0sfn31" path="res://Images/Test/hoja (duelo).png" id="4_sm8xl"]

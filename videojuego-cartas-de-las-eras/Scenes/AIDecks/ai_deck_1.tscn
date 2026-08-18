@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://bbxqfwl8a41q3"]
+
+[ext_resource type="PackedScene" uid="uid://cijc3618b2i0u" path="res://Scenes/base_ai_deck.tscn" id="1_5a8b6"]
+[ext_resource type="Script" uid="uid://dpb2maqmd0xhf" path="res://Scripts/AIDecks/ai_deck_1.gd" id="2_u2r5p"]
+
+[node name="AIDeck1" instance=ExtResource("1_5a8b6")]
+script = ExtResource("2_u2r5p")

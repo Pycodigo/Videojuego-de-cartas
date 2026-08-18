@@ -2,8 +2,18 @@ extends Control
 
 signal card_placed(card)
 
-# Tipo de carta que acepta este slot. Vacío = acepta cualquiera.
-@export var accepted_card_type: String = ""
+# Saber si el slot recibe cartas del jugador o IA.
+enum SlotOwner {
+	PLAYER,
+	AI
+}
+# Tipos de cartas que van en algunos slots.
+enum SlotType {
+	BASIC,
+	ERA
+}
+@export var slot_owner: SlotOwner
+@export var slot_type: SlotType
 
 var occupied: bool = false
 # Carta que ocupa el slot (null si está libre).
@@ -15,10 +25,18 @@ func _ready() -> void:
 func try_place_card(card) -> bool:
 	if occupied:
 		return false
-	# Si el slot tiene restricción, comprobar que la carta es del tipo correcto.
-	if accepted_card_type != "" and card.card_type != accepted_card_type:
-		print("Este slot solo acepta cartas de tipo: ", accepted_card_type)
+	# Comprobar que en el slot para las eras no se metan cartas básicas y viceversa.
+	if card.is_era_type and slot_type != SlotType.ERA:
 		return false
+	if not card.is_era_type and slot_type != SlotType.BASIC:
+		return false
+	
+	if card.is_in_ai and slot_owner != SlotOwner.AI:
+		return false
+	if not card.is_in_ai and slot_owner != SlotOwner.PLAYER:
+		return false
+	
+	
 	occupied = true
 	current_card = card
 	card_placed.emit(card)
