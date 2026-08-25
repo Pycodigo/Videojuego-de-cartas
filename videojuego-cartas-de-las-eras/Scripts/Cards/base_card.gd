@@ -43,6 +43,7 @@ extends Control
 @onready var ability_zoom_texture = $BasicCard/AbilityZoomBorderTexture
 @onready var ability_zoom_text = $BasicCard/AbilityZoomBorderTexture/AbilityZoomText
 @onready var action_texture = $BasicCard/ActionTexture
+@onready var no_texture = $BasicCard/NoTexture
 
 # Detalles de la carta.
 @onready var detail_panel = $Details
@@ -67,7 +68,7 @@ extends Control
 @onready var board = get_parent().get_parent().get_parent()
 
 # Cubierta para la IA.
-@onready var cover = $Cover
+@onready var cover = $BasicCard/Cover
 
 # Tamaño de la carta.
 var card_size = Vector2(300, 400)
@@ -139,6 +140,12 @@ var is_era_type: bool = false
 # Guardar que acción (ataque, defensa...) se hizo click.
 var action_clicked: int = 0  # 1 (ATK), 2 (DEF), 3 (HABILIDAD).
 
+# Color e icono varían según la acción.
+var target_color = null
+var target_icon = null
+# Color de herido.
+var hurt_color = Color("#ff0a06")
+
 
 func _ready() -> void:
 	if is_in_ai:
@@ -193,6 +200,7 @@ func init_card():
 	cooldown_zoom_texture.visible = false
 	ability_zoom_texture.visible = false
 	action_texture.visible = false
+	no_texture.visible = false
 	action_bg.visible = false
 	
 	# Ocultar botones de acciones.
@@ -404,7 +412,7 @@ func _hide_zoom() -> void:
 		was_zoomed_in_slot = false
 
 func _process(delta: float) -> void:
-	if board.pause_while_zoom or is_in_ai:
+	if board.pause_while_zoom or is_in_ai or board.pause_while_deciding:
 		return
 	
 	var mouse_pos = get_global_mouse_position()
@@ -465,7 +473,7 @@ func _process(delta: float) -> void:
 		restore_rotation(0.2)
 
 func move_up(duration: float) -> void:
-	if is_in_ai:
+	if is_in_ai or board.pause_while_deciding:
 		return
 	
 	if raise_tween:
@@ -483,7 +491,7 @@ func move_up(duration: float) -> void:
 	)
 
 func go_back_to_position(duration: float) -> void:
-	if is_in_ai:
+	if is_in_ai or board.pause_while_deciding:
 		return
 	
 	print("VOLVIENDO:", card_name)
@@ -504,7 +512,7 @@ func go_back_to_position(duration: float) -> void:
 
 # Volver a la rotación original.
 func restore_rotation(duration: float):
-	if zoom_active or cannot_zoom or hold_card or board.card_is_dragging or not in_hand:
+	if zoom_active or cannot_zoom or hold_card or board.card_is_dragging or not in_hand or board.pause_while_deciding:
 		create_tween().tween_property(self, "rotation_degrees", original_rotation, duration)
 
 func _on_plus_btn_pressed() -> void:
@@ -584,17 +592,25 @@ func _on_cancel_btn_pressed() -> void:
 
 
 func _on_basic_card_gui_input(event: InputEvent) -> void:
-	if zoom_active or board.pause_while_zoom or is_in_ai:
+	if zoom_active or board.pause_while_zoom:
 		return
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
+			if is_in_ai and is_in_slot and not in_hand and board.pause_while_deciding:
+				await self.receive_damage(board.attacking_card.attack)
+				# Solo ataca una vez.
+				board.attacking_card._cannot_use_card()
+				board.attacking_card = null
+				board.pause_while_deciding = false
+			
 			# Cualquier pulsación nueva cancela un click simple pendiente.
 			click_timer.stop()
 			if event.double_click:
 				if actions_showed:
 					_deselect_card()
-				_shake_card_effect()
+				if not is_in_ai and board.pause_while_deciding == false:
+					_shake_card_effect()
 				return
 			
 			# Aún no se arrastra, solo guardar dónde se pulsó.
@@ -604,7 +620,7 @@ func _on_basic_card_gui_input(event: InputEvent) -> void:
 			mouse_hovering = false
 			mouse_time = 0.0
 		else:
-			if is_dragging:
+			if is_dragging and not is_in_ai and board.pause_while_deciding == false:
 				hold_card = false
 				is_dragging = false
 				board.card_is_dragging = false
@@ -622,7 +638,7 @@ func _on_basic_card_gui_input(event: InputEvent) -> void:
 			_show_zoom()
 
 	elif event is InputEventMouseMotion:
-		if not is_in_slot:
+		if not is_in_slot and board.pause_while_deciding == false:
 			if event.button_mask & MOUSE_BUTTON_MASK_LEFT and not is_dragging:
 				if press_position.distance_to(get_global_mouse_position()) >= DRAG_THRESHOLD:
 					is_dragging = true
@@ -633,7 +649,7 @@ func _on_basic_card_gui_input(event: InputEvent) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if not actions_showed or is_in_ai:
+	if not actions_showed or is_in_ai or board.pause_while_deciding:
 		return
 	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
@@ -762,36 +778,37 @@ func _try_drop_on_slot() -> void:
 	
 	
 func _on_card_left_clicked() -> void:
-	if actions_showed or card_action_clicked or in_hand or is_in_ai:
+	if actions_showed or card_action_clicked or in_hand:
 		return
 	
 	print("Click izquierdo sobre la carta...\nClick on hand: ", in_hand)
 	cannot_zoom = true
 	
-	# Crear animaciones.
-	var tween = create_tween()
-	# Mover en vertical los botones, y que aparezcan de forma suave (si no está en la mano).
-	tween.tween_property(atk_btn, "position:y", atk_btn.position.y - 150, 0.5)\
-	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.parallel().tween_property(def_btn, "position:y", def_btn.position.y + 150, 0.5)\
-	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	atk_btn.modulate.a = 0.0
-	tween.parallel().tween_property(atk_btn, "modulate:a", 1.0, 0.4)\
-	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	def_btn.modulate.a = 0.0
-	tween.parallel().tween_property(def_btn, "modulate:a", 1.0, 0.4)\
-	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	if not is_in_ai and board.pause_while_deciding == false:
+		# Crear animaciones.
+		var tween = create_tween()
+		# Mover en vertical los botones, y que aparezcan de forma suave (si no está en la mano).
+		tween.tween_property(atk_btn, "position:y", atk_btn.position.y - 150, 0.5)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		tween.parallel().tween_property(def_btn, "position:y", def_btn.position.y + 150, 0.5)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		atk_btn.modulate.a = 0.0
+		tween.parallel().tween_property(atk_btn, "modulate:a", 1.0, 0.4)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		def_btn.modulate.a = 0.0
+		tween.parallel().tween_property(def_btn, "modulate:a", 1.0, 0.4)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
-	atk_btn.visible = true
-	def_btn.visible = true
-	atk_btn.disabled = false
-	def_btn.disabled = false
-	
-	actions_showed = true
+		atk_btn.visible = true
+		def_btn.visible = true
+		atk_btn.disabled = false
+		def_btn.disabled = false
+		
+		actions_showed = true
 
 # Efecto de sacudida en cartas para las habilidades.
 func _shake_card_effect() -> void:
-	if card_action_clicked or in_hand:
+	if card_action_clicked or in_hand or board.pause_while_deciding:
 		return
 	
 	print("Activando habilidad de carta...")
@@ -828,10 +845,6 @@ func _shake_card_effect() -> void:
 func _activate_action() -> void:
 	action_texture.visible = true
 	action_bg.visible = true
-	
-	# Color e icono varían según la acción.
-	var target_color = null
-	var target_icon = null
 	
 	action_texture.position = Vector2(125, -20)
 	# Hacer el icono invisible al principio.
@@ -873,11 +886,87 @@ func _on_atk_btn_pressed() -> void:
 	action_clicked = 1
 	card_action_clicked = true
 	_deselect_card()
-	_activate_action()
+	await _activate_action()
+	board.attacking_card = self
+	board.pause_while_deciding = true
 
 
 func _on_def_btn_pressed() -> void:
 	action_clicked = 2
 	card_action_clicked = true
+	board.defending_cards.append(self)
 	_deselect_card()
 	_activate_action() 
+
+func receive_damage(damage: int) -> void:
+	action_bg.visible = true
+	
+	var tween = create_tween()
+	
+	action_bg.modulate.a = 0.0
+	action_bg.color = hurt_color
+	tween.tween_property(action_bg, "modulate:a", 0.7, 0.2)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(action_bg, "modulate:a", 0.0, 0.1)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(action_bg, "modulate:a", 0.7, 0.2)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(action_bg, "modulate:a", 0.0, 0.1)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(action_bg, "color", hurt_color, 0.5)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
+	# Quitar vida gradualmente.
+	if board.defending_cards.has(self):
+		var nerfed_damage := damage - defense
+		if nerfed_damage <= 0:
+			nerfed_damage = 1
+		while nerfed_damage > 0:
+			nerfed_damage -= 1
+			current_hp -= 1
+			
+			if current_hp < 0:
+				current_hp = 0
+			
+			# Actualizar lo visual.
+			hp_text.text = str(current_hp)
+			hp_num_detail.text = str(max_hp, " (", current_hp, ")")
+			hp_zoom_text.text = str(current_hp)
+			await get_tree().create_timer(0.05).timeout
+	else:
+		while damage > 0:
+			damage -= 1
+			current_hp -= 1
+			
+			if current_hp < 0:
+				current_hp = 0
+			
+			# Actualizar lo visual.
+			hp_text.text = str(current_hp)
+			hp_num_detail.text = str(max_hp, " (", current_hp, ")")
+			hp_zoom_text.text = str(current_hp)
+			await get_tree().create_timer(0.05).timeout
+	
+	if target_color != null:
+		action_bg.color = target_color
+
+
+# Hacer visual el que no se puede usar la carta ese turno.
+func _cannot_use_card() -> void:
+	no_texture.visible = true
+	no_texture.position = Vector2(125, -20)
+	# Hacer el icono invisible al principio.
+	no_texture.scale = Vector2(0, 0)
+	
+	# Crear animaciones.
+	var tween = create_tween()
+	
+	action_bg.color = Color("#3a3100")
+	# Hacer algo transparente el icono.
+	tween.tween_property(action_texture, "modulate:a", 0.5, 0.2)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# Hacerlo enorme para efecto.
+	tween.parallel().tween_property(no_texture, "scale", Vector2(2.5, 2.5), 0.4)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.chain().tween_property(no_texture, "scale", Vector2(2, 2), 0.3)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)

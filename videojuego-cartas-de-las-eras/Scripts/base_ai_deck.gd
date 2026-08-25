@@ -15,6 +15,7 @@ func _ready():
 	shuffle_deck()
 	update_deck_visual()
 	update_count()
+	z_index = -1
 
 # Construir la baraja.
 func build_deck():

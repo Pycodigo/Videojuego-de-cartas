@@ -21,6 +21,8 @@ var current_card = null
 
 func _ready() -> void:
 	add_to_group("slots")
+	# Para que no esté por encima de las cartas.
+	z_index = -1
 
 func try_place_card(card) -> bool:
 	if occupied:

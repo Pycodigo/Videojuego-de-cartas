@@ -8,6 +8,7 @@ extends Control
 # Nodos de la IA.
 @onready var ai = $AI
 @onready var ai_hand = $AI/Hand
+@onready var ai_slots = $AI/Slots
 # Baraja de IA.
 var ai_deck
 
@@ -26,6 +27,14 @@ var pause_while_zoom: bool = false
 
 # Mandar si es jugador o bot.
 var is_player: bool
+# Carta del jugador que ataca.
+var attacking_card = null
+var pause_while_deciding: bool = false
+
+var times_slot: int
+
+# Cartas que se defienden.
+var defending_cards: Array = []
 
 
 func _ready() -> void:
@@ -65,8 +74,11 @@ func _ready() -> void:
 		draw_starting_hand(start_draw, player_deck, player_hand)
 		is_player = true
 	if ai_deck:
-		draw_starting_hand(start_draw, ai_deck, ai_hand)
+		await draw_starting_hand(start_draw, ai_deck, ai_hand)
 		is_player = false
+		while times_slot < 3 and await _AI_place_card_in_slot():
+			times_slot += 1
+		
 	#Inicialmente, al no tener cartas en slots, el botón de finalizar turno está deshabilitado.
 	'''update_finish_turn_btn()
 	turn_label.visible = false
@@ -108,6 +120,9 @@ func draw_starting_hand(n: int, deck, hand):
 
 # Organiza la mano del jugador en abanico.
 func organize_hand() -> void:
+	if pause_while_deciding:
+		return
+	
 	# Pillar todas las cartas de la mano.
 	var player_total = player_hand.get_child_count()
 	# Cartas que quedan en la mano.
@@ -284,3 +299,106 @@ func organize_hand_AI() -> void:
 			card.original_position_global = card.global_position
 			card.hand_rotation = rot
 		)
+
+# Colocar una carta de la IA en un slot.
+func _AI_place_card_in_slot() -> bool:
+	# Comprobar que la IA tiene cartas en la mano.
+	var ai_total = ai_hand.get_child_count()
+	if ai_total == 0:
+		print("La mano de la IA está vacía.")
+		return false
+	
+	var valid_cards: Array = []
+	
+	# Solo mira las cartas válidas (ya no están en la mano).
+	for card in ai_hand.get_children():
+		if not card.in_hand or card.is_dragging or card.is_in_slot:
+			continue
+		
+		valid_cards.append(card)
+	
+	# Elegir una carta (por el momento, al azar).
+	var random_ai_card = valid_cards[randi_range(0, valid_cards.size() - 1)]
+	# Buscar todos los slots de IA disponibles.
+	for slot in ai_slots.get_children():
+		if slot.slot_owner == slot.SlotOwner.AI and not slot.occupied and slot.try_place_card(random_ai_card):
+			# Crear animación de volteo.
+			var flip_tween = create_tween()
+			
+			# Hacer animación de volteo.
+			var flip_start = flip_tween.tween_property(random_ai_card.card_panel, "scale:x", 0, 0.3)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			flip_tween.tween_callback(func():
+				# Ocultar el cover.
+				random_ai_card.cover.visible = false
+			)
+			var flip_ends = flip_tween.tween_property(random_ai_card.card_panel, "scale:x", 1, 0.3)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			await flip_ends.finished
+			
+			# Crear resto de animaciones.
+			var tween = create_tween()
+			
+			# Poner rotación a 0º.
+			tween.tween_property(random_ai_card, "rotation_degrees", random_ai_card.original_rotation, 0.2)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+			# Mover la carta al centro del slot.
+			# Usar get_global_rect() para obtener posición y tamaño reales del slot.
+			var slot_rect = slot.get_global_rect()
+
+			var target_scale = slot_rect.size / random_ai_card.card_size
+			random_ai_card.slot_scale = target_scale
+			random_ai_card.card_panel.pivot_offset = Vector2.ZERO
+
+			tween.parallel().tween_property(random_ai_card.card_panel, "scale", target_scale, 0.3)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			tween.parallel().tween_property(random_ai_card.card_panel, "global_position", slot_rect.position, 0.3)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			
+			random_ai_card.slot_pos = slot_rect.position
+			
+			# Ocultar stats normales (se ven mal).
+			for stat in [random_ai_card.hp_border_texture, random_ai_card.hp_text, random_ai_card.hp_texture, 
+			random_ai_card.energy_cost_text, random_ai_card.energy_cost_texture, 
+			random_ai_card.energy_cost_border_texture, random_ai_card.ability_text, 
+			random_ai_card.attack_text, random_ai_card.attack_texture, 
+			random_ai_card.defense_text, random_ai_card.defense_texture, 
+			random_ai_card.cooldown_text, random_ai_card.cooldown_texture]:
+				tween.parallel().tween_property(stat, "modulate:a", 0.0, 0.2)\
+				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			
+			# Posiciones destino en esquinas (relativas al 300x400 de la carta).
+			var corners = {
+				random_ai_card.hp_zoom_texture:           Vector2(-80, -15),           # Esquina superior izquierda.
+				random_ai_card.energy_cost_zoom_texture:  Vector2(220, -15),         # Esquina superior derecha.
+				random_ai_card.attack_zoom_texture:       Vector2(-80, 350),         # Esquina inferior izquierda.
+				random_ai_card.defense_zoom_texture:      Vector2(220, 350),       # Esquina inferior derecha.
+				random_ai_card.cooldown_zoom_texture:     Vector2(70, 130),       # Centro.
+				random_ai_card.ability_zoom_texture:      Vector2(-60, 210),      # Centro un poco más abajo.
+			}
+
+			for stat_zoom in corners:
+				stat_zoom.visible = true
+				stat_zoom.modulate.a = 0.0
+				tween.tween_property(stat_zoom, "modulate:a", 1.0, 0.1)\
+				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+				tween.parallel().tween_property(stat_zoom, "scale", Vector2(2, 2), 0.1)\
+				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+				tween.parallel().tween_property(stat_zoom, "position", corners[stat_zoom], 0.1)\
+				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT).set_delay(0.08)
+
+			# Actualizar la posición original por si se deselecciona después.
+			tween.tween_callback(func():
+				random_ai_card.original_position_global = random_ai_card.card_panel.global_position
+			)
+			
+			random_ai_card.is_in_slot = true
+			random_ai_card.in_hand = false
+			random_ai_card.current_slot = slot
+			organize_hand_AI()
+			return true
+	
+	# Todos los slots estaban ocupados.
+	print("Ningún slot está libre.")
+	return false
