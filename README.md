@@ -103,6 +103,7 @@
 - [x] Mejorar el menú (más o menos).
 - [x] Hacer un menú rápido.
 - [x] Guardar la configuración (resolución, idiomas...).
+- [ ] Hacer bien la nueva IA del tablero.
 - [ ] Crear cartas inmunes a las eras.
 - [ ] Poner cronómetro en las partidas.
 - [ ] Hacer bien y montar el tablero de juego con, al menos, lo básico.
