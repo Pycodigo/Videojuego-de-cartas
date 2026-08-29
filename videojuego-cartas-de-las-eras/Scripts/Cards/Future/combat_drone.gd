@@ -11,8 +11,8 @@ func _ready() -> void:
 	max_hp = 5
 	current_hp = 5
 	energy_cost = 2
-	attack = 5
-	defense = 2
+	base_attack = 5
+	base_defense = 2
 	cooldown = 2
 	
 	# Ejecutar la inicialización de la base.

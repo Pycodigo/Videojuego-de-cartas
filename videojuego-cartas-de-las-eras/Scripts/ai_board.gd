@@ -4,11 +4,13 @@ extends Control
 @onready var player = $Player
 @onready var player_hand = $Player/Hand
 @onready var player_deck = $Player/Deck
+@onready var player_discard_slot = $Player/Slots/SlotDiscard
 
 # Nodos de la IA.
 @onready var ai = $AI
 @onready var ai_hand = $AI/Hand
 @onready var ai_slots = $AI/Slots
+@onready var ai_discard_slot = $AI/Slots/SlotDiscard
 # Baraja de IA.
 var ai_deck
 
@@ -370,12 +372,14 @@ func _AI_place_card_in_slot() -> bool:
 			
 			# Posiciones destino en esquinas (relativas al 300x400 de la carta).
 			var corners = {
-				random_ai_card.hp_zoom_texture:           Vector2(-80, -15),           # Esquina superior izquierda.
-				random_ai_card.energy_cost_zoom_texture:  Vector2(220, -15),         # Esquina superior derecha.
-				random_ai_card.attack_zoom_texture:       Vector2(-80, 350),         # Esquina inferior izquierda.
-				random_ai_card.defense_zoom_texture:      Vector2(220, 350),       # Esquina inferior derecha.
-				random_ai_card.cooldown_zoom_texture:     Vector2(70, 130),       # Centro.
-				random_ai_card.ability_zoom_texture:      Vector2(-60, 210),      # Centro un poco más abajo.
+				random_ai_card.hp_zoom_texture:           Vector2(-80, -15),      # Esquina superior izquierda.
+				random_ai_card.energy_cost_zoom_texture:  Vector2(220, -15),      # Esquina superior derecha.
+				random_ai_card.attack_zoom_texture:       Vector2(-80, 350),      # Esquina inferior izquierda.
+				random_ai_card.defense_zoom_texture:      Vector2(220, 350),      # Esquina inferior derecha.
+				#random_ai_card.cooldown_zoom_texture:     Vector2(70, 130),      # Centro.
+				random_ai_card.cooldown_zoom_texture:     Vector2(70, 400),       # Abajo del todo.
+				#random_ai_card.ability_zoom_texture:      Vector2(-60, 210),     # Centro un poco más abajo.
+				random_ai_card.ability_zoom_texture:      Vector2(-60, 270),      # Centro un poco más abajo.
 			}
 
 			for stat_zoom in corners:

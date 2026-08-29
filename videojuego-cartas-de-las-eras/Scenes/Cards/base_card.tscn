@@ -1,26 +1,71 @@
-[gd_scene load_steps=22 format=3 uid="uid://cqni8h8tmukl8"]
+[gd_scene load_steps=26 format=3 uid="uid://cqni8h8tmukl8"]
 
 [ext_resource type="Script" uid="uid://b5lqa63fswvko" path="res://Scripts/Cards/base_card.gd" id="1_x5hng"]
-[ext_resource type="Texture2D" uid="uid://myue64h8ybjx" path="res://Images/Polígono.png" id="2_rfn2n"]
-[ext_resource type="Texture2D" uid="uid://b3dt6uctbeto0" path="res://Images/Borde PS-Energia.png" id="3_2w3gi"]
+[ext_resource type="Texture2D" uid="uid://biubui14akjqu" path="res://Images/Polígono.png" id="2_rfn2n"]
 [ext_resource type="Texture2D" uid="uid://et0w46kr38v7" path="res://Images/Hexágono.png" id="4_fvadl"]
 [ext_resource type="Texture2D" uid="uid://byb7h1xet85kn" path="res://Images/Corazón.png" id="5_aod86"]
 [ext_resource type="Texture2D" uid="uid://uf2ieqbpj1gd" path="res://Images/Escudo.png" id="6_3dik3"]
 [ext_resource type="Texture2D" uid="uid://dkecbfu13gon2" path="res://Images/Espada.png" id="7_0wn3j"]
 [ext_resource type="Texture2D" uid="uid://dap2g0pwheym" path="res://Images/Rayo.png" id="8_2sihe"]
-[ext_resource type="Texture2D" uid="uid://byxauoe3tvc8m" path="res://Images/Habilidad-borde.png" id="9_opvx1"]
 [ext_resource type="Texture2D" uid="uid://ctq85w115fk3r" path="res://Images/Enfriamiento.png" id="10_aod86"]
 [ext_resource type="Texture2D" uid="uid://dmxs75a103jmw" path="res://Images/Boton Atacar.png" id="11_2w3gi"]
 [ext_resource type="Texture2D" uid="uid://bu6q6sqgqgw23" path="res://Images/Icono ataque.png" id="11_3dik3"]
-[ext_resource type="Texture2D" uid="uid://cltesqibe6806" path="res://Images/Borde PS detalle.png" id="11_vr43h"]
-[ext_resource type="Texture2D" uid="uid://dvh3vrgdob301" path="res://Images/Borde Coste detalle.png" id="12_8cdgg"]
 [ext_resource type="Texture2D" uid="uid://d0ekkxl0u2qc7" path="res://Images/Boton Defender.png" id="12_fvadl"]
 [ext_resource type="Texture2D" uid="uid://b3pwm8pt3l2ge" path="res://Images/Borde stats zoom.png" id="13_fvadl"]
-[ext_resource type="Texture2D" uid="uid://cfnasn48tup1v" path="res://Images/Borde ATK detalle.png" id="13_i4kx0"]
 [ext_resource type="Texture2D" uid="uid://qaj14y32y1ny" path="res://Images/prohibido.png" id="14_0wn3j"]
-[ext_resource type="Texture2D" uid="uid://bpwr3idxqaeck" path="res://Images/Borde DEF detalle.png" id="14_ho3s0"]
-[ext_resource type="Texture2D" uid="uid://cdafceox73xs8" path="res://Images/linea.png" id="15_bty5r"]
 [ext_resource type="Texture2D" uid="uid://dya1dyuvlsp1w" path="res://Images/Test/Carta reversa.png" id="20_3dik3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oeind"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_bottom_right = 40
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x5hng"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_bottom_left = 40
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_opvx1"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qcxs8"]
+bg_color = Color(0.0823529, 0.0823529, 0.0823529, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0wn3j"]
+bg_color = Color(0.0862745, 0.431373, 0.0117647, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aod86"]
+bg_color = Color(0.576471, 0.427451, 0.0509804, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fvadl"]
+bg_color = Color(0.513726, 0.0588235, 0.0588235, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2w3gi"]
+bg_color = Color(0.0745098, 0.286275, 0.541176, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3dik3"]
+bg_color = Color(0.481789, 0.48179, 0.481789, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rfn2n"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2sihe"]
+bg_color = Color(0.0807833, 0.0807833, 0.0807833, 1)
 
 [node name="BaseCard" type="Control"]
 layout_mode = 3
@@ -47,48 +92,58 @@ offset_right = 300.0
 offset_bottom = 400.0
 color = Color(0.359069, 0.359069, 0.359069, 1)
 
-[node name="NameTexture" type="TextureRect" parent="BasicCard"]
-texture_filter = 1
+[node name="HPPanel" type="Panel" parent="BasicCard"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.094
-anchor_right = 0.5
-anchor_bottom = 0.094
-offset_left = -109.0
-offset_top = -23.6
-offset_right = 124.0
-offset_bottom = 47.4
-texture = ExtResource("2_rfn2n")
-expand_mode = 1
+anchor_left = 0.007
+anchor_top = 0.012
+anchor_right = 0.177
+anchor_bottom = 0.107
+offset_left = -0.1
+offset_top = 0.2
+offset_right = -0.0999985
+offset_bottom = 0.199997
+theme_override_styles/panel = SubResource("StyleBoxFlat_oeind")
 
-[node name="HpTexture" type="TextureRect" parent="BasicCard"]
-texture_filter = 1
+[node name="EnergyPanel" type="Panel" parent="BasicCard"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.094
-anchor_right = 0.5
-anchor_bottom = 0.094
-offset_left = -153.0
-offset_top = -39.6
-offset_right = -90.0
-offset_bottom = 4.4
-texture = ExtResource("3_2w3gi")
+anchor_left = 0.827
+anchor_top = 0.012
+anchor_right = 0.993
+anchor_bottom = 0.107
+offset_left = -0.100006
+offset_top = 0.2
+offset_right = 0.0999756
+offset_bottom = 0.199997
+theme_override_styles/panel = SubResource("StyleBoxFlat_x5hng")
+
+[node name="NameTexture" type="TextureRect" parent="BasicCard"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.507
+anchor_top = 0.116
+anchor_right = 0.507
+anchor_bottom = 0.116
+offset_left = -91.1
+offset_top = -21.4
+offset_right = 90.9
+offset_bottom = 21.6
+texture = ExtResource("2_rfn2n")
 expand_mode = 1
 
 [node name="EraBorderTexture" type="TextureRect" parent="BasicCard"]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.094
-anchor_right = 0.5
-anchor_bottom = 0.094
-offset_left = -17.0
-offset_top = 26.4
-offset_right = 21.0
-offset_bottom = 60.4
+anchor_left = 0.51
+anchor_top = 0.192
+anchor_right = 0.51
+anchor_bottom = 0.192
+offset_left = -19.0
+offset_top = -16.8
+offset_right = 19.0
+offset_bottom = 17.2
 texture = ExtResource("4_fvadl")
 expand_mode = 1
 
@@ -96,65 +151,69 @@ expand_mode = 1
 texture_filter = 1
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.094
-anchor_right = 0.5
-anchor_bottom = 0.094
-offset_left = -17.0
-offset_top = 26.4
-offset_right = 21.0
-offset_bottom = 60.4
+anchor_left = 0.51
+anchor_top = 0.192
+anchor_right = 0.51
+anchor_bottom = 0.192
+offset_left = -19.0
+offset_top = -16.8
+offset_right = 19.0
+offset_bottom = 17.2
 expand_mode = 1
-
-[node name="EnergyTexture" type="TextureRect" parent="BasicCard"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.094
-anchor_right = 0.5
-anchor_bottom = 0.094
-offset_left = 90.0
-offset_top = -39.6
-offset_right = 153.0
-offset_bottom = 4.4
-texture = ExtResource("3_2w3gi")
-expand_mode = 1
-flip_h = true
 
 [node name="ThunderTexture" type="TextureRect" parent="BasicCard"]
-layout_mode = 0
-offset_left = 284.0
-offset_top = 2.0
-offset_right = 299.0
-offset_bottom = 18.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.887
+anchor_top = 0.041
+anchor_right = 0.887
+anchor_bottom = 0.041
+offset_left = -10.1
+offset_top = -8.4
+offset_right = 9.89999
+offset_bottom = 8.6
 texture = ExtResource("8_2sihe")
 expand_mode = 1
 
 [node name="HeartTexture" type="TextureRect" parent="BasicCard"]
-layout_mode = 0
-offset_left = 3.0
-offset_top = 2.0
-offset_right = 19.0
-offset_bottom = 17.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.125
+anchor_top = 0.037
+anchor_right = 0.125
+anchor_bottom = 0.037
+offset_left = -10.5
+offset_top = -8.8
+offset_right = 10.5
+offset_bottom = 9.2
 texture = ExtResource("5_aod86")
 expand_mode = 1
 
 [node name="ShieldTexture" type="TextureRect" parent="BasicCard"]
-layout_mode = 0
-offset_left = 185.0
-offset_top = 86.0
-offset_right = 201.0
-offset_bottom = 101.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.633
+anchor_top = 0.227
+anchor_right = 0.633
+anchor_bottom = 0.227
+offset_left = -11.9
+offset_top = -11.8
+offset_right = 12.1
+offset_bottom = 12.2
 texture = ExtResource("6_3dik3")
 expand_mode = 1
 
 [node name="SwordTexture" type="TextureRect" parent="BasicCard"]
-layout_mode = 0
-offset_left = 77.0
-offset_top = 85.0
-offset_right = 93.0
-offset_bottom = 100.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.297
+anchor_top = 0.227
+anchor_right = 0.297
+anchor_bottom = 0.227
+offset_left = -14.1
+offset_top = -13.8
+offset_right = 13.9
+offset_bottom = 14.2
 texture = ExtResource("7_0wn3j")
 expand_mode = 1
 
@@ -165,43 +224,41 @@ offset_right = 300.0
 offset_bottom = 330.0
 expand_mode = 1
 
-[node name="AbilityTexture" type="TextureRect" parent="BasicCard"]
-texture_filter = 1
+[node name="AbilityPanel" type="Panel" parent="BasicCard"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.094
-anchor_right = 0.5
-anchor_bottom = 0.094
-offset_left = -155.0
-offset_top = 289.4
-offset_right = 158.0
-offset_bottom = 365.4
-texture = ExtResource("9_opvx1")
-expand_mode = 1
+anchor_top = 0.827
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 0.199982
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_opvx1")
 
 [node name="CooldownTexture" type="TextureRect" parent="BasicCard"]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.094
-anchor_right = 0.5
-anchor_bottom = 0.094
-offset_left = 97.0
-offset_top = 296.4
-offset_right = 116.0
-offset_bottom = 318.4
+anchor_left = 0.855
+anchor_top = 0.875
+anchor_right = 0.855
+anchor_bottom = 0.875
+offset_left = -9.5
+offset_top = -11.0
+offset_right = 9.5
+offset_bottom = 11.0
 texture = ExtResource("10_aod86")
 expand_mode = 1
 
 [node name="NameText" type="Label" parent="BasicCard"]
 texture_filter = 1
-layout_mode = 0
-offset_left = 66.0
-offset_top = 34.0
-offset_right = 244.0
-offset_bottom = 62.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.21
+anchor_top = 0.08
+anchor_right = 0.803
+anchor_bottom = 0.155
+offset_right = 0.0999908
 theme_override_font_sizes/font_size = 20
 text = "Nombre carta"
 horizontal_alignment = 1
@@ -223,11 +280,16 @@ text_overrun_behavior = 3
 
 [node name="HpText" type="Label" parent="BasicCard"]
 texture_filter = 1
-layout_mode = 0
-offset_left = 10.0
-offset_top = 7.0
-offset_right = 43.0
-offset_bottom = 35.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.058
+anchor_top = 0.077
+anchor_right = 0.058
+anchor_bottom = 0.077
+offset_left = -11.4
+offset_top = -13.8
+offset_right = 11.6
+offset_bottom = 14.2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
 text = "99"
@@ -235,11 +297,16 @@ horizontal_alignment = 1
 
 [node name="EnergyText" type="Label" parent="BasicCard"]
 texture_filter = 1
-layout_mode = 0
-offset_left = 256.0
-offset_top = 7.0
-offset_right = 291.0
-offset_bottom = 35.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.942
+anchor_top = 0.077
+anchor_right = 0.942
+anchor_bottom = 0.077
+offset_left = -11.6
+offset_top = -13.8
+offset_right = 11.4
+offset_bottom = 14.2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
 text = "99"
@@ -247,33 +314,48 @@ horizontal_alignment = 1
 
 [node name="AttackText" type="Label" parent="BasicCard"]
 texture_filter = 1
-layout_mode = 0
-offset_left = 95.0
-offset_top = 80.0
-offset_right = 113.0
-offset_bottom = 108.0
-theme_override_font_sizes/font_size = 15
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.372
+anchor_top = 0.226
+anchor_right = 0.372
+anchor_bottom = 0.226
+offset_left = -9.60001
+offset_top = -11.4
+offset_right = 9.39999
+offset_bottom = 11.6
+theme_override_font_sizes/font_size = 16
 text = "99"
 horizontal_alignment = 1
 
 [node name="DefenseText" type="Label" parent="BasicCard"]
 texture_filter = 1
-layout_mode = 0
-offset_left = 204.0
-offset_top = 81.0
-offset_right = 222.0
-offset_bottom = 109.0
-theme_override_font_sizes/font_size = 15
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.712
+anchor_top = 0.226
+anchor_right = 0.712
+anchor_bottom = 0.226
+offset_left = -9.60001
+offset_top = -11.4
+offset_right = 9.39999
+offset_bottom = 11.6
+theme_override_font_sizes/font_size = 16
 text = "99"
 horizontal_alignment = 1
 
 [node name="CooldownText" type="Label" parent="BasicCard"]
 texture_filter = 1
-layout_mode = 0
-offset_left = 270.0
-offset_top = 331.0
-offset_right = 293.0
-offset_bottom = 359.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.938
+anchor_top = 0.87
+anchor_right = 0.938
+anchor_bottom = 0.87
+offset_left = -11.4
+offset_top = -14.0
+offset_right = 11.6
+offset_bottom = 14.0
 theme_override_font_sizes/font_size = 20
 text = "99"
 horizontal_alignment = 1
@@ -302,6 +384,7 @@ expand_icon = true
 
 [node name="PlusBtn" type="Button" parent="BasicCard"]
 layout_mode = 0
+offset_left = 4.0
 offset_top = 150.0
 offset_right = 150.0
 offset_bottom = 200.0
@@ -312,7 +395,7 @@ text = "+"
 layout_mode = 0
 offset_left = 150.0
 offset_top = 150.0
-offset_right = 300.0
+offset_right = 296.0
 offset_bottom = 200.0
 theme_override_colors/font_color = Color(0.637963, 0.0472057, 0.155284, 1)
 theme_override_font_sizes/font_size = 30
@@ -327,7 +410,42 @@ offset_bottom = 400.0
 mouse_filter = 2
 color = Color(0.359069, 0.359069, 0.359069, 1)
 
+[node name="Panel" type="Panel" parent="BasicCard"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.012
+offset_bottom = 0.2
+theme_override_styles/panel = SubResource("StyleBoxFlat_qcxs8")
+
+[node name="Panel2" type="Panel" parent="BasicCard"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.987
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 0.199982
+theme_override_styles/panel = SubResource("StyleBoxFlat_qcxs8")
+
+[node name="Panel3" type="Panel" parent="BasicCard"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.017
+anchor_bottom = 1.0
+offset_right = -0.1
+theme_override_styles/panel = SubResource("StyleBoxFlat_qcxs8")
+
+[node name="Panel4" type="Panel" parent="BasicCard"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.983
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0999756
+theme_override_styles/panel = SubResource("StyleBoxFlat_qcxs8")
+
 [node name="ActionTexture" type="TextureRect" parent="BasicCard"]
+visible = false
 texture_filter = 1
 layout_mode = 1
 anchors_preset = -1
@@ -343,6 +461,7 @@ texture = ExtResource("11_3dik3")
 expand_mode = 1
 
 [node name="NoTexture" type="TextureRect" parent="BasicCard"]
+visible = false
 texture_filter = 1
 layout_mode = 1
 anchors_preset = -1
@@ -358,7 +477,6 @@ texture = ExtResource("14_0wn3j")
 expand_mode = 1
 
 [node name="HpZoomBorderTexture" type="TextureRect" parent="BasicCard"]
-visible = false
 layout_mode = 0
 offset_left = 26.0
 offset_top = 195.0
@@ -387,7 +505,6 @@ texture = ExtResource("5_aod86")
 expand_mode = 1
 
 [node name="AbilityZoomBorderTexture" type="TextureRect" parent="BasicCard"]
-visible = false
 layout_mode = 0
 offset_left = 47.0
 offset_top = 294.0
@@ -413,7 +530,6 @@ clip_text = true
 text_overrun_behavior = 3
 
 [node name="EnergyZoomBorderTexture" type="TextureRect" parent="BasicCard"]
-visible = false
 layout_mode = 0
 offset_left = 182.0
 offset_top = 194.0
@@ -447,7 +563,6 @@ texture = ExtResource("8_2sihe")
 expand_mode = 1
 
 [node name="AttackZoomBorderTexture" type="TextureRect" parent="BasicCard"]
-visible = false
 layout_mode = 0
 offset_left = 26.0
 offset_top = 251.0
@@ -476,7 +591,6 @@ texture = ExtResource("7_0wn3j")
 expand_mode = 1
 
 [node name="DefenseZoomBorderTexture" type="TextureRect" parent="BasicCard"]
-visible = false
 layout_mode = 0
 offset_left = 184.0
 offset_top = 249.0
@@ -505,7 +619,6 @@ texture = ExtResource("6_3dik3")
 expand_mode = 1
 
 [node name="CooldownZoomBorderTexture" type="TextureRect" parent="BasicCard"]
-visible = false
 layout_mode = 0
 offset_left = 105.0
 offset_top = 220.0
@@ -556,85 +669,308 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.125911, 0.125911, 0.125911, 1)
 
-[node name="HPDetailTexture" type="TextureRect" parent="Details"]
+[node name="HPDetailPanel" type="Panel" parent="Details"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.021067
-anchor_top = 0.1325
-anchor_right = 0.484551
-anchor_bottom = 0.35
-texture = ExtResource("11_vr43h")
-expand_mode = 1
+anchor_left = 0.025
+anchor_top = 0.157
+anchor_right = 0.465
+anchor_bottom = 0.335
+offset_left = 0.199999
+offset_top = 0.199997
+offset_right = -0.0800171
+theme_override_styles/panel = SubResource("StyleBoxFlat_0wn3j")
 
-[node name="EnergyDetailTexture" type="TextureRect" parent="Details"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.505618
-anchor_top = 0.1375
-anchor_right = 0.969101
-anchor_bottom = 0.34
-texture = ExtResource("12_8cdgg")
-expand_mode = 1
-
-[node name="ATKDetailTexture" type="TextureRect" parent="Details"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.021067
-anchor_top = 0.36
-anchor_right = 0.484551
-anchor_bottom = 0.5875
-texture = ExtResource("13_i4kx0")
-expand_mode = 1
-
-[node name="DEFDetailTexture" type="TextureRect" parent="Details"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.505618
-anchor_top = 0.37
-anchor_right = 0.969101
-anchor_bottom = 0.565
-texture = ExtResource("14_ho3s0")
-expand_mode = 1
-
-[node name="HeartDetailTexture" type="TextureRect" parent="Details"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.377809
-anchor_top = 0.17
-anchor_right = 0.433989
-anchor_bottom = 0.265
+[node name="HeartDetailTexture" type="TextureRect" parent="Details/HPDetailPanel"]
+layout_mode = 2
+anchor_left = 0.067
+anchor_right = 0.201
+anchor_bottom = 0.465
+offset_left = 0.0289993
+offset_right = 0.086998
+offset_bottom = -0.0150032
+size_flags_horizontal = 3
 texture = ExtResource("5_aod86")
 expand_mode = 1
 
-[node name="SwordDetailTexture" type="TextureRect" parent="Details"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.375
-anchor_top = 0.3875
-anchor_right = 0.43118
-anchor_bottom = 0.4825
-texture = ExtResource("7_0wn3j")
-expand_mode = 1
+[node name="HPDetailText" type="Label" parent="Details/HPDetailPanel"]
+layout_mode = 2
+anchor_left = 0.316
+anchor_top = 0.042
+anchor_right = 0.936
+anchor_bottom = 0.408
+offset_left = 0.0919952
+offset_top = 0.0179999
+offset_right = 0.0319824
+offset_bottom = 0.0319977
+theme_override_font_sizes/font_size = 18
+text = "BASE_HP_DETAIL_TEXT"
+horizontal_alignment = 2
+vertical_alignment = 1
 
-[node name="ThunderDetailTexture" type="TextureRect" parent="Details"]
+[node name="HPNumDetail" type="Label" parent="Details/HPDetailPanel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.869382
-anchor_top = 0.1675
-anchor_right = 0.925562
-anchor_bottom = 0.2625
+anchor_left = 0.47
+anchor_top = 0.542
+anchor_right = 0.47
+anchor_bottom = 0.542
+offset_left = -47.11
+offset_top = -24.482
+offset_right = 46.89
+offset_bottom = 24.518
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 35
+text = "99/99"
+horizontal_alignment = 1
+
+[node name="EnergyDetaiPanel" type="Panel" parent="Details"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.514
+anchor_top = 0.157
+anchor_right = 0.968
+anchor_bottom = 0.335
+offset_left = 0.0320129
+offset_top = 0.199997
+offset_right = -0.216064
+theme_override_styles/panel = SubResource("StyleBoxFlat_aod86")
+
+[node name="ThunderDetailTexture" type="TextureRect" parent="Details/EnergyDetaiPanel"]
+layout_mode = 2
+anchor_left = 0.068
+anchor_top = 0.028
+anchor_right = 0.202
+anchor_bottom = 0.5
+offset_left = -0.964001
+offset_top = 0.012
+offset_right = -0.906006
+offset_bottom = -0.5
+size_flags_horizontal = 3
 texture = ExtResource("8_2sihe")
 expand_mode = 1
 
-[node name="ShieldDetailTexture" type="TextureRect" parent="Details"]
+[node name="EnergyDetailText" type="Label" parent="Details/EnergyDetaiPanel"]
+layout_mode = 2
+anchor_left = 0.29
+anchor_top = 0.028
+anchor_right = 0.954
+anchor_bottom = 0.394
+offset_left = -0.670006
+offset_top = 0.012
+offset_right = -0.142029
+offset_bottom = 0.0259991
+theme_override_font_sizes/font_size = 18
+text = "BASE_COST_DETAIL_TEXT"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="EnergyNumDetail" type="Label" parent="Details/EnergyDetaiPanel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.869382
-anchor_top = 0.385
-anchor_right = 0.925562
-anchor_bottom = 0.48
+anchor_left = 0.506
+anchor_top = 0.542
+anchor_right = 0.506
+anchor_bottom = 0.542
+offset_left = -25.438
+offset_top = -24.482
+offset_right = 25.562
+offset_bottom = 24.518
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 35
+text = "99"
+horizontal_alignment = 1
+
+[node name="ATKDetailPanel" type="Panel" parent="Details"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.032
+anchor_top = 0.375
+anchor_right = 0.473
+anchor_bottom = 0.55
+offset_left = 0.216
+offset_top = -1.52588e-05
+offset_right = 0.223999
+theme_override_styles/panel = SubResource("StyleBoxFlat_fvadl")
+
+[node name="SwordDetailTexture" type="TextureRect" parent="Details/ATKDetailPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.051
+anchor_top = 0.029
+anchor_right = 0.194
+anchor_bottom = 0.586
+offset_left = -0.0139999
+offset_top = -0.03
+offset_right = 0.0839996
+offset_bottom = -0.0200005
+texture = ExtResource("7_0wn3j")
+expand_mode = 1
+
+[node name="AttackDetailText" type="Label" parent="Details/ATKDetailPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.277
+anchor_top = 0.029
+anchor_right = 0.924
+anchor_bottom = 0.4
+offset_left = 0.0219955
+offset_top = -0.03
+offset_right = -0.136017
+theme_override_font_sizes/font_size = 18
+text = "BASE_ATK_DETAIL_TEXT"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ATKNumDetail" type="Label" parent="Details/ATKDetailPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.46
+anchor_top = 0.45
+anchor_right = 0.46
+anchor_bottom = 0.45
+offset_left = -25.44
+offset_top = -24.5
+offset_right = 25.56
+offset_bottom = 24.5
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 35
+text = "99"
+horizontal_alignment = 1
+
+[node name="BaseText" type="Label" parent="Details/ATKDetailPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.003
+anchor_top = 0.657
+anchor_right = 0.49
+anchor_bottom = 1.0
+offset_left = 0.058
+offset_top = 0.00999832
+offset_right = 0.139999
+theme_override_font_sizes/font_size = 17
+text = "BASE_DETAIL_TEXT"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ATKBaseNumDetail" type="Label" parent="Details/ATKDetailPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.556
+anchor_top = 0.829
+anchor_right = 0.556
+anchor_bottom = 0.829
+offset_left = -10.584
+offset_top = -13.03
+offset_right = 10.416
+offset_bottom = 12.97
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 18
+text = "99"
+vertical_alignment = 1
+
+[node name="DEFDetailPanel" type="Panel" parent="Details"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.521
+anchor_top = 0.375
+anchor_right = 0.965
+anchor_bottom = 0.547
+offset_left = 0.0479736
+offset_top = -1.52588e-05
+offset_right = -0.0800171
+offset_bottom = 0.199982
+theme_override_styles/panel = SubResource("StyleBoxFlat_2w3gi")
+
+[node name="ShieldDetailTexture" type="TextureRect" parent="Details/DEFDetailPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.054
+anchor_top = 0.058
+anchor_right = 0.206
+anchor_bottom = 0.58
+offset_left = -0.0640011
+offset_top = -0.00199461
+offset_right = -0.0960083
+offset_bottom = -0.0199966
 texture = ExtResource("6_3dik3")
 expand_mode = 1
+
+[node name="DefenseDetailText" type="Label" parent="Details/DEFDetailPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.307
+anchor_top = 0.014
+anchor_right = 0.946
+anchor_bottom = 0.391
+offset_left = -0.012001
+offset_top = 0.034
+offset_right = 0.0639954
+offset_bottom = 0.020998
+theme_override_font_sizes/font_size = 18
+text = "BASE_DEF_DETAIL_TEXT"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="DEFNumDetail" type="Label" parent="Details/DEFDetailPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.509
+anchor_top = 0.5
+anchor_right = 0.509
+anchor_bottom = 0.5
+offset_left = -19.844
+offset_top = -25.5
+offset_right = 20.156
+offset_bottom = 23.5
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 35
+text = "99"
+horizontal_alignment = 1
+
+[node name="BaseText" type="Label" parent="Details/DEFDetailPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.044
+anchor_top = 0.667
+anchor_right = 0.528
+anchor_bottom = 1.0
+offset_left = 0.0959988
+offset_top = -0.0230026
+offset_right = 0.152008
+offset_bottom = 1.0
+theme_override_font_sizes/font_size = 17
+text = "BASE_DETAIL_TEXT"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="DEFBaseNumDetail" type="Label" parent="Details/DEFDetailPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.587
+anchor_top = 0.826
+anchor_right = 0.587
+anchor_bottom = 0.826
+offset_left = -10.492
+offset_top = -12.994
+offset_right = 10.508
+offset_bottom = 13.006
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 18
+text = "99"
+vertical_alignment = 1
 
 [node name="NameDetail" type="Label" parent="Details"]
 layout_mode = 1
@@ -653,79 +989,6 @@ theme_override_constants/shadow_offset_y = 3
 theme_override_font_sizes/font_size = 30
 text = "Nombre"
 
-[node name="AbilityNameDetailText" type="Label" parent="Details"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.191011
-anchor_top = 0.565
-anchor_right = 0.726124
-anchor_bottom = 0.67
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 3
-theme_override_font_sizes/font_size = 30
-text = "Nombre habilidad"
-horizontal_alignment = 1
-vertical_alignment = 2
-
-[node name="HPNumDetail" type="Label" parent="Details"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.053371
-anchor_top = 0.1675
-anchor_right = 0.125
-anchor_bottom = 0.2725
-offset_left = 6.99985
-offset_right = 33.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 3
-theme_override_font_sizes/font_size = 25
-text = "99 (99)"
-horizontal_alignment = 1
-
-[node name="EnergyNumDetail" type="Label" parent="Details"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.554775
-anchor_top = 0.165
-anchor_right = 0.626404
-anchor_bottom = 0.27
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 3
-theme_override_font_sizes/font_size = 25
-text = "99"
-horizontal_alignment = 1
-
-[node name="ATKNumDetail" type="Label" parent="Details"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.054775
-anchor_top = 0.3875
-anchor_right = 0.126404
-anchor_bottom = 0.4925
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 3
-theme_override_font_sizes/font_size = 25
-text = "99"
-horizontal_alignment = 1
-
-[node name="DEFNumDetail" type="Label" parent="Details"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.55618
-anchor_top = 0.39
-anchor_right = 0.627809
-anchor_bottom = 0.495
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 3
-theme_override_font_sizes/font_size = 25
-text = "99"
-horizontal_alignment = 1
-
 [node name="EraDetailText" type="Label" parent="Details"]
 layout_mode = 1
 anchors_preset = -1
@@ -741,147 +1004,131 @@ theme_override_font_sizes/font_size = 20
 text = "Era"
 horizontal_alignment = 2
 
-[node name="HPDetailText" type="Label" parent="Details"]
+[node name="AbilityPanel" type="Panel" parent="Details"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.110955
-anchor_top = 0.26
-anchor_right = 0.38764
-anchor_bottom = 0.33
-theme_override_font_sizes/font_size = 18
-text = "BASE_HP_DETAIL_TEXT"
-horizontal_alignment = 1
+anchor_top = 0.592
+anchor_right = 1.0
+anchor_bottom = 0.69
+offset_top = -13.8
+offset_bottom = -3.05176e-05
+theme_override_styles/panel = SubResource("StyleBoxFlat_3dik3")
 
-[node name="EnergyDetailText" type="Label" parent="Details"]
+[node name="AbilityBorderPanel" type="Panel" parent="Details/AbilityPanel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.644663
-anchor_top = 0.2675
-anchor_right = 0.849719
-anchor_bottom = 0.3375
-offset_left = -32.0
-offset_top = -2.00001
-offset_right = 37.0001
-offset_bottom = -2.0
-theme_override_font_sizes/font_size = 18
-text = "BASE_COST_DETAIL_TEXT"
-horizontal_alignment = 1
+anchor_right = 1.0
+anchor_bottom = 0.094
+offset_bottom = 0.0179996
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rfn2n")
 
-[node name="AttackDetailText" type="Label" parent="Details"]
+[node name="AbilityBorderPanel2" type="Panel" parent="Details/AbilityPanel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.18118
-anchor_top = 0.48
-anchor_right = 0.339888
-anchor_bottom = 0.55
-offset_left = -52.0002
-offset_top = 2.0
-offset_right = 37.9997
-offset_bottom = 2.0
-theme_override_font_sizes/font_size = 18
-text = "BASE_ATK_DETAIL_TEXT"
-horizontal_alignment = 1
+anchor_top = 0.906
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -0.0180016
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rfn2n")
 
-[node name="AbilityDetailText" type="Label" parent="Details"]
+[node name="AbilityNameDetailText" type="Label" parent="Details/AbilityPanel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.039326
-anchor_top = 0.5875
-anchor_right = 0.198034
-anchor_bottom = 0.6575
-offset_left = -24.0001
-offset_top = 10.0
-offset_right = 97.9998
-offset_bottom = 10.0
-theme_override_font_sizes/font_size = 18
-text = "BASE_ABILITY_DETAIL_TEXT"
+anchor_top = 0.208
+anchor_right = 0.463
+anchor_bottom = 1.0
+offset_top = -0.0240002
+offset_right = 0.343994
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 30
+text = "Nombre habilidad"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CooldownDetailText" type="Label" parent="Details"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.745787
-anchor_top = 0.6175
-anchor_right = 0.912921
-anchor_bottom = 0.6875
-theme_override_font_sizes/font_size = 18
-text = "BASE_COOLDOWN_DETAIL_TEXT"
+[node name="AbilityDetailText" type="Label" parent="Details/AbilityPanel"]
+layout_mode = 2
+anchor_top = 0.094
+anchor_right = 0.518
+anchor_bottom = 0.5
+offset_top = 0.0179996
+offset_right = 0.18399
+offset_bottom = 6.5
+theme_override_font_sizes/font_size = 20
+text = "BASE_ABILITY_DETAIL_TEXT"
 horizontal_alignment = 1
 
-[node name="CooldownNumDetail" type="Label" parent="Details"]
+[node name="StateText" type="Label" parent="Details/AbilityPanel"]
+layout_mode = 2
+anchor_left = 0.478
+anchor_top = 0.094
+anchor_right = 0.996
+anchor_bottom = 0.623
+offset_left = -0.335999
+offset_top = 0.0179996
+offset_right = -0.152039
+offset_bottom = -0.019001
+theme_override_font_sizes/font_size = 20
+text = "Pasiva"
+horizontal_alignment = 1
+
+[node name="CooldownDetailTexture" type="TextureRect" parent="Details/AbilityPanel"]
+texture_filter = 1
+layout_mode = 2
+anchor_left = 0.949
+anchor_top = 0.5
+anchor_right = 0.949
+anchor_bottom = 0.5
+offset_left = -23.688
+offset_top = -20.5
+offset_right = 23.312
+offset_bottom = 20.5
+size_flags_horizontal = 3
+texture = ExtResource("10_aod86")
+expand_mode = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Details/AbilityPanel"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.907303
-anchor_top = 0.615
-anchor_right = 0.978933
-anchor_bottom = 0.685
-offset_right = -13.0006
+anchor_left = 0.479
+anchor_top = 0.396
+anchor_right = 0.972
+anchor_bottom = 0.925
+offset_left = -0.0480347
+offset_top = 0.0119991
+offset_right = -16.064
+offset_bottom = -0.0250053
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="CooldownDetailText" type="Label" parent="Details/AbilityPanel/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "BASE_COOLDOWN_DETAIL_TEXT"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CooldownNumDetail" type="Label" parent="Details/AbilityPanel/HBoxContainer"]
+layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 3
 theme_override_font_sizes/font_size = 20
 text = "99"
-horizontal_alignment = 1
-
-[node name="StateText" type="Label" parent="Details"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.827247
-anchor_top = 0.5575
-anchor_right = 0.985955
-anchor_bottom = 0.6125
-theme_override_font_sizes/font_size = 15
-text = "Pasiva"
-horizontal_alignment = 1
-
-[node name="DefenseDetailText" type="Label" parent="Details"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.660112
-anchor_top = 0.4775
-anchor_right = 0.855337
-anchor_bottom = 0.5475
-offset_left = -34.9998
-offset_top = 2.0
-offset_right = 28.0001
-offset_bottom = 2.0
-theme_override_font_sizes/font_size = 18
-text = "BASE_DEF_DETAIL_TEXT"
-horizontal_alignment = 1
-
-[node name="CooldownDetailTexture" type="TextureRect" parent="Details"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.978
-anchor_top = 0.65
-anchor_right = 0.978
-anchor_bottom = 0.65
-offset_left = -18.3361
-offset_top = -23.0
-offset_right = 12.6639
-offset_bottom = 14.0
-texture = ExtResource("10_aod86")
-expand_mode = 1
-
-[node name="TextureRect" type="TextureRect" parent="Details"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = -0.023876
-anchor_top = 0.6825
-anchor_right = 1.02388
-anchor_bottom = 0.705
-texture = ExtResource("15_bty5r")
-expand_mode = 1
+vertical_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Details"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.015449
+anchor_left = 0.015
 anchor_top = 0.7025
 anchor_right = 0.994382
-anchor_bottom = 1.0
+anchor_bottom = 0.987
+offset_left = 0.32
+offset_bottom = 0.199982
 
 [node name="DescriptionDetailText" type="RichTextLabel" parent="Details/ScrollContainer"]
 layout_mode = 2
@@ -889,6 +1136,44 @@ size_flags_horizontal = 3
 theme_override_font_sizes/normal_font_size = 20
 text = "bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
 fit_content = true
+
+[node name="Panel" type="Panel" parent="Details"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.012
+offset_bottom = 0.2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2sihe")
+
+[node name="Panel2" type="Panel" parent="Details"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.994
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -2.60001
+theme_override_styles/panel = SubResource("StyleBoxFlat_2sihe")
+
+[node name="Panel3" type="Panel" parent="Details"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.002
+anchor_right = 0.007
+anchor_bottom = 1.0
+offset_top = -0.8
+offset_right = 0.0159998
+theme_override_styles/panel = SubResource("StyleBoxFlat_2sihe")
+
+[node name="Panel4" type="Panel" parent="Details"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.993
+anchor_top = 0.002
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.0159912
+offset_top = -0.8
+theme_override_styles/panel = SubResource("StyleBoxFlat_2sihe")
 
 [connection signal="gui_input" from="BasicCard" to="." method="_on_basic_card_gui_input"]
 [connection signal="pressed" from="BasicCard/ATKBtn" to="." method="_on_atk_btn_pressed"]

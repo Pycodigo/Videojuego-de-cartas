@@ -18,3 +18,4 @@ CARD_FUTURE_ERA,Futuro,Future,Futuro
 CARD_COMBAT_DRONE_NAME,Dron de Combate,Combat Drone,Dron de Combate
 CARD_COMBAT_DRONE_ABILITY,Unidad Sincronizada,Synchronized Unit,Unidade Sincronizada
 CARD_COMBAT_DRONE_ABILITY_DESCRIPTION,"Inflige 3 de daño a todas las cartas enemigas en campo, ignorando DEF. Esta carta recibe 2 de daño por el recalentamiento del sistema de armas.","Deals 3 damage to all enemy cards in play, ignoring DEF. This card takes 2 damage for the reheating of the system.","Inflixe 3 de dano a todas as cartas inimigas no campo, ignorando DEF. Esta carta recibe 2 de dano polo recalentamento do sistema de armas."
+BASE_DETAIL_TEXT,Base:,Base:,Base:

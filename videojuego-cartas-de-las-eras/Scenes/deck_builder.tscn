@@ -190,7 +190,7 @@ theme_override_constants/separation = 30
 
 [node name="HeaderColection" type="HBoxContainer" parent="ColectionBar"]
 layout_mode = 2
-theme_override_constants/separation = 500
+theme_override_constants/separation = 740
 
 [node name="TitleColection" type="Label" parent="ColectionBar/HeaderColection"]
 layout_mode = 2
@@ -294,7 +294,7 @@ layout_mode = 2
 
 [node name="HeaderDeck" type="HBoxContainer" parent="DeckBar/Header"]
 layout_mode = 2
-theme_override_constants/separation = 350
+theme_override_constants/separation = 390
 
 [node name="TitleDeck" type="Label" parent="DeckBar/Header/HeaderDeck"]
 layout_mode = 2
@@ -342,6 +342,7 @@ size_flags_stretch_ratio = 20.0
 layout_mode = 2
 
 [node name="QuickMenu" parent="." instance=ExtResource("8_cqfg8")]
+visible = false
 layout_mode = 1
 
 [connection signal="pressed" from="TopBar/BtnDelete" to="." method="_on_btn_delete_pressed"]

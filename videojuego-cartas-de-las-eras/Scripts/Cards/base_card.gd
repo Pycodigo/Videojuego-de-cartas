@@ -7,8 +7,8 @@ extends Control
 @export var current_hp: int # Vida actual de la carta.
 @export var max_hp: int
 @export var energy_cost: int
-@export var attack: int
-@export var defense: int
+@export var base_attack: int
+@export var base_defense: int
 @export var cooldown: int
 
 # Nodos de la carta.
@@ -16,11 +16,11 @@ extends Control
 @onready var name_text = $BasicCard/NameText
 @onready var energy_cost_text = $BasicCard/EnergyText
 @onready var energy_cost_texture = $BasicCard/ThunderTexture
-@onready var energy_cost_border_texture = $BasicCard/EnergyTexture
+@onready var energy_cost_border_texture = $BasicCard/EnergyPanel
 @onready var ability_text = $BasicCard/AbilityText
 @onready var hp_text = $BasicCard/HpText
 @onready var hp_texture = $BasicCard/HeartTexture
-@onready var hp_border_texture = $BasicCard/HpTexture
+@onready var hp_border_texture = $BasicCard/HPPanel
 @onready var attack_text = $BasicCard/AttackText
 @onready var attack_texture = $BasicCard/SwordTexture
 @onready var defense_text = $BasicCard/DefenseText
@@ -49,14 +49,16 @@ extends Control
 @onready var detail_panel = $Details
 @onready var name_detail = $Details/NameDetail
 @onready var era_detail = $Details/EraDetailText
-@onready var ability_detail = $Details/AbilityNameDetailText
+@onready var ability_detail = $Details/AbilityPanel/AbilityNameDetailText
 @onready var ability_description = $Details/ScrollContainer/DescriptionDetailText
-@onready var hp_num_detail = $Details/HPNumDetail
-@onready var energy_cost_num_detail = $Details/EnergyNumDetail
-@onready var atk_num_detail = $Details/ATKNumDetail
-@onready var def_num_detail = $Details/DEFNumDetail
-@onready var cooldown_num_detail = $Details/CooldownNumDetail
-@onready var state_text_detail = $Details/StateText
+@onready var hp_num_detail = $Details/HPDetailPanel/HPNumDetail
+@onready var energy_cost_num_detail = $Details/EnergyDetaiPanel/EnergyNumDetail
+@onready var atk_num_detail = $Details/ATKDetailPanel/ATKNumDetail
+@onready var def_num_detail = $Details/DEFDetailPanel/DEFNumDetail
+@onready var atk_base_num_detail = $Details/ATKDetailPanel/ATKBaseNumDetail
+@onready var def_base_num_detail = $Details/DEFDetailPanel/DEFBaseNumDetail
+@onready var cooldown_num_detail = $Details/AbilityPanel/HBoxContainer/CooldownNumDetail
+@onready var state_text_detail = $Details/AbilityPanel/StateText
 
 # Botones.
 @onready var plus_btn = $BasicCard/PlusBtn
@@ -123,14 +125,17 @@ var press_position: Vector2 = Vector2.ZERO
 var is_dragging: bool = false
 const DRAG_THRESHOLD := 15.0  # Píxeles que hay que mover el ratón para que cuente como arrastre.
 
-# Guardar la posición y escala del slot.
+# Guardar la posición y escala del slot (incluyendo el descarte).
 var slot_pos: Vector2
 var slot_scale: Vector2
+var slot_discard = null
 
 # Comprobar si la carta está en la mano.
 var in_hand: bool = true
 # Obtener posición de la carta en la mano.
 var hand_index: int = -1
+# Carta va a descarte.
+var go_discard: bool = false
 
 # Comprobar si está en IA o no.
 var is_in_ai: bool = false
@@ -145,6 +150,10 @@ var target_color = null
 var target_icon = null
 # Color de herido.
 var hurt_color = Color("#ff0a06")
+
+# Stats actuales (o en uso).
+var def_used: int = 0
+var actual_atk: int = 0
 
 
 func _ready() -> void:
@@ -167,6 +176,8 @@ func _ready() -> void:
 
 # Base de las cartas.
 func init_card():
+	actual_atk = base_attack
+	
 	name_text.text = card_name
 	name_detail.text = card_name
 	era_detail.text = era_name
@@ -177,18 +188,20 @@ func init_card():
 	state_text_detail.text = ability.get("state", "")
 	ability_description.text = ability.get("description", "")
 	hp_text.text = str(current_hp)
-	attack_text.text = str(attack)
-	defense_text.text = str(defense)
+	attack_text.text = str(actual_atk)
+	defense_text.text = str(def_used)
 	cooldown_text.text = str(cooldown)
-	hp_num_detail.text = str(max_hp, " (", current_hp, ")")
-	atk_num_detail.text = str(attack)
-	def_num_detail.text = str(defense)
+	hp_num_detail.text = str(current_hp, "/", max_hp)
+	atk_num_detail.text = str(actual_atk)
+	def_num_detail.text = str(def_used)
+	atk_base_num_detail.text = str(base_attack)
+	def_base_num_detail.text = str(base_defense)
 	cooldown_num_detail.text = str(cooldown)
 	
 	hp_zoom_text.text = str(current_hp)
 	energy_cost_zoom_text.text = str(energy_cost)
-	attack_zoom_text.text = str(attack)
-	defense_zoom_text.text = str(defense)
+	attack_zoom_text.text = str(actual_atk)
+	defense_zoom_text.text = str(def_used)
 	cooldown_zoom_text.text = str(cooldown)
 	ability_zoom_text.text = ability.get("name", "")
 	
@@ -224,8 +237,14 @@ func init_card():
 
 # Zoom de la carta.
 func _show_zoom() -> void:
-	if in_hand:
+	if is_in_ai and in_hand:
 		return
+	board.pause_while_zoom = true
+	
+	# Si está en la mano del jugador, poner en posición normal.
+	if in_hand:
+		restore_rotation(0.2)
+		go_back_to_position(0.2)
 	
 	# Crear animación.
 	var tween = create_tween()
@@ -333,7 +352,18 @@ func _hide_zoom() -> void:
 		tween.tween_callback(func(): detail_panel.visible = false)
 	
 	# Volver al slot o a la posición original según corresponda.
-	var target_pos = slot_pos if was_zoomed_in_slot else original_position_global
+	var target_pos
+	if go_discard:
+		self.z_index = slot_discard.get_child_count()
+		target_pos = current_slot.get_global_rect().position
+	elif was_zoomed_in_slot:
+		target_pos = slot_pos
+	elif in_hand:
+		target_pos = global_position
+		board.organize_hand()
+	else:
+		target_pos = original_position_global
+	#var target_pos = slot_pos if was_zoomed_in_slot else original_position_global
 	var target_scale = slot_scale if was_zoomed_in_slot else Vector2.ONE
 	
 	# Posición y escala de la carta a la vez.
@@ -390,12 +420,14 @@ func _hide_zoom() -> void:
 		
 		# Posiciones destino en esquinas (relativas al 300x400 de la carta).
 		var corners = {
-			hp_zoom_texture:           Vector2(-80, -15),      # Esquina superior izquierda.
-			energy_cost_zoom_texture:  Vector2(220, -15),      # Esquina superior derecha.
-			attack_zoom_texture:       Vector2(-80, 350),      # Esquina inferior izquierda.
-			defense_zoom_texture:      Vector2(220, 350),      # Esquina inferior derecha.
-			cooldown_zoom_texture:     Vector2(70, 130),       # Centro.
-			ability_zoom_texture:      Vector2(-60, 210),      # Centro un poco más abajo.
+			hp_zoom_texture:           Vector2(-80, -15),           # Esquina superior izquierda.
+			energy_cost_zoom_texture:  Vector2(220, -15),         # Esquina superior derecha.
+			attack_zoom_texture:       Vector2(-80, 350),         # Esquina inferior izquierda.
+			defense_zoom_texture:      Vector2(220, 350),       # Esquina inferior derecha.
+			#cooldown_zoom_texture:     Vector2(70, 130),       # Centro.
+			cooldown_zoom_texture:     Vector2(70, 400),       # Abajo del todo.
+			#ability_zoom_texture:      Vector2(-60, 210),      # Centro un poco más abajo.
+			ability_zoom_texture:      Vector2(-60, 270),      # Centro un poco más abajo.
 		}
 
 		for stat_zoom in corners:
@@ -597,8 +629,8 @@ func _on_basic_card_gui_input(event: InputEvent) -> void:
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
-			if is_in_ai and is_in_slot and not in_hand and board.pause_while_deciding:
-				await self.receive_damage(board.attacking_card.attack)
+			if is_in_ai and is_in_slot and not in_hand and board.pause_while_deciding and not slot_discard:
+				await self.receive_damage(board.attacking_card.actual_atk)
 				# Solo ataca una vez.
 				board.attacking_card._cannot_use_card()
 				board.attacking_card = null
@@ -632,9 +664,8 @@ func _on_basic_card_gui_input(event: InputEvent) -> void:
 				# Esperar a ver si llega un segundo click.
 				click_timer.start()
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
-		if not in_hand and event.pressed:
+		if event.pressed and not cannot_zoom:
 			zoom_active = true
-			board.pause_while_zoom = true
 			_show_zoom()
 
 	elif event is InputEventMouseMotion:
@@ -737,8 +768,10 @@ func _try_drop_on_slot() -> void:
 					energy_cost_zoom_texture:  Vector2(220, -15),         # Esquina superior derecha.
 					attack_zoom_texture:       Vector2(-80, 350),         # Esquina inferior izquierda.
 					defense_zoom_texture:      Vector2(220, 350),       # Esquina inferior derecha.
-					cooldown_zoom_texture:     Vector2(70, 130),       # Centro.
-					ability_zoom_texture:      Vector2(-60, 210),      # Centro un poco más abajo.
+					#cooldown_zoom_texture:     Vector2(70, 130),       # Centro.
+					cooldown_zoom_texture:     Vector2(70, 400),       # Abajo del todo.
+					#ability_zoom_texture:      Vector2(-60, 210),      # Centro un poco más abajo.
+					ability_zoom_texture:      Vector2(-60, 270),      # Centro un poco más abajo.
 				}
 
 				for stat_zoom in corners:
@@ -775,8 +808,38 @@ func _try_drop_on_slot() -> void:
 	if in_hand:
 		tween.parallel().tween_property(self, "rotation_degrees", hand_rotation, 0.3)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+func _discard_card() -> void:
+	if is_in_ai:
+		slot_discard = board.ai_discard_slot
+	else:
+		slot_discard = board.player_discard_slot
 	
+	# Quitamos la carta del slot (y damos a entender que no está).
+	if current_slot != null:
+		current_slot.remove_card()
+	current_slot = slot_discard
 	
+	# Mandar dicha carta al slot de descarte.
+	slot_discard.try_place_card(self)
+	
+	# Hacer desaparecer y aparecer la carta en el slot (con animación).
+	# Crear animaciones.
+	var tween = create_tween()
+
+	# Mover la carta al centro del slot.
+	# Usar get_global_rect() para obtener posición y tamaño reales del slot.
+	var slot_rect = slot_discard.get_global_rect()
+	
+	# La hacemos transparente desaparecer.
+	tween.tween_property(card_panel, "modulate:a", 0.0, 0.2)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(card_panel, "global_position", slot_rect.position, 0.1)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# Vuelve a aparecer.
+	tween.tween_property(card_panel, "modulate:a", 1.0, 0.2)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
 func _on_card_left_clicked() -> void:
 	if actions_showed or card_action_clicked or in_hand:
 		return
@@ -897,8 +960,23 @@ func _on_def_btn_pressed() -> void:
 	board.defending_cards.append(self)
 	_deselect_card()
 	_activate_action() 
+	
+	# Usamos la defensa base (con animaciones).
+	while def_used < base_defense:
+		def_used += 1
+		
+		# Actualizar lo visual.
+		defense_text.text = str(def_used)
+		defense_zoom_text.text = str(def_used)
+		def_num_detail.text = str(def_used)
+		await get_tree().create_timer(0.08).timeout
+	
+	# Cambiar color.
+	defense_zoom_text.add_theme_color_override("font_color", Color.BLUE)
 
 func receive_damage(damage: int) -> void:
+	cannot_zoom = true
+	
 	action_bg.visible = true
 	
 	var tween = create_tween()
@@ -918,7 +996,7 @@ func receive_damage(damage: int) -> void:
 	
 	# Quitar vida gradualmente.
 	if board.defending_cards.has(self):
-		var nerfed_damage := damage - defense
+		var nerfed_damage := damage - def_used
 		if nerfed_damage <= 0:
 			nerfed_damage = 1
 		while nerfed_damage > 0:
@@ -930,7 +1008,7 @@ func receive_damage(damage: int) -> void:
 			
 			# Actualizar lo visual.
 			hp_text.text = str(current_hp)
-			hp_num_detail.text = str(max_hp, " (", current_hp, ")")
+			hp_num_detail.text = str(current_hp, "/", max_hp)
 			hp_zoom_text.text = str(current_hp)
 			await get_tree().create_timer(0.05).timeout
 	else:
@@ -943,13 +1021,18 @@ func receive_damage(damage: int) -> void:
 			
 			# Actualizar lo visual.
 			hp_text.text = str(current_hp)
-			hp_num_detail.text = str(max_hp, " (", current_hp, ")")
+			hp_num_detail.text = str(current_hp, "/", max_hp)
 			hp_zoom_text.text = str(current_hp)
 			await get_tree().create_timer(0.05).timeout
 	
 	if target_color != null:
 		action_bg.color = target_color
-
+	
+	if current_hp <= 0:
+		go_discard = true
+		_discard_card()
+	
+	cannot_zoom = false
 
 # Hacer visual el que no se puede usar la carta ese turno.
 func _cannot_use_card() -> void:

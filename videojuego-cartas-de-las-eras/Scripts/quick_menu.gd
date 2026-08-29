@@ -36,20 +36,21 @@ func _on_quick_menu_panel_gui_input(event: InputEvent) -> void:
 
 # Pulsar fuera del panel y solo cuando está el menú puesto.
 func _on_gui_input(event: InputEvent) -> void:
-	if quick_menu_showed:
-		var tween = create_tween()
+	if not quick_menu_showed:
+		return
+	var tween = create_tween()
 	
-		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-			if event.pressed:
-				tween.tween_property(quick_menu_panel, "position:x", original_position_quick_menu, 0.3)\
-				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-				
-				quick_menu_showed = false
-				await tween.finished
-				# Ponerlo por debajo.
-				quick_menu_panel.z_index = 0
-				# Dejarlo como estaba.
-				mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			tween.tween_property(quick_menu_panel, "position:x", original_position_quick_menu, 0.3)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			
+			quick_menu_showed = false
+			await tween.finished
+			# Ponerlo por debajo.
+			quick_menu_panel.z_index = 0
+			# Dejarlo como estaba.
+			mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func _on_btn_home_pressed() -> void:

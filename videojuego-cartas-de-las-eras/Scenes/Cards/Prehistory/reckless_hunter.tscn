@@ -8,11 +8,13 @@
 [node name="BaseCard" instance=ExtResource("1_kkany")]
 script = ExtResource("2_yjjol")
 
-[node name="EraTexture" parent="BasicCard" index="4"]
-offset_left = -8.0
-offset_top = 33.4
-offset_right = 12.0
-offset_bottom = 51.4
+[node name="EraTexture" parent="BasicCard" index="5"]
+anchor_top = 0.19
+anchor_bottom = 0.19
+offset_left = -10.0
+offset_top = -9.00001
+offset_right = 9.99998
+offset_bottom = 8.99999
 texture = ExtResource("2_o4fvy")
 
 [node name="CardTexture" parent="BasicCard" index="10"]
@@ -27,12 +29,6 @@ offset_left = -99.47
 offset_top = -13.0
 offset_right = 95.53
 
-[node name="NameDetail" parent="Details" index="9"]
+[node name="NameDetail" parent="Details" index="5"]
 offset_left = 22.0
 offset_right = 0.000305176
-
-[node name="AbilityNameDetailText" parent="Details" index="10"]
-offset_right = 46.9995
-
-[node name="StateText" parent="Details" index="22"]
-vertical_alignment = 1

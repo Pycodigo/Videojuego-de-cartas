@@ -60,6 +60,21 @@ offset_top = 580.0
 offset_right = 1210.0
 offset_bottom = 740.0
 
+[node name="SlotDiscard" parent="Player/Slots" instance=ExtResource("2_t2wnw")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 3.775
+anchor_top = 22.025
+anchor_right = 3.775
+anchor_bottom = 22.025
+offset_left = -60.0
+offset_top = -100.0
+offset_right = 60.0
+offset_bottom = 99.9999
+grow_horizontal = 1
+grow_vertical = 1
+slot_type = 2
+
 [node name="Deck" parent="Player" instance=ExtResource("3_ks1o3")]
 layout_mode = 1
 anchors_preset = 0
@@ -131,6 +146,22 @@ offset_top = 280.0
 offset_right = 1210.0
 offset_bottom = 440.0
 slot_owner = 1
+
+[node name="SlotDiscard" parent="AI/Slots" instance=ExtResource("2_t2wnw")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 44.075
+anchor_top = 4.2
+anchor_right = 44.075
+anchor_bottom = 4.2
+offset_left = -60.0
+offset_top = -100.0
+offset_right = 60.0
+offset_bottom = 100.0
+grow_horizontal = 0
+grow_vertical = 1
+slot_owner = 1
+slot_type = 2
 
 [node name="Hand" type="Control" parent="AI"]
 layout_mode = 3
