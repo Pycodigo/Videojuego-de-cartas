@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://0qv0xluy23g7"]
+[gd_scene load_steps=5 format=3 uid="uid://0qv0xluy23g7"]
 
 [ext_resource type="Script" uid="uid://buk5gympwj3cx" path="res://Scripts/ai_board.gd" id="1_6uulp"]
 [ext_resource type="PackedScene" uid="uid://d0dhxg263iuv0" path="res://Scenes/slot.tscn" id="2_t2wnw"]
 [ext_resource type="PackedScene" uid="uid://6wcl4hftxfrs" path="res://Scenes/deck.tscn" id="3_ks1o3"]
+[ext_resource type="PackedScene" uid="uid://c0qjxwb43wumb" path="res://Scenes/energy_bar.tscn" id="4_6uulp"]
 
 [node name="AiBoard" type="Control"]
 texture_filter = 1
@@ -96,6 +97,13 @@ offset_right = 1313.0
 offset_bottom = 1080.0
 pivot_offset = Vector2(500, 90)
 
+[node name="EnergyBar" parent="Player" instance=ExtResource("4_6uulp")]
+layout_mode = 1
+offset_left = 1400.0
+offset_top = 823.0
+offset_right = 1510.0
+offset_bottom = 1018.0
+
 [node name="AI" type="Control" parent="."]
 anchors_preset = 0
 offset_right = 40.0
@@ -170,3 +178,10 @@ offset_left = 343.0
 offset_right = 1313.0
 offset_bottom = 160.0
 pivot_offset = Vector2(500, 90)
+
+[node name="EnergyBar" parent="AI" instance=ExtResource("4_6uulp")]
+layout_mode = 1
+offset_left = 1410.0
+offset_top = 18.0
+offset_right = 1520.0
+offset_bottom = 213.0

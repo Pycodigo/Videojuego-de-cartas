@@ -946,6 +946,7 @@ func _activate_action() -> void:
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 func _on_atk_btn_pressed() -> void:
+	board.player_energy_bar.spend_energy(energy_cost)
 	action_clicked = 1
 	card_action_clicked = true
 	_deselect_card()
@@ -955,6 +956,7 @@ func _on_atk_btn_pressed() -> void:
 
 
 func _on_def_btn_pressed() -> void:
+	board.player_energy_bar.spend_energy(energy_cost)
 	action_clicked = 2
 	card_action_clicked = true
 	board.defending_cards.append(self)
