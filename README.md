@@ -1,4 +1,4 @@
-# Videojuego-de-cartas
+# Dominio Cronológico
 <p align="left">🚧<img src="https://img.shields.io/badge/Estado%20-%20En%20desarrollo-red"/>🚧</p>
 
 <h3><u>Índice</u></h3>
@@ -16,7 +16,6 @@
 <hr/>
 <p>Este proyecto consiste en un juego de cartas por turnos donde los jugadores usan cartas de distintas épocas de la historia para dominar la línea temporal y expulsar/derrotar al oponente.</p>
 <p>Se está llevando a cabo con el objetivo de aprender campos que no domino muy bien, como el backend.</p>
-<p>El nombre del proyecto no es definitivo. Se cambiará en un futuro.</p>
 <br/>
 <h3>⚒️<u>Modos de juego</u>🛠️</h3>
 <hr/>
@@ -24,7 +23,7 @@
   <li>Duelo rápido contra IA y/o jugador online.</li>
   <li>Campaña de Eras corta (3-4 niveles).</li>
   <li>Modo desafío con 1 o 2 reglas locas.</li>
-  <li>Modo alocado</li>li>
+  <li>Modo alocado</li>
   <li>Editor de mazos.</li>
 </ul>
 <br/>
@@ -84,31 +83,55 @@
 - [x] Configurar IA para habilidades.
 - [ ] Terminar todas las tareas anteriores y hacer la primera demo-beta (ir a 'Tareas para la DEMO-BETA 1').
 - [ ] Crear los tres modos de dificultad.
-- [ ] Crear editor de mazos.
-- [ ] Guardar mazos creados.
-- [ ] Guardar ajustes de la configuración.
-- [ ] Crear buscador de cartas. Filtrar por era, tipo...
+- [x] Crear constructor de mazos.
+- [x] Guardar mazos creados.
+- [x] Guardar ajustes de la configuración.
+- [x] Crear buscador de cartas. Filtrar por era, tipo...
 - [ ] Crear cartas con efectos variopintos.
 - [ ] Crear cartas inmunes a las eras.
 - [ ] Poner cronómetro en las partidas.
 
-<p><b>DEMO-BETA 1:</b></p>
+<p><b>DEMO-BETA1:</b></p>
 
-- [ ] Definir un aproximado de 500 cartas (normales).
-- [ ] Definir varias cartas de era (unas 10).
+- [x] Meter más de un idioma.
+- [x] Crear constructor de mazos.
+- [x] Guardar barajas creadas.
+- [x] Poder editar y eliminar las barajas creadas.
+- [x] Guardar ajustes de la configuración.
+- [x] Crear buscador de cartas. Filtrar por era, tipo...
+- [x] Usar las barajas que quiera el jugador en una partida.
+- [x] Mejorar el menú (más o menos).
+- [x] Hacer un menú rápido.
+- [x] Guardar la configuración (resolución, idiomas...).
+- [x] Implementar sistema de turnos.
+- [x] Implementar ataque y defensa para cartas del jugador y la IA.
+- [x] Crear barra de energía (tipo batería).
+- [ ] Crear núcleo (con mejor diseño).
+- [ ] Volver a crear las cartas de era.
+- [ ] Hacer que las cartas de la IA ataquen al núcleo (si no hay cartas en juego).
+- [ ] Poner cronómetro en las partidas.
+- [ ] Implementar algunas habilidades de prueba.
+	- [ ] Activas.
+	- [ ] Pasivas.
+- [ ] Configurar la nueva IA del tablero al completo.
+- [ ] Crear cartas inmunes a las eras.
+- [ ] Hacer bien, y montar el tablero de juego con, al menos, lo básico.
+- [ ] Definir un aproximado de 50-60 cartas (normales).
+- [ ] Definir las 5 cartas de era.
 - [ ] Programar nuevas habilidades introducidas.
-- [ ] Poner dificultad fácil y normal.
-- [ ] Tener diseño artístico de las cartas, escenarios, y opciones.
-- [ ] Tener música.
-- [ ] Hacer mejores animaciones.
-- [ ] Conectar todas las escenas.
-- [ ] Hacer el ejecutable.
+- [ ] Tener diseño artístico de las cartas, escenarios, y opciones (Opcional en esta DEMO).
+- [ ] Implementar música.
+- [ ] Hacer mejores animaciones (Opcional en esta DEMO).
+- [ ] Conectar (casi) todas las escenas.
+- [ ] Rehacer todo lo de 'tareas básicas'.
+- [ ] Hacer el primer ejecutable.
 
 
 <br/>
 <h3>🤵<u>Desarrollador</u></h3>
 <hr/>
-<p><img src="https://github.com/user-attachments/assets/d02d9333-4b01-4801-ba56-fa7795e27da9" widht="300" height="300"/><br/><sub>Alonso García Castiñeira</sub></p>
+<p><b>Pycod</b></p>
+<p>Cuenta con ayuda de miembros de Discord (créditos en proceso).</p>
 <br/>
 <h3><u>Licencia</u></h3>
 <hr/>
