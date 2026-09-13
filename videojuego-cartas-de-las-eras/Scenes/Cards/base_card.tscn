@@ -85,11 +85,13 @@ layout_mode = 0
 offset_right = 300.0
 offset_bottom = 400.0
 pivot_offset = Vector2(150, 400)
+mouse_filter = 1
 
 [node name="CardBG" type="ColorRect" parent="BasicCard"]
 layout_mode = 0
 offset_right = 300.0
 offset_bottom = 400.0
+mouse_filter = 1
 color = Color(0.359069, 0.359069, 0.359069, 1)
 
 [node name="HPPanel" type="Panel" parent="BasicCard"]
@@ -103,6 +105,7 @@ offset_left = -0.1
 offset_top = 0.2
 offset_right = -0.0999985
 offset_bottom = 0.199997
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_oeind")
 
 [node name="EnergyPanel" type="Panel" parent="BasicCard"]
@@ -116,6 +119,7 @@ offset_left = -0.100006
 offset_top = 0.2
 offset_right = 0.0999756
 offset_bottom = 0.199997
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_x5hng")
 
 [node name="NameTexture" type="TextureRect" parent="BasicCard"]
@@ -233,6 +237,7 @@ anchor_bottom = 1.0
 offset_top = 0.199982
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_opvx1")
 
 [node name="CooldownTexture" type="TextureRect" parent="BasicCard"]
@@ -416,6 +421,7 @@ anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.012
 offset_bottom = 0.2
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_qcxs8")
 
 [node name="Panel2" type="Panel" parent="BasicCard"]
@@ -425,6 +431,7 @@ anchor_top = 0.987
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 0.199982
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_qcxs8")
 
 [node name="Panel3" type="Panel" parent="BasicCard"]
@@ -433,6 +440,7 @@ anchors_preset = -1
 anchor_right = 0.017
 anchor_bottom = 1.0
 offset_right = -0.1
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_qcxs8")
 
 [node name="Panel4" type="Panel" parent="BasicCard"]
@@ -442,6 +450,7 @@ anchor_left = 0.983
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 0.0999756
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_qcxs8")
 
 [node name="ActionTexture" type="TextureRect" parent="BasicCard"]

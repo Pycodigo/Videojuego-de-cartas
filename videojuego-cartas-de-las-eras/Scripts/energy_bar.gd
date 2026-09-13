@@ -21,6 +21,10 @@ var max_energy: int = 40
 
 
 func _ready() -> void:
+	# Crear dos (uno para jugador y otro para oponente).
+	sandwatch_top.material = sandwatch_top.material.duplicate()
+	sandwatch_bottom.material = sandwatch_bottom.material.duplicate()
+	
 	total_height = sandwatch_top.size.y + sandwatch_bottom.size.y
 	top_material = sandwatch_top.material as ShaderMaterial
 	bottom_material = sandwatch_bottom.material as ShaderMaterial

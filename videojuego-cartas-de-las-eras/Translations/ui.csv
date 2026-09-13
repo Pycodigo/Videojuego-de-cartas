@@ -53,3 +53,7 @@ UI_EXIT,Salir,Exit,Saír
 UI_CREDITS,Créditos,Credits,Créditos
 UI_DECK_BUILDER,Constructor de barajas,Deck builder,Construtor de barallas
 UI_HOME,Inicio,Beginning,Comezo
+UI_START_MATCH,EMPEZAR,START,COMEZAR
+UI_FINISH_TURN,TERMINAR TURNO,FINISH TURN,REMATAR TURNO
+UI_RESET,REINICIAR,RESET,REINICIAR
+UI_ACTIONS,Acciones:,Actions:,Accións:

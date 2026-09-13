@@ -4,6 +4,7 @@ extends Control
 @onready var player = $Player
 @onready var player_hand = $Player/Hand
 @onready var player_deck = $Player/Deck
+@onready var player_slots = $Player/Slots
 @onready var player_discard_slot = $Player/Slots/SlotDiscard
 @onready var player_energy_bar = $Player/EnergyBar
 
@@ -15,6 +16,14 @@ extends Control
 @onready var ai_energy_bar = $AI/EnergyBar
 # Baraja de IA.
 var ai_deck
+
+# Otros nodos.
+@onready var reset_btn = $ResetBtn
+@onready var finish_turn_btn = $FinishTurnBtn
+@onready var turn_lbl = $Label
+@onready var actions_border = $ActionsBorder
+@onready var actions_lbl = $ActionsBorder/ActionsLabel
+@onready var actions_num = $ActionsBorder/ActionsNumber
 
 # Cartas a robar al inicio.
 var start_draw: int = 7
@@ -31,6 +40,8 @@ var pause_while_zoom: bool = false
 
 # Mandar si es jugador o bot.
 var is_player: bool
+# Turno del jugador o bot.
+var is_ai_turn: bool = false
 # Carta del jugador que ataca.
 var attacking_card = null
 var pause_while_deciding: bool = false
@@ -40,8 +51,22 @@ var times_slot: int
 # Cartas que se defienden.
 var defending_cards: Array = []
 
+# Contadores.
+var turn_cnt: int = 0
+var max_actions: int = 3
+var current_actions: int
+
 
 func _ready() -> void:
+	# Decir el turno actual.
+	turn_lbl.text = "Turno " + str(turn_cnt)
+	# Poner el botón de reiniciar.
+	var tween = create_tween()
+	tween.tween_property(reset_btn, "position:x", 0, 0.3)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(finish_turn_btn, "position:x", 0, 0.3)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	
 	# Esperar un frame para asegurar que todo esté cargado.
 	await get_tree().process_frame
 	# Ruta de las barajas IA.
@@ -154,14 +179,15 @@ func organize_hand() -> void:
 	var base_spacing_cards: float = 120.0
 	# Por si no cambia.
 	var spacing_cards = base_spacing_cards
-	# Recalcular el espacio entre cartas en caso de que se pase del ancho disponible.
-	if (player_total - 1) * base_spacing_cards > hand_width and player_total > 1:
-		spacing_cards = hand_width / (player_total - 1)
 	
 	# Primero averiguar cuántas cartas hay realmente.
 	for card in player_hand.get_children():
 		if card.in_hand and not card.is_dragging:
 			valid_total += 1
+	
+	# Recalcular el espacio entre cartas en caso de que se pase del ancho disponible.
+	if (valid_total - 1) * base_spacing_cards > hand_width and valid_total > 1:
+		spacing_cards = hand_width / (valid_total - 1)
 	
 	for i in range(player_total):
 		# Obtener una carta.
@@ -308,6 +334,20 @@ func organize_hand_AI() -> void:
 			card.hand_rotation = rot
 		)
 
+# Poner las cartas de los slots del jugador en mano.
+func _on_reset_btn_pressed() -> void:
+	# Pillar las cartas del jugador en juego.
+	var player_cards_slots: Array = []
+	for slot in player_slots.get_children():
+		if slot == player_discard_slot:
+			continue
+		if slot.occupied:
+			player_cards_slots.append(slot.current_card)
+	
+	# LLamar a la función para cada carta.
+	for player_card in player_cards_slots:
+		player_card._return_to_hand()
+
 # Elegir la mejor carta.
 func choose_card_to_play() -> Control:
 	var best_card = null
@@ -436,3 +476,298 @@ func _AI_place_card_in_slot(ai_best_card) -> bool:
 	# Todos los slots estaban ocupados.
 	print("Ningún slot está libre.")
 	return false
+
+
+# Evaluar qué acción usa la IA.
+func AI_evaluate_action() -> void:
+	# Pillar las cartas del jugador y la IA en juego.
+	var player_cards_slots: Array = []
+	var ai_cards_slots: Array = []
+
+	for slot in player_slots.get_children():
+		if slot == player_discard_slot:
+			continue
+		if slot.occupied:
+			print(slot.current_card.card_name, " HP: ", slot.current_card.current_hp)
+			player_cards_slots.append(slot.current_card)
+
+	for ai_slot in ai_slots.get_children():
+		if ai_slot == ai_discard_slot:
+			continue
+
+		if ai_slot.occupied:
+			ai_cards_slots.append(ai_slot.current_card)
+	
+	# Generar todas las interacciones entre cartas.
+	for ai_card in ai_cards_slots:
+		# No tener en cuenta cartas que cuesten más de la energía disponible.
+		if ai_card.energy_cost > ai_energy_bar.energy:
+			continue
+		# Comprobar que quedan acciones.
+		if current_actions <= 0:
+			return
+		
+		var best_target = null
+		var best_value_atk = -INF
+		# Calcular amenaza del jugador a nivel defensivo.
+		var max_threat: float = 0.0
+		var threat: float = 0.0
+		var defense_score: float = 0.0
+
+		for player_card in player_cards_slots:
+			# Evitar meter cartas descartadas.
+			if player_card.current_hp <= 0:
+				continue
+			
+			print("Carta bot: ", ai_card.card_name, " / Carta jugador: ", player_card.card_name)
+			
+			# Daño que haría la IA contra la carta rival.
+			var damage = max(0, ai_card.actual_atk - player_card.def_used)
+
+			# Daño que recibiría la IA.
+			var resistance = max(0, player_card.actual_atk - ai_card.base_defense)
+			var damage_taken = player_card.actual_atk
+
+			# Ver si puede la IA destruir la carta rival.
+			var can_kill = damage >= player_card.current_hp
+
+			# Guardar la mayor amenaza encontrada.
+			max_threat = max(max_threat, resistance)
+			threat = max(threat, player_card.actual_atk)
+
+			var attack_score: float = 0.0
+
+			if can_kill:
+				attack_score = 10 + (damage * 2.0 - ai_card.energy_cost)
+			else:
+				attack_score = damage * 2.0 - ai_card.energy_cost
+
+			print(
+				"Carta bot: ", ai_card.card_name,
+				" / Carta jugador: ", player_card.card_name,
+				" / Daño: ", damage,
+				" / Puede matar: ", can_kill
+			)
+
+			print("Puntuación ataque: ", attack_score)
+			
+			# Guardar la mejor carta para atacar según la puntuación.
+			if attack_score > best_value_atk:
+				best_value_atk = attack_score
+				best_target = player_card
+
+		# Comprobar si la carta moriría sin defender y defendiendo sobrevive.
+		var avoid_lose_card = threat >= ai_card.current_hp and max_threat < ai_card.current_hp
+
+		if avoid_lose_card:
+			defense_score = 10 + ((threat - max_threat) * 2.0 - ai_card.energy_cost)
+		else:
+			defense_score = (threat - max_threat) * 2.0 - ai_card.energy_cost
+
+		print(
+			"Carta bot: ", ai_card.card_name,
+			" / Amenaza máxima: ", max_threat,
+			" / Puntuación defensa: ", defense_score
+		)
+		
+		if best_target != null:
+			if best_value_atk > defense_score:
+				ai_card.action_clicked = 1
+				print(
+					"ANTES DE ACTIVAR: ", ai_card.card_name,
+					" | BG visible: ", ai_card.action_bg.visible,
+					" | BG alpha: ", ai_card.action_bg.modulate.a,
+					" | TEX visible: ", ai_card.action_texture.visible,
+					" | TEX alpha: ", ai_card.action_texture.modulate.a,
+					" | TEX scale: ", ai_card.action_texture.scale
+				)
+
+				await ai_card._activate_action()
+
+				print(
+					"DESPUÉS DE ACTIVAR: ", ai_card.card_name,
+					" | BG visible: ", ai_card.action_bg.visible,
+					" | BG alpha: ", ai_card.action_bg.modulate.a,
+					" | TEX visible: ", ai_card.action_texture.visible,
+					" | TEX alpha: ", ai_card.action_texture.modulate.a,
+					" | TEX scale: ", ai_card.action_texture.scale
+				)
+				# Atacar al objetivo.
+				await best_target.receive_damage(ai_card.actual_atk)
+				print("Carta rival: ", ai_card.card_name, " ataca a ", best_target.card_name, ".")
+				print("Después del ataque: ", best_target.card_name, " HP: ", best_target.current_hp)
+				await ai_card._cannot_use_card()
+			else:
+				ai_card.action_clicked = 2
+				await ai_card._activate_action()
+				
+				# Usamos la defensa base (con animaciones).
+				while ai_card.def_used < ai_card.base_defense:
+					ai_card.def_used += 1
+					
+					# Actualizar lo visual.
+					ai_card.defense_text.text = str(ai_card.def_used)
+					ai_card.defense_zoom_text.text = str(ai_card.def_used)
+					ai_card.def_num_detail.text = str(ai_card.def_used)
+					await get_tree().create_timer(0.08).timeout
+				
+				# Cambiar color.
+				ai_card.defense_zoom_text.add_theme_color_override("font_color", Color.BLUE)
+				defending_cards.append(ai_card)
+				print("Carta rival: ", ai_card.card_name, " se defiende.")
+		else:
+			ai_card.action_clicked = 2
+			await ai_card._activate_action()
+			
+			# Usamos la defensa base (con animaciones).
+			while ai_card.def_used < ai_card.base_defense:
+				ai_card.def_used += 1
+				
+				# Actualizar lo visual.
+				ai_card.defense_text.text = str(ai_card.def_used)
+				ai_card.defense_zoom_text.text = str(ai_card.def_used)
+				ai_card.def_num_detail.text = str(ai_card.def_used)
+				await get_tree().create_timer(0.08).timeout
+			
+			# Cambiar color.
+			ai_card.defense_zoom_text.add_theme_color_override("font_color", Color.BLUE)
+			defending_cards.append(ai_card)
+			print("Carta rival: ", ai_card.card_name, " se defiende.")
+		
+		ai_energy_bar.spend_energy(ai_card.energy_cost)
+		current_actions -= 1
+		
+		# Actualizar lo visual.
+		actions_num.text = str(current_actions)
+		await get_tree().create_timer(0.08).timeout
+		if current_actions == 0:
+			# Poner texto a rojo.
+			actions_lbl.add_theme_color_override("font_color", Color.RED)
+			actions_num.add_theme_color_override("font_color", Color.RED)
+			await _pass_turn()
+			return
+
+# Pasar turno.
+func _pass_turn() -> void:
+	var has_cards := false
+	
+	# Reiniciamos acciones.
+	current_actions = max_actions
+	
+	# Actualizar lo visual.
+	actions_num.text = str(current_actions)
+	actions_lbl.add_theme_color_override("font_color", Color.WHITE)
+	actions_num.add_theme_color_override("font_color", Color.WHITE)
+	
+	
+	# Comprobar si hay cartas en juego y reiniciar las cartas.
+	if is_ai_turn:
+		# Acaba de terminar la IA.
+		# Va a empezar el jugador.
+		for slot in player_slots.get_children():
+			if slot == player_discard_slot:
+				continue
+			
+			if slot.occupied:
+				has_cards = true
+				var card = slot.current_card
+				
+				card._deactivate_actions()
+				card.action_clicked = 0
+				card.card_action_clicked = false
+				card.def_used = 0
+				
+				# Actualizar lo visual.
+				card.defense_text.text = str(card.def_used)
+				card.defense_zoom_text.text = str(card.def_used)
+				card.def_num_detail.text = str(card.def_used)
+				card.defense_zoom_text.add_theme_color_override("font_color", Color.WHITE)
+	
+	else:
+		# Acaba de terminar el jugador.
+		# Va a empezar la IA.
+		for slot in ai_slots.get_children():
+			if slot == ai_discard_slot:
+				continue
+			
+			if slot.occupied:
+				has_cards = true
+				var card = slot.current_card
+				
+				await card._deactivate_actions()
+				card.action_clicked = 0
+				card.card_action_clicked = false
+				card.def_used = 0
+				
+				# Actualizar lo visual.
+				card.defense_text.text = str(card.def_used)
+				card.defense_zoom_text.text = str(card.def_used)
+				card.def_num_detail.text = str(card.def_used)
+				card.defense_zoom_text.add_theme_color_override("font_color", Color.WHITE)
+	
+	
+	# Esperar a que termine la animación de todas las cartas.
+	await get_tree().create_timer(0.25).timeout
+	
+	
+	if turn_cnt == 0:
+		# Comprobar si hay, al menos, alguna carta en juego.
+		if not has_cards:
+			print("No hay cartas en juego. Se pone al menos una.")
+			return
+		
+		# Decidir al azar quién empieza.
+		is_ai_turn = randi() % 2 == 0
+		print("AI turn: " + str(is_ai_turn))
+		_draw_per_turn()
+		
+		# Quitar botón de reinicio.
+		var tween = create_tween()
+		
+		tween.tween_property(reset_btn, "modulate:a", 0.0, 1.0)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		
+		# Mostrar acciones.
+		tween.parallel().tween_property(actions_border, "position:x", 0, 0.3)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		
+		reset_btn.visible = false
+		finish_turn_btn.text = "UI_FINISH_TURN"
+	
+	else:
+		# Cambiar de turno.
+		is_ai_turn = not is_ai_turn
+		_draw_per_turn()
+	
+	
+	# Aumentar contador de turno.
+	turn_cnt += 1
+	
+	print("AI turn: " + str(is_ai_turn))
+	
+	# Actualizar texto del turno.
+	turn_lbl.text = "Turno " + str(turn_cnt)
+	
+	
+	# La IA actúa solo cuando es su turno.
+	if is_ai_turn and turn_cnt > 0:
+		await AI_evaluate_action()
+
+func _draw_per_turn() -> void:
+	# Robar carta para la IA.
+		if is_ai_turn:
+			var new_ai_card = ai_deck.draw_card()
+			ai_hand.add_child(new_ai_card)
+			organize_hand_AI()
+			if turn_cnt > 1:
+				ai_energy_bar.spend_energy(-5)
+		# Robar carta para el jugador.
+		else:
+			var new_player_card = player_deck.draw_card()
+			player_hand.add_child(new_player_card)
+			organize_hand()
+			if turn_cnt > 1:
+				player_energy_bar.spend_energy(-5)
+
+func _on_finish_turn_btn_pressed() -> void:
+	await _pass_turn()

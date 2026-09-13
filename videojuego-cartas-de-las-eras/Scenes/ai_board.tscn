@@ -1,9 +1,82 @@
-[gd_scene load_steps=5 format=3 uid="uid://0qv0xluy23g7"]
+[gd_scene load_steps=12 format=3 uid="uid://0qv0xluy23g7"]
 
 [ext_resource type="Script" uid="uid://buk5gympwj3cx" path="res://Scripts/ai_board.gd" id="1_6uulp"]
 [ext_resource type="PackedScene" uid="uid://d0dhxg263iuv0" path="res://Scenes/slot.tscn" id="2_t2wnw"]
 [ext_resource type="PackedScene" uid="uid://6wcl4hftxfrs" path="res://Scenes/deck.tscn" id="3_ks1o3"]
 [ext_resource type="PackedScene" uid="uid://c0qjxwb43wumb" path="res://Scenes/energy_bar.tscn" id="4_6uulp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6uulp"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2vo5t"]
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_75yey"]
+bg_color = Color(0.0470588, 0.0470588, 0.0470588, 1)
+border_width_left = 2
+border_width_top = 3
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.545098, 0.0509804, 0, 0.772549)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3udkx"]
+bg_color = Color(0.0470588, 0.0470588, 0.0470588, 1)
+border_width_left = 2
+border_width_top = 3
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.545098, 0.0509804, 0, 0.772549)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jl0dn"]
+bg_color = Color(0.362829, 0.362829, 0.362829, 1)
+border_width_left = 2
+border_width_top = 3
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.545098, 0.0509804, 0, 0.772549)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bm7oe"]
+bg_color = Color(0.0475577, 0.0475577, 0.0475576, 1)
+border_width_left = 2
+border_width_top = 3
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.545098, 0.0509804, 0, 0.772549)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_44lbx"]
+bg_color = Color(0.122252, 0.122252, 0.122252, 1)
+border_width_left = 2
+border_width_top = 3
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.545098, 0.0509804, 0, 0.772549)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
 
 [node name="AiBoard" type="Control"]
 texture_filter = 1
@@ -35,30 +108,30 @@ offset_bottom = 740.0
 
 [node name="Slot2" parent="Player/Slots" instance=ExtResource("2_t2wnw")]
 layout_mode = 1
-offset_left = 1350.0
-offset_top = 580.0
-offset_right = 1430.0
-offset_bottom = 740.0
-
-[node name="Slot3" parent="Player/Slots" instance=ExtResource("2_t2wnw")]
-layout_mode = 1
 offset_left = 670.0
 offset_top = 580.0
 offset_right = 750.0
 offset_bottom = 740.0
 
-[node name="Slot4" parent="Player/Slots" instance=ExtResource("2_t2wnw")]
+[node name="Slot3" parent="Player/Slots" instance=ExtResource("2_t2wnw")]
 layout_mode = 1
 offset_left = 900.0
 offset_top = 580.0
 offset_right = 980.0
 offset_bottom = 740.0
 
-[node name="Slot5" parent="Player/Slots" instance=ExtResource("2_t2wnw")]
+[node name="Slot4" parent="Player/Slots" instance=ExtResource("2_t2wnw")]
 layout_mode = 1
 offset_left = 1130.0
 offset_top = 580.0
 offset_right = 1210.0
+offset_bottom = 740.0
+
+[node name="Slot5" parent="Player/Slots" instance=ExtResource("2_t2wnw")]
+layout_mode = 1
+offset_left = 1350.0
+offset_top = 580.0
+offset_right = 1430.0
 offset_bottom = 740.0
 
 [node name="SlotDiscard" parent="Player/Slots" instance=ExtResource("2_t2wnw")]
@@ -99,10 +172,10 @@ pivot_offset = Vector2(500, 90)
 
 [node name="EnergyBar" parent="Player" instance=ExtResource("4_6uulp")]
 layout_mode = 1
-offset_left = 1400.0
-offset_top = 823.0
-offset_right = 1510.0
-offset_bottom = 1018.0
+offset_left = 1421.0
+offset_top = 805.0
+offset_right = 1531.0
+offset_bottom = 1000.0
 
 [node name="AI" type="Control" parent="."]
 anchors_preset = 0
@@ -125,21 +198,13 @@ slot_owner = 1
 
 [node name="Slot2" parent="AI/Slots" instance=ExtResource("2_t2wnw")]
 layout_mode = 1
-offset_left = 1350.0
-offset_top = 280.0
-offset_right = 1430.0
-offset_bottom = 440.0
-slot_owner = 1
-
-[node name="Slot3" parent="AI/Slots" instance=ExtResource("2_t2wnw")]
-layout_mode = 1
 offset_left = 670.0
 offset_top = 280.0
 offset_right = 750.0
 offset_bottom = 440.0
 slot_owner = 1
 
-[node name="Slot4" parent="AI/Slots" instance=ExtResource("2_t2wnw")]
+[node name="Slot3" parent="AI/Slots" instance=ExtResource("2_t2wnw")]
 layout_mode = 1
 offset_left = 900.0
 offset_top = 280.0
@@ -147,11 +212,19 @@ offset_right = 980.0
 offset_bottom = 440.0
 slot_owner = 1
 
-[node name="Slot5" parent="AI/Slots" instance=ExtResource("2_t2wnw")]
+[node name="Slot4" parent="AI/Slots" instance=ExtResource("2_t2wnw")]
 layout_mode = 1
 offset_left = 1130.0
 offset_top = 280.0
 offset_right = 1210.0
+offset_bottom = 440.0
+slot_owner = 1
+
+[node name="Slot5" parent="AI/Slots" instance=ExtResource("2_t2wnw")]
+layout_mode = 1
+offset_left = 1350.0
+offset_top = 280.0
+offset_right = 1430.0
 offset_bottom = 440.0
 slot_owner = 1
 
@@ -185,3 +258,103 @@ offset_left = 1410.0
 offset_top = 18.0
 offset_right = 1520.0
 offset_bottom = 213.0
+
+[node name="ActionsBorder" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.208
+anchor_top = 0.463
+anchor_bottom = 0.525
+offset_left = -0.639984
+offset_top = -0.0400391
+offset_bottom = -6.10352e-05
+theme_override_styles/panel = SubResource("StyleBoxFlat_6uulp")
+
+[node name="ActionsSuborder" type="Panel" parent="ActionsBorder"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.986
+anchor_bottom = 0.91
+offset_left = 6.5
+offset_top = 8.0
+offset_right = 0.0999756
+offset_bottom = 0.0300255
+theme_override_styles/panel = SubResource("StyleBoxFlat_2vo5t")
+
+[node name="ActionsLabel" type="Label" parent="ActionsBorder"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.016
+anchor_right = 0.625
+anchor_bottom = 0.91
+offset_left = -0.4
+offset_top = 8.0
+offset_bottom = 0.0300255
+theme_override_font_sizes/font_size = 35
+text = "UI_ACTIONS"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ActionsNumber" type="Label" parent="ActionsBorder"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.657
+anchor_top = 0.119
+anchor_right = 0.952
+anchor_bottom = 0.91
+offset_left = 0.200012
+offset_top = 0.0270033
+offset_right = 0.199982
+offset_bottom = 0.0300255
+theme_override_font_sizes/font_size = 35
+text = "00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ResetBtn" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.208
+anchor_top = 0.463
+anchor_bottom = 0.525
+offset_left = -0.639984
+offset_top = -0.0400391
+offset_bottom = -6.10352e-05
+theme_override_font_sizes/font_size = 35
+text = "UI_RESET"
+
+[node name="FinishTurnBtn" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.208
+anchor_top = 0.556
+anchor_bottom = 0.618
+offset_left = -0.639984
+offset_top = -0.480042
+offset_bottom = -0.440063
+theme_override_font_sizes/font_size = 35
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_75yey")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_3udkx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jl0dn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bm7oe")
+theme_override_styles/normal = SubResource("StyleBoxFlat_44lbx")
+text = "UI_START_MATCH"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.079
+anchor_top = 0.968
+anchor_right = 0.079
+anchor_bottom = 0.968
+offset_left = -140.68
+offset_top = -27.4401
+offset_right = 139.32
+offset_bottom = 27.5599
+theme_override_font_sizes/font_size = 40
+text = "Turno X"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="ResetBtn" to="." method="_on_reset_btn_pressed"]
+[connection signal="pressed" from="FinishTurnBtn" to="." method="_on_finish_turn_btn_pressed"]

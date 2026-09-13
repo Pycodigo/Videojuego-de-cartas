@@ -87,6 +87,7 @@ var atk_btn_original_pos: Vector2
 var def_btn_original_pos: Vector2
 # Posición de la carta en la mano.
 var hand_position: Vector2
+var card_panel_original_position: Vector2
 
 # Tiempo del ratón sobre la carta.
 var mouse_time: float = 0.0
@@ -231,13 +232,14 @@ func init_card():
 	
 	# Guardar la posición inicial global de la carta.
 	original_position_global = card_panel.global_position
+	card_panel_original_position = card_panel.position
 	
 	atk_btn_original_pos = atk_btn.position
 	def_btn_original_pos = def_btn.position
 
 # Zoom de la carta.
 func _show_zoom() -> void:
-	if is_in_ai and in_hand:
+	if is_in_ai and in_hand or board.is_ai_turn:
 		return
 	board.pause_while_zoom = true
 	
@@ -360,7 +362,6 @@ func _hide_zoom() -> void:
 		target_pos = slot_pos
 	elif in_hand:
 		target_pos = global_position
-		board.organize_hand()
 	else:
 		target_pos = original_position_global
 	#var target_pos = slot_pos if was_zoomed_in_slot else original_position_global
@@ -371,6 +372,11 @@ func _hide_zoom() -> void:
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tween.parallel().tween_property(card_panel, "scale", target_scale, 0.3)\
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	if in_hand:
+		tween.tween_callback(func():
+			card_panel.position = card_panel_original_position
+			board.organize_hand()
+		)
 	
 	for text in [name_text, ability_text, attack_text, cooldown_text, 
 	defense_text, energy_cost_text, hp_text]:
@@ -444,7 +450,7 @@ func _hide_zoom() -> void:
 		was_zoomed_in_slot = false
 
 func _process(delta: float) -> void:
-	if board.pause_while_zoom or is_in_ai or board.pause_while_deciding:
+	if board.pause_while_zoom or is_in_ai or board.pause_while_deciding or board.is_ai_turn:
 		return
 	
 	var mouse_pos = get_global_mouse_position()
@@ -505,7 +511,7 @@ func _process(delta: float) -> void:
 		restore_rotation(0.2)
 
 func move_up(duration: float) -> void:
-	if is_in_ai or board.pause_while_deciding:
+	if is_in_ai or board.pause_while_deciding or board.is_ai_turn:
 		return
 	
 	if raise_tween:
@@ -544,7 +550,7 @@ func go_back_to_position(duration: float) -> void:
 
 # Volver a la rotación original.
 func restore_rotation(duration: float):
-	if zoom_active or cannot_zoom or hold_card or board.card_is_dragging or not in_hand or board.pause_while_deciding:
+	if zoom_active or cannot_zoom or hold_card or board.card_is_dragging or not in_hand or board.pause_while_deciding or board.is_ai_turn:
 		create_tween().tween_property(self, "rotation_degrees", original_rotation, duration)
 
 func _on_plus_btn_pressed() -> void:
@@ -624,9 +630,9 @@ func _on_cancel_btn_pressed() -> void:
 
 
 func _on_basic_card_gui_input(event: InputEvent) -> void:
-	if zoom_active or board.pause_while_zoom:
+	if zoom_active or board.pause_while_zoom or board.is_ai_turn:
 		return
-
+	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			if is_in_ai and is_in_slot and not in_hand and board.pause_while_deciding and not slot_discard:
@@ -658,8 +664,18 @@ func _on_basic_card_gui_input(event: InputEvent) -> void:
 				board.card_is_dragging = false
 				restore_rotation(0.2)
 				_try_drop_on_slot()
-				# Organizar mano.
-				board.organize_hand()
+				if in_hand:
+					# Organizar mano.
+					var tween = create_tween()
+
+					tween.tween_property(
+						card_panel,
+						"position",
+						card_panel_original_position,
+						0.3
+					).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+					board.organize_hand()
 			else:
 				# Esperar a ver si llega un segundo click.
 				click_timer.start()
@@ -680,7 +696,7 @@ func _on_basic_card_gui_input(event: InputEvent) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if not actions_showed or is_in_ai or board.pause_while_deciding:
+	if not actions_showed or is_in_ai or board.pause_while_deciding or board.is_ai_turn:
 		return
 	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
@@ -834,14 +850,72 @@ func _discard_card() -> void:
 	# La hacemos transparente desaparecer.
 	tween.tween_property(card_panel, "modulate:a", 0.0, 0.2)\
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# Quitamos efectos.
+	_deactivate_actions()
 	tween.tween_property(card_panel, "global_position", slot_rect.position, 0.1)\
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	# Vuelve a aparecer.
 	tween.tween_property(card_panel, "modulate:a", 1.0, 0.2)\
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
+# Devolver carta a la mano.
+func _return_to_hand() -> void:
+	# Quitamos la carta del slot (y damos a entender que no está).
+	if current_slot != null:
+		current_slot.remove_card()
+	
+	var tween = create_tween()
+	tween.tween_property(card_panel, "scale", Vector2.ONE, 0.3)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.parallel().tween_property(card_panel, "position",
+	card_panel_original_position, 0.3)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
+	if is_in_slot:
+		# Posiciones destino originales (relativas al 300x400 de la carta).
+		var original_pos = {
+			hp_zoom_texture:           Vector2(26, 195),          
+			energy_cost_zoom_texture:  Vector2(182, 194),        
+			attack_zoom_texture:       Vector2(26, 251),        
+			defense_zoom_texture:      Vector2(184, 249),       
+			cooldown_zoom_texture:     Vector2(105, 220),
+			ability_zoom_texture:      Vector2(47, 294),
+		}
+
+		for stat_zoom in original_pos:
+			tween.tween_property(stat_zoom, "modulate:a", 0.0, 0.05)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			tween.parallel().tween_property(stat_zoom, "scale", Vector2.ONE, 0.05)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+			tween.parallel().tween_property(stat_zoom, "position", original_pos[stat_zoom], 0.05)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		
+		# Ocultar al terminar.
+		tween.tween_callback(func():
+			hp_zoom_texture.visible = false
+			energy_cost_zoom_texture.visible = false
+			attack_zoom_texture.visible = false
+			defense_zoom_texture.visible = false
+			cooldown_zoom_texture.visible = false
+			ability_zoom_texture.visible = false
+		)
+		
+		# Volver a mostrar stats normales.
+		for stat in [hp_border_texture, hp_text, hp_texture, 
+		energy_cost_text, energy_cost_texture, energy_cost_border_texture,
+		ability_text, attack_text, attack_texture, defense_text, defense_texture, 
+		cooldown_text, cooldown_texture]:
+			stat.modulate.a = 0.0
+			tween.parallel().tween_property(stat, "modulate:a", 1.0, 0.05)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
+	is_in_slot = false
+	in_hand = true
+	current_slot = null
+	board.organize_hand()
+
 func _on_card_left_clicked() -> void:
-	if actions_showed or card_action_clicked or in_hand:
+	if actions_showed or card_action_clicked or in_hand or board.turn_cnt == 0 or board.current_actions == 0:
 		return
 	
 	print("Click izquierdo sobre la carta...\nClick on hand: ", in_hand)
@@ -871,7 +945,7 @@ func _on_card_left_clicked() -> void:
 
 # Efecto de sacudida en cartas para las habilidades.
 func _shake_card_effect() -> void:
-	if card_action_clicked or in_hand or board.pause_while_deciding:
+	if card_action_clicked or in_hand or board.pause_while_deciding or board.is_ai_turn or board.turn_cnt == 0 or board.current_actions == 0:
 		return
 	
 	print("Activando habilidad de carta...")
@@ -906,12 +980,23 @@ func _shake_card_effect() -> void:
 	_activate_action()
 
 func _activate_action() -> void:
+	print("ACTIVATE: ", card_name)
+	print("BG visible antes: ", action_bg.visible)
+	print("TEX visible antes: ", action_texture.visible)
+
 	action_texture.visible = true
 	action_bg.visible = true
+
+	print("BG visible después: ", action_bg.visible)
+	print("TEX visible después: ", action_texture.visible)
 	
 	action_texture.position = Vector2(125, -20)
 	# Hacer el icono invisible al principio.
 	action_texture.scale = Vector2(0, 0)
+	
+	# Reiniciar completamente el estado visual.
+	action_texture.modulate.a = 1.0
+	action_bg.modulate.a = 0.0
 	
 	# Crear animaciones.
 	var tween = create_tween()
@@ -932,6 +1017,7 @@ func _activate_action() -> void:
 	
 	action_texture.texture = target_icon
 	action_bg.modulate.a = 0.0
+	action_texture.modulate.a = 0.0
 	action_bg.color = target_color
 	tween.tween_property(action_bg, "modulate:a", 1.0, 0.4)\
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
@@ -940,13 +1026,50 @@ func _activate_action() -> void:
 	tween.tween_property(action_bg, "color", target_color, 0.5)\
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	# Hacerlo enorme para efecto.
+	tween.parallel().tween_property(action_texture, "modulate:a", 1.0, 0.05)\
+	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tween.parallel().tween_property(action_texture, "scale", Vector2(2.5, 2.5), 0.3)\
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tween.chain().tween_property(action_texture, "scale", Vector2(2, 2), 0.2)\
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
+	# Esperar a que finalize.
+	await tween.finished
+	print("FIN ACTIVATE: ", card_name)
+	print("BG visible: ", action_bg.visible)
+	print("TEX visible: ", action_texture.visible)
+
+# Desaparecer la acción realizada.
+func _deactivate_actions() -> void:
+	var tween = create_tween()
+	
+	tween.tween_property(action_bg, "modulate:a", 0.0, 0.2)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.parallel().tween_property(action_texture, "scale", Vector2.ZERO, 0.2)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.parallel().tween_property(no_texture, "scale", Vector2.ZERO, 0.2)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
+	tween.tween_callback(func():
+		action_texture.visible = false
+		action_bg.visible = false
+		no_texture.visible = false
+	)
+	
+	await tween.finished
 
 func _on_atk_btn_pressed() -> void:
 	board.player_energy_bar.spend_energy(energy_cost)
+	# Restar acción.
+	board.current_actions -= 1
+		
+	# Actualizar lo visual.
+	board.actions_num.text = str(board.current_actions)
+	await get_tree().create_timer(0.08).timeout
+	if board.current_actions == 0:
+		# Poner texto a rojo.
+		board.actions_lbl.add_theme_color_override("font_color", Color.RED)
+		board.actions_num.add_theme_color_override("font_color", Color.RED)
 	action_clicked = 1
 	card_action_clicked = true
 	_deselect_card()
@@ -957,6 +1080,16 @@ func _on_atk_btn_pressed() -> void:
 
 func _on_def_btn_pressed() -> void:
 	board.player_energy_bar.spend_energy(energy_cost)
+	# Restar acción.
+	board.current_actions -= 1
+		
+	# Actualizar lo visual.
+	board.actions_num.text = str(board.current_actions)
+	await get_tree().create_timer(0.08).timeout
+	if board.current_actions == 0:
+		# Poner texto a rojo.
+		board.actions_lbl.add_theme_color_override("font_color", Color.RED)
+		board.actions_num.add_theme_color_override("font_color", Color.RED)
 	action_clicked = 2
 	card_action_clicked = true
 	board.defending_cards.append(self)
@@ -1055,3 +1188,6 @@ func _cannot_use_card() -> void:
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tween.chain().tween_property(no_texture, "scale", Vector2(2, 2), 0.3)\
 	.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
+	# Esperar a que finalize.
+	await tween.finished

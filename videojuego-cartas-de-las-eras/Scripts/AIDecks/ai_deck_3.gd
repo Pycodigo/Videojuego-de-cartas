@@ -1,0 +1,11 @@
+extends "res://Scripts/base_ai_deck.gd"
+
+func _ready() -> void:
+	card_scenes = [
+		preload("res://Scenes/Cards/Prehistory/reckless_hunter.tscn"),
+		preload("res://Scenes/Cards/Future/combat_drone.tscn"),
+		preload("res://Scenes/Cards/AcientAge/the_wall.tscn"),
+	]
+	
+	# Ejecutar la inicialización de la base.
+	super._ready()

@@ -33,6 +33,7 @@ func shuffle_deck():
 
 # Robar carta superior.
 func draw_card() -> Node:
+	print("draw_card() llamada")
 	if cards.size() == 0:
 		print("La baraja está vacía")
 		return null
