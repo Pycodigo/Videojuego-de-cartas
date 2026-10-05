@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://0qv0xluy23g7"]
+[gd_scene load_steps=13 format=3 uid="uid://0qv0xluy23g7"]
 
 [ext_resource type="Script" uid="uid://buk5gympwj3cx" path="res://Scripts/ai_board.gd" id="1_6uulp"]
 [ext_resource type="PackedScene" uid="uid://d0dhxg263iuv0" path="res://Scenes/slot.tscn" id="2_t2wnw"]
 [ext_resource type="PackedScene" uid="uid://6wcl4hftxfrs" path="res://Scenes/deck.tscn" id="3_ks1o3"]
-[ext_resource type="PackedScene" uid="uid://c0qjxwb43wumb" path="res://Scenes/energy_bar.tscn" id="4_6uulp"]
+[ext_resource type="PackedScene" uid="uid://yloww08rggwj" path="res://Scenes/energy_battery_bar.tscn" id="4_6uulp"]
+[ext_resource type="PackedScene" uid="uid://bbba428tosxgy" path="res://Scenes/hp_core.tscn" id="5_2vo5t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6uulp"]
 bg_color = Color(1, 1, 1, 1)
@@ -170,12 +171,22 @@ offset_right = 1313.0
 offset_bottom = 1080.0
 pivot_offset = Vector2(500, 90)
 
-[node name="EnergyBar" parent="Player" instance=ExtResource("4_6uulp")]
+[node name="EnergyBatteryBar" parent="Player" instance=ExtResource("4_6uulp")]
 layout_mode = 1
 offset_left = 1421.0
-offset_top = 805.0
+offset_top = 802.0
 offset_right = 1531.0
-offset_bottom = 1000.0
+offset_bottom = 997.0
+
+[node name="HpCore" parent="Player" instance=ExtResource("5_2vo5t")]
+layout_mode = 1
+anchor_left = 6.7
+anchor_top = 19.4
+anchor_right = 12.325
+anchor_bottom = 25.025
+offset_top = -6.10352e-05
+offset_right = -3.05176e-05
+offset_bottom = -6.10352e-05
 
 [node name="AI" type="Control" parent="."]
 anchors_preset = 0
@@ -252,12 +263,24 @@ offset_right = 1313.0
 offset_bottom = 160.0
 pivot_offset = Vector2(500, 90)
 
-[node name="EnergyBar" parent="AI" instance=ExtResource("4_6uulp")]
+[node name="EnergyBatteryBar" parent="AI" instance=ExtResource("4_6uulp")]
 layout_mode = 1
 offset_left = 1410.0
-offset_top = 18.0
+offset_top = 9.0
 offset_right = 1520.0
-offset_bottom = 213.0
+offset_bottom = 204.0
+
+[node name="HpCore" parent="AI" instance=ExtResource("5_2vo5t")]
+layout_mode = 1
+anchor_left = 7.625
+anchor_top = 0.25
+anchor_right = 13.25
+anchor_bottom = 6.025
+offset_left = -3.05176e-05
+offset_top = 6.0
+offset_right = -6.10352e-05
+offset_bottom = 0.0
+is_in_ai = true
 
 [node name="ActionsBorder" type="Panel" parent="."]
 layout_mode = 1

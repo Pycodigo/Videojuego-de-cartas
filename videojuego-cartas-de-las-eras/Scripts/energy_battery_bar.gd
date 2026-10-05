@@ -1,16 +1,19 @@
 extends Control
 
 # Nodos de la barra.
-@onready var sandwatch_top: Panel = $Top
-@onready var sandwatch_bottom: Panel = $Bottom
-@onready var energy_label = $EnergyLabel
+@onready var energy_label = $BatteryHat/EnergyLabel
+@onready var segments: Array[Panel] = [
+	$Segment1,
+	$Segment2,
+	$Segment3,
+	$Segment4,
+	$Segment5
+]
 
+# Material del shader de los segmentos.
+var segment_materials: Array[ShaderMaterial] = []
 # Progreso de la barra de ambos paneles.
 var total_height: float
-
-# Material del shader del Top y Bottom.
-var top_material: ShaderMaterial
-var bottom_material: ShaderMaterial
 
 # Valor actual
 var progress: float = 0.5
@@ -21,13 +24,10 @@ var max_energy: int = 40
 
 
 func _ready() -> void:
-	# Crear dos (uno para jugador y otro para oponente).
-	sandwatch_top.material = sandwatch_top.material.duplicate()
-	sandwatch_bottom.material = sandwatch_bottom.material.duplicate()
-	
-	total_height = sandwatch_top.size.y + sandwatch_bottom.size.y
-	top_material = sandwatch_top.material as ShaderMaterial
-	bottom_material = sandwatch_bottom.material as ShaderMaterial
+	for i in segments.size():
+		segments[i].material = segments[i].material.duplicate()
+		segment_materials.append(segments[i].material as ShaderMaterial)
+		segment_materials[i].set_shader_parameter("segment_index", i)
 	
 	# Lo iniciamos a 0 (en el tablero ya avisa la cantidad).
 	spend_energy(0)
@@ -59,8 +59,10 @@ func set_progress(new_progress: float, animate: bool = true) -> void:
 	
 	if not animate:
 		progress = new_progress
-		top_material.set_shader_parameter("progress", progress)
-		bottom_material.set_shader_parameter("progress", progress)
+		
+		for material in segment_materials:
+			material.set_shader_parameter("progress", progress)
+		
 		return
 	
 	var tween := create_tween()
@@ -73,11 +75,10 @@ func set_progress(new_progress: float, animate: bool = true) -> void:
 		new_progress,
 		0.4
 	)
-	
 
 
 func _update_progress(value: float) -> void:
 	progress = value
 	
-	top_material.set_shader_parameter("progress", value)
-	bottom_material.set_shader_parameter("progress", value)
+	for material in segment_materials:
+		material.set_shader_parameter("progress", value)

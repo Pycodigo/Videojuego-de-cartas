@@ -1,0 +1,69 @@
+[gd_scene load_steps=2 format=3 uid="uid://bbba428tosxgy"]
+
+[ext_resource type="Script" uid="uid://6trbqlchou2r" path="res://Scripts/hp_core.gd" id="1_s17sx"]
+
+[node name="HpCore" type="Control"]
+layout_mode = 3
+anchor_right = 0.117
+anchor_bottom = 0.208
+offset_right = 0.359985
+offset_bottom = 0.360001
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_s17sx")
+
+[node name="Shield" type="Polygon2D" parent="."]
+color = Color(0.721569, 0.780392, 0.827451, 1)
+
+[node name="ShieldBorder" type="Line2D" parent="."]
+width = 5.0
+default_color = Color(0.203922, 0.286275, 0.368627, 1)
+
+[node name="Fragments" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Fragment1" type="Polygon2D" parent="Fragments"]
+color = Color(0.207843, 0.839216, 0.909804, 1)
+
+[node name="Fragment2" type="Polygon2D" parent="Fragments"]
+color = Color(0.207843, 0.839216, 0.909804, 1)
+
+[node name="Fragment3" type="Polygon2D" parent="Fragments"]
+color = Color(0.207843, 0.839216, 0.909804, 1)
+
+[node name="Fragment4" type="Polygon2D" parent="Fragments"]
+color = Color(0.207843, 0.839216, 0.909804, 1)
+
+[node name="Fragment5" type="Polygon2D" parent="Fragments"]
+color = Color(0.207843, 0.839216, 0.909804, 1)
+
+[node name="Fragment6" type="Polygon2D" parent="Fragments"]
+color = Color(0.207843, 0.839216, 0.909804, 1)
+
+[node name="HpLabel" type="Label" parent="."]
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.542
+anchor_top = 0.464
+anchor_right = 0.542
+anchor_bottom = 0.464
+offset_left = -31.95
+offset_top = -24.4
+offset_right = 32.05
+offset_bottom = 24.6
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.60933, 0.60933, 0.60933, 1)
+theme_override_font_sizes/font_size = 35
+text = "180"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

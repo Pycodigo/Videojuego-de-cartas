@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://c0qjxwb43wumb"]
 
-[ext_resource type="Script" uid="uid://dxccmaeolqjgo" path="res://Scripts/energy_bar.gd" id="1_wo8bj"]
+[ext_resource type="Script" uid="uid://dxccmaeolqjgo" path="res://Scripts/energy_battery_bar.gd" id="1_wo8bj"]
 [ext_resource type="Shader" uid="uid://di1y6qbh2s0ve" path="res://Shaders/energy_bar_top.gdshader" id="2_wo8bj"]
 [ext_resource type="Shader" uid="uid://bg0m8ot0e0kua" path="res://Shaders/energy_bar_bottom.gdshader" id="3_mydjc"]
 

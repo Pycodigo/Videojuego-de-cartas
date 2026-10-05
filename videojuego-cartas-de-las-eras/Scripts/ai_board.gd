@@ -6,14 +6,15 @@ extends Control
 @onready var player_deck = $Player/Deck
 @onready var player_slots = $Player/Slots
 @onready var player_discard_slot = $Player/Slots/SlotDiscard
-@onready var player_energy_bar = $Player/EnergyBar
+@onready var player_energy_bar = $Player/EnergyBatteryBar
 
 # Nodos de la IA.
 @onready var ai = $AI
 @onready var ai_hand = $AI/Hand
 @onready var ai_slots = $AI/Slots
 @onready var ai_discard_slot = $AI/Slots/SlotDiscard
-@onready var ai_energy_bar = $AI/EnergyBar
+@onready var ai_energy_bar = $AI/EnergyBatteryBar
+@onready var ai_core = $AI/HpCore
 # Baraja de IA.
 var ai_deck
 
@@ -477,6 +478,17 @@ func _AI_place_card_in_slot(ai_best_card) -> bool:
 	print("Ningún slot está libre.")
 	return false
 
+# Comprobar que los slots de la IA contienen cartas.
+func AI_slots_have_cards() -> bool:
+	for ai_slot in ai_slots.get_children():
+		if ai_slot == ai_discard_slot:
+			continue
+		
+		# Hay al menos una carta en juego.
+		if ai_slot.occupied:
+			return true
+
+	return false
 
 # Evaluar qué acción usa la IA.
 func AI_evaluate_action() -> void:
@@ -573,25 +585,9 @@ func AI_evaluate_action() -> void:
 		if best_target != null:
 			if best_value_atk > defense_score:
 				ai_card.action_clicked = 1
-				print(
-					"ANTES DE ACTIVAR: ", ai_card.card_name,
-					" | BG visible: ", ai_card.action_bg.visible,
-					" | BG alpha: ", ai_card.action_bg.modulate.a,
-					" | TEX visible: ", ai_card.action_texture.visible,
-					" | TEX alpha: ", ai_card.action_texture.modulate.a,
-					" | TEX scale: ", ai_card.action_texture.scale
-				)
 
 				await ai_card._activate_action()
 
-				print(
-					"DESPUÉS DE ACTIVAR: ", ai_card.card_name,
-					" | BG visible: ", ai_card.action_bg.visible,
-					" | BG alpha: ", ai_card.action_bg.modulate.a,
-					" | TEX visible: ", ai_card.action_texture.visible,
-					" | TEX alpha: ", ai_card.action_texture.modulate.a,
-					" | TEX scale: ", ai_card.action_texture.scale
-				)
 				# Atacar al objetivo.
 				await best_target.receive_damage(ai_card.actual_atk)
 				print("Carta rival: ", ai_card.card_name, " ataca a ", best_target.card_name, ".")
@@ -634,8 +630,8 @@ func AI_evaluate_action() -> void:
 			defending_cards.append(ai_card)
 			print("Carta rival: ", ai_card.card_name, " se defiende.")
 		
-		ai_energy_bar.spend_energy(ai_card.energy_cost)
 		current_actions -= 1
+		ai_energy_bar.spend_energy(ai_card.energy_cost)
 		
 		# Actualizar lo visual.
 		actions_num.text = str(current_actions)
