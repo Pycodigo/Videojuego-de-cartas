@@ -106,7 +106,7 @@
 - [x] Implementar sistema de turnos.
 - [x] Implementar ataque y defensa para cartas del jugador y la IA.
 - [x] Crear barra de energía (tipo batería).
-- [ ] Crear núcleo (con mejor diseño).
+- [x] Crear núcleo (con mejor diseño).
 - [ ] Volver a crear las cartas de era.
 - [ ] Hacer que las cartas de la IA ataquen al núcleo (si no hay cartas en juego).
 - [ ] Poner cronómetro en las partidas.
