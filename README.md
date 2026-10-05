@@ -103,17 +103,26 @@
 - [x] Mejorar el menú (más o menos).
 - [x] Hacer un menú rápido.
 - [x] Guardar la configuración (resolución, idiomas...).
-- [ ] Hacer bien la nueva IA del tablero.
-- [ ] Crear cartas inmunes a las eras.
+- [x] Implementar sistema de turnos.
+- [x] Implementar ataque y defensa para cartas del jugador y la IA.
+- [x] Crear barra de energía (tipo batería).
+- [ ] Crear núcleo (con mejor diseño).
+- [ ] Volver a crear las cartas de era.
+- [ ] Hacer que las cartas de la IA ataquen al núcleo (si no hay cartas en juego).
 - [ ] Poner cronómetro en las partidas.
-- [ ] Hacer bien y montar el tablero de juego con, al menos, lo básico.
+- [ ] Implementar algunas habilidades de prueba.
+	- [ ] Activas.
+	- [ ] Pasivas.
+- [ ] Configurar la nueva IA del tablero al completo.
+- [ ] Crear cartas inmunes a las eras.
+- [ ] Hacer bien, y montar el tablero de juego con, al menos, lo básico.
 - [ ] Definir un aproximado de 50-60 cartas (normales).
 - [ ] Definir las 5 cartas de era.
 - [ ] Programar nuevas habilidades introducidas.
 - [ ] Tener diseño artístico de las cartas, escenarios, y opciones (Opcional en esta DEMO).
-- [ ] Tener música.
+- [ ] Implementar música.
 - [ ] Hacer mejores animaciones (Opcional en esta DEMO).
-- [ ] Conectar todas las escenas.
+- [ ] Conectar (casi) todas las escenas.
 - [ ] Rehacer todo lo de 'tareas básicas'.
 - [ ] Hacer el primer ejecutable.
 
@@ -121,7 +130,8 @@
 <br/>
 <h3>🤵<u>Desarrollador</u></h3>
 <hr/>
-<p><img src="https://github.com/user-attachments/assets/d02d9333-4b01-4801-ba56-fa7795e27da9" widht="300" height="300"/><br/><sub>Alonso García Castiñeira</sub></p>
+<p><b>Pycod</b></p>
+<p>Cuenta con ayuda de miembros de Discord (créditos en proceso).</p>
 <br/>
 <h3><u>Licencia</u></h3>
 <hr/>
