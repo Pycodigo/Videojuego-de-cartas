@@ -87,17 +87,36 @@ func set_all_resolution() -> void:
 	var mode = config.get_value("settings", "window_mode", 0)
 	if fullscreen:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-	else:
-		match mode:
-			0:
-				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-				DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
-			1:
-				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-				DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
+		# No llegar al while.
+		return
+	
+	match mode:
+		0:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
+		1:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
+	# Esperar a que termine.
+	while DisplayServer.window_get_mode() != DisplayServer.WINDOW_MODE_WINDOWED:
+		await get_tree().process_frame
 	print("Tamaño tras aplicar modo de ventana: ", DisplayServer.window_get_size())
 	
-	# Resolución.
-	var res = config.get_value("settings", "resolution", Vector2i(1280, 720))
-	DisplayServer.window_set_size(res)
-	print("Resolución que voy a aplicar: ", res)
+	var res: Vector2i = config.get_value(
+		"settings",
+		"resolution",
+		Vector2i(1280, 720)
+	)
+
+	get_tree().root.size = res
+	if DisplayServer.window_get_size() != res:
+		await get_tree().root.size_changed
+
+	print("Solicitado: ", res)
+	print("Ventana: ", get_tree().root.size)
+	print("Viewport: ", get_viewport().get_visible_rect().size)
+	print("Modo de escala: ", get_tree().root.content_scale_mode)
+	print("Tamaño base: ", get_tree().root.content_scale_size)
+	await get_tree().create_timer(0.5).timeout
+	print("Ventana 0.5 s después: ", DisplayServer.window_get_size())
+	print("Ventana después: ", get_tree().root.size)

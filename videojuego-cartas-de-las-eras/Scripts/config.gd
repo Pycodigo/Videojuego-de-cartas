@@ -5,7 +5,7 @@ extends Control
 @onready var window_type = $"opc/UI_TAB_GRAPHICS/VBoxContainer/modo/ventana"
 
 # Tamaño mínimo.
-var min_width = 1024
+var min_width = 800
 var min_height = 600
 
 # Lista de idiomas.
@@ -23,14 +23,23 @@ var locales: Array[String] = [
 ]
 
 # Lista de resoluciones disponibles.
-var resolutions = [
-	Vector2i(1024, 600),
-	Vector2i(1152, 648),
-	Vector2i(1280, 720),
-	Vector2i(1366, 768),
-	Vector2i(1600, 900),
-	Vector2i(1920, 1080)
+var resolutions: Array[Vector2i] = [
+	Vector2i(800, 600),
+	Vector2i(1024, 768),
+	Vector2i(1280, 720),   # HD
+	Vector2i(1280, 800),   # WXGA
+	Vector2i(1366, 768),   # Portátiles
+	Vector2i(1600, 900),   # HD+
+	Vector2i(1920, 1080),  # Full HD
+	Vector2i(1920, 1200),  # WUXGA
+	Vector2i(2560, 1440),  # QHD
+	Vector2i(3440, 1440),  # Ultrawide QHD
+	Vector2i(3840, 2160)   # 4K UHD
 ]
+# Resoluciones realmente disponibles para el jugador.
+var res_available: Array[Vector2i]
+
+
 
 # Modos de ventana.
 const window_mode: Array[String] = [
@@ -53,13 +62,16 @@ func _ready() -> void:
 	if current != -1:
 		language.select(current)
 	
-	# Resoluciones.
+	# Meter solo las resoluciones concorde a la pantalla del usuario.
+	var screen_size = DisplayServer.screen_get_size()
 	for res in resolutions:
-		resolution_type.add_item(str(res.x) + "x" + str(res.y))
+		if res.x <= screen_size.x and res.y <= screen_size.y:
+			resolution_type.add_item(str(res.x) + "x" + str(res.y))
+			res_available.append(res)
 	
 	# Seleccionar la resolución guardada.
 	var saved_res = GlobalConfigFile.config.get_value("settings", "resolution", Vector2i(1280, 720))
-	var res_index = resolutions.find(saved_res)
+	var res_index = res_available.find(saved_res)
 	print(saved_res, " - tipo: ", typeof(saved_res))
 	print("res_index: ", res_index)
 	if res_index != -1:
@@ -86,7 +98,7 @@ func _on_idioma_item_selected(index: int) -> void:
 func _on_opc_item_selected(index: int) -> void:
 	if $QuickMenu.quick_menu_showed:
 		return
-	GlobalConfigFile.set_resolution(resolutions[index])
+	GlobalConfigFile.set_resolution(res_available[index])
 
 func _on_vindow_item_selected(mode: int) -> void:
 	if $QuickMenu.quick_menu_showed:
