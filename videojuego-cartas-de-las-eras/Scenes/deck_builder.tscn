@@ -342,7 +342,6 @@ size_flags_stretch_ratio = 20.0
 layout_mode = 2
 
 [node name="QuickMenu" parent="." instance=ExtResource("8_cqfg8")]
-visible = false
 layout_mode = 1
 
 [connection signal="pressed" from="TopBar/BtnDelete" to="." method="_on_btn_delete_pressed"]

@@ -34,6 +34,7 @@ func _ready() -> void:
 	print(get_path(), " -> is_in_ai: ", is_in_ai)
 	current_hp = max_hp
 	hp_lbl.text = str(current_hp)
+	hp_lbl.z_index = -1
 	# Crear los lados del hexágono.
 	var sides_hexagon = PackedVector2Array([
 		Vector2(125, 25),  # Arriba.
@@ -53,16 +54,17 @@ func _ready() -> void:
 	
 	# Asignar.
 	shield.polygon = sides_hexagon
+	shield.z_index = -1
 	var sides_h_border = sides_hexagon.duplicate()
 	sides_h_border.append(sides_hexagon[0])
 	shield_border.points = sides_h_border
+	shield_border.z_index = -1
 	
 	for i in range(6):
 		var fragment = fragments.get_child(i)
 		var vertex = sides_hexagon[i]
 
 		fragment.position = vertex 
-		fragment.z_index = 1
 		fragment.polygon = sides_fragment
 
 
@@ -182,6 +184,7 @@ func create_random_final_point() -> Vector2:
 # Animar una grieta.
 func animate_crack(points: PackedVector2Array) -> void:
 	var line = Line2D.new()
+	line.z_index = -1
 	line.width = 3
 	line.default_color = Color.BLACK
 	
@@ -200,8 +203,12 @@ func create_lines() -> void:
 	print("HP al crear grietas: ", current_hp)
 	
 	var damage_taken = max_hp - current_hp
-	var damage_level = int(damage_taken / 15.0)
-	var crack_progress = fmod(damage_taken, 15.0) / 15.0
+	# Que empiece desde 0-14.
+	var damage_level = int((damage_taken - 1)/ 15.0)
+	var crack_progress = (fmod(damage_taken, 15.0) + 1) / 15.0
+	# Evitar que la línea desaparezca.
+	if damage_taken % 15 == 0:
+		crack_progress = 1.0
 	
 	# Hemos empezado un nuevo tramo de 15 de daño.
 	if damage_level != current_crack_level:
@@ -218,6 +225,7 @@ func create_lines() -> void:
 		
 		# Crear la línea de este tramo.
 		current_crack_line = Line2D.new()
+		current_crack_line.z_index = -1
 		current_crack_line.width = 3
 		current_crack_line.default_color = Color.BLACK
 		add_child(current_crack_line)

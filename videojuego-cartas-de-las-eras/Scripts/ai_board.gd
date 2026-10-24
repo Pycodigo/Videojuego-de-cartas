@@ -7,6 +7,7 @@ extends Control
 @onready var player_slots = $Player/Slots
 @onready var player_discard_slot = $Player/Slots/SlotDiscard
 @onready var player_energy_bar = $Player/EnergyBatteryBar
+@onready var player_core = $Player/HpCore
 
 # Nodos de la IA.
 @onready var ai = $AI
@@ -47,8 +48,6 @@ var is_ai_turn: bool = false
 var attacking_card = null
 var pause_while_deciding: bool = false
 
-var times_slot: int
-
 # Cartas que se defienden.
 var defending_cards: Array = []
 
@@ -61,6 +60,7 @@ var current_actions: int
 func _ready() -> void:
 	# Decir el turno actual.
 	turn_lbl.text = "Turno " + str(turn_cnt)
+	finish_turn_btn.disabled = true
 	# Poner el botón de reiniciar.
 	var tween = create_tween()
 	tween.tween_property(reset_btn, "position:x", 0, 0.3)\
@@ -106,12 +106,8 @@ func _ready() -> void:
 	if ai_deck:
 		await draw_starting_hand(start_draw, ai_deck, ai_hand)
 		is_player = false
-		while times_slot < 5:
-			var card = choose_card_to_play()
-			if card == null:
-				break
-			if await _AI_place_card_in_slot(card):
-				times_slot += 1
+		await _AI_fill_slots()
+		finish_turn_btn.disabled = false
 		
 	#Inicialmente, al no tener cartas en slots, el botón de finalizar turno está deshabilitado.
 	'''update_finish_turn_btn()
@@ -385,8 +381,20 @@ func choose_card_to_play() -> Control:
 			best_value = score
 			best_card = card
 	
-	print("Mejor carta: ", best_card.card_name)
+	if best_card != null:
+		print("Mejor carta: ", best_card.card_name)
 	return best_card
+
+func _AI_fill_slots() -> void:
+	while true:
+		# Si no hay cartas en mano, no efectuar.
+		if ai_hand.get_child_count() == 0:
+			break
+		var card = choose_card_to_play()
+		if card == null:
+			break
+		if not await _AI_place_card_in_slot(card):
+			break
 
 # Colocar la mejor carta de la IA en un slot.
 func _AI_place_card_in_slot(ai_best_card) -> bool:
@@ -490,11 +498,24 @@ func AI_slots_have_cards() -> bool:
 
 	return false
 
+# Comprobar que los slots del jugador contienen cartas.
+func player_slots_have_cards() -> bool:
+	for player_slot in player_slots.get_children():
+		if player_slot == player_discard_slot:
+			continue
+		
+		# Hay al menos una carta en juego.
+		if player_slot.occupied:
+			return true
+
+	return false
+
 # Evaluar qué acción usa la IA.
 func AI_evaluate_action() -> void:
 	# Pillar las cartas del jugador y la IA en juego.
 	var player_cards_slots: Array = []
 	var ai_cards_slots: Array = []
+	await _AI_fill_slots()
 
 	for slot in player_slots.get_children():
 		if slot == player_discard_slot:
@@ -525,6 +546,8 @@ func AI_evaluate_action() -> void:
 		var max_threat: float = 0.0
 		var threat: float = 0.0
 		var defense_score: float = 0.0
+		# Calcular si vale la pena hacer daño al núcleo.
+		var core_atk_score: float = 0.0
 
 		for player_card in player_cards_slots:
 			# Evitar meter cartas descartadas.
@@ -612,23 +635,41 @@ func AI_evaluate_action() -> void:
 				defending_cards.append(ai_card)
 				print("Carta rival: ", ai_card.card_name, " se defiende.")
 		else:
-			ai_card.action_clicked = 2
-			await ai_card._activate_action()
+			# Ver si el jugador tiene cartas.
+			var player_total = player_hand.get_child_count()
+			# Decidir si atacar o no al núcleo.
+			core_atk_score = (ai_card.actual_atk * 10.0) - ai_card.energy_cost - (player_total * 5.0)
+			defense_score  = 180 - ai_core.current_hp   # Sube cuando current_hp baja.
 			
-			# Usamos la defensa base (con animaciones).
-			while ai_card.def_used < ai_card.base_defense:
-				ai_card.def_used += 1
+			if defense_score > core_atk_score:
+				ai_card.action_clicked = 2
+				await ai_card._activate_action()
 				
-				# Actualizar lo visual.
-				ai_card.defense_text.text = str(ai_card.def_used)
-				ai_card.defense_zoom_text.text = str(ai_card.def_used)
-				ai_card.def_num_detail.text = str(ai_card.def_used)
-				await get_tree().create_timer(0.08).timeout
-			
-			# Cambiar color.
-			ai_card.defense_zoom_text.add_theme_color_override("font_color", Color.BLUE)
-			defending_cards.append(ai_card)
-			print("Carta rival: ", ai_card.card_name, " se defiende.")
+				# Usamos la defensa base (con animaciones).
+				while ai_card.def_used < ai_card.base_defense:
+					ai_card.def_used += 1
+					
+					# Actualizar lo visual.
+					ai_card.defense_text.text = str(ai_card.def_used)
+					ai_card.defense_zoom_text.text = str(ai_card.def_used)
+					ai_card.def_num_detail.text = str(ai_card.def_used)
+					await get_tree().create_timer(0.08).timeout
+				
+				# Cambiar color.
+				ai_card.defense_zoom_text.add_theme_color_override("font_color", Color.BLUE)
+				defending_cards.append(ai_card)
+				print("Carta rival: ", ai_card.card_name, " se defiende.")
+			else:
+				ai_card.action_clicked = 1
+				# Esperar a que termine la animación.
+				await ai_card._activate_action()
+
+				# Atacar al núcleo.
+				await player_core.receive_damage(ai_card.actual_atk)
+				player_core.update_fragments()
+				print("Carta rival: ", ai_card.card_name, " ataca al núcleo del jugador.")
+				print("Vida después del ataque: ", player_core.current_hp)
+				await ai_card._cannot_use_card()
 		
 		current_actions -= 1
 		ai_energy_bar.spend_energy(ai_card.energy_cost)
@@ -642,6 +683,8 @@ func AI_evaluate_action() -> void:
 			actions_num.add_theme_color_override("font_color", Color.RED)
 			await _pass_turn()
 			return
+	# No puede hacer nada más.
+	await _pass_turn()
 
 # Pasar turno.
 func _pass_turn() -> void:
@@ -708,7 +751,7 @@ func _pass_turn() -> void:
 	
 	if turn_cnt == 0:
 		# Comprobar si hay, al menos, alguna carta en juego.
-		if not has_cards:
+		if not player_slots_have_cards():
 			print("No hay cartas en juego. Se pone al menos una.")
 			return
 		
@@ -734,7 +777,7 @@ func _pass_turn() -> void:
 		# Cambiar de turno.
 		is_ai_turn = not is_ai_turn
 		_draw_per_turn()
-	
+	finish_turn_btn.disabled = is_ai_turn
 	
 	# Aumentar contador de turno.
 	turn_cnt += 1
