@@ -7,5 +7,5 @@
 [node name="BtnMenuCredits" instance=ExtResource("1_30bwd")]
 script = ExtResource("2_xfs7s")
 
-[node name="TextureIcon" parent="BtnMenu/IconBG" index="0"]
+[node name="TextureIcon" parent="ScaleContainer/BtnMenu/IconBG" index="0"]
 texture = ExtResource("2_8n8p3")

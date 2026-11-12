@@ -239,6 +239,8 @@ func init_card():
 
 # Zoom de la carta.
 func _show_zoom() -> void:
+	board.atk_indicator.hide()
+	
 	if is_in_ai and in_hand or board.is_ai_turn:
 		return
 	board.pause_while_zoom = true
@@ -341,6 +343,8 @@ func _show_zoom() -> void:
 
 # Volver a tener la carta en tamaño normal.
 func _hide_zoom() -> void:
+	board.atk_indicator.show()
+	
 	# Crear animación.
 	var tween = create_tween()
 	
@@ -641,6 +645,14 @@ func _on_basic_card_gui_input(event: InputEvent) -> void:
 				board.attacking_card._cannot_use_card()
 				board.attacking_card = null
 				board.pause_while_deciding = false
+				# Salir de la animación.
+				board.atk_indicator.state = board.atk_indicator.State.EXITING
+				board.atk_indicator.anim.play_backwards("Target valid")
+				await board.atk_indicator.anim.animation_finished
+				board.atk_indicator.state = board.atk_indicator.State.APPEAR
+				board.atk_indicator.anim.play_backwards("Appear")
+				await board.atk_indicator.anim.animation_finished
+				board.atk_indicator.hide()
 			
 			# Cualquier pulsación nueva cancela un click simple pendiente.
 			click_timer.stop()
@@ -830,6 +842,13 @@ func _discard_card() -> void:
 		slot_discard = board.ai_discard_slot
 	else:
 		slot_discard = board.player_discard_slot
+	
+	# Si justo la carta muere mientras está en zoom, lo quitamos.
+	if zoom_active:
+		zoom_active = false
+		board.pause_while_zoom = false
+		_hide_zoom()
+	
 	
 	# Quitamos la carta del slot (y damos a entender que no está).
 	if current_slot != null:
@@ -1076,6 +1095,60 @@ func _on_atk_btn_pressed() -> void:
 	await _activate_action()
 	board.attacking_card = self
 	board.pause_while_deciding = true
+	
+	# Mostrar marcador.
+	board.atk_indicator.show()
+	board.atk_indicator.anim.play("Appear")
+	board.atk_indicator.set_line_atk(card_panel)
+	await board.atk_indicator.anim.animation_finished
+
+	var indicator = board.atk_indicator
+	var anim = indicator.anim
+	var target = indicator.get_current_target()
+
+	print("Objetivo detectado: ", target)
+
+	# Si no hay ningún objetivo bajo el ratón.
+	if target == null:
+		indicator.state = indicator.State.SELECT
+		anim.play("Select")
+		return
+
+	# Comprobar si el objetivo es válido.
+	var is_valid_target = false
+
+	if target.name == "BasicCard":
+		var target_card = target.get_parent()
+		is_valid_target = (
+			target_card.is_in_ai
+			and target_card.is_in_slot
+			and not target_card.in_hand
+			and board.pause_while_deciding
+			and not target_card.slot_discard
+		)
+
+	elif target.name == "HpCore":
+		is_valid_target = (
+			target.is_in_ai
+			and not board.AI_slots_have_cards()
+		)
+
+	# Reproducir la animación correspondiente.
+	if is_valid_target:
+		indicator.state = indicator.State.ENTERING
+		anim.play("Target valid")
+		await anim.animation_finished
+
+		indicator.state = indicator.State.WAITING_VALID
+		anim.play("Target valid waiting")
+
+	else:
+		indicator.state = indicator.State.INVALID
+		anim.play("Not valid")
+		await anim.animation_finished
+
+		indicator.state = indicator.State.WAITING_INVALID
+		anim.play("Not valid try exit")
 
 
 func _on_def_btn_pressed() -> void:
@@ -1191,3 +1264,127 @@ func _cannot_use_card() -> void:
 	
 	# Esperar a que finalize.
 	await tween.finished
+
+
+func _on_basic_card_mouse_entered() -> void:
+	var indicator = board.atk_indicator
+	var anim = indicator.anim
+	var previous_state = indicator.state
+
+	if previous_state not in [
+		indicator.State.SELECT,
+		indicator.State.WAITING_VALID,
+		indicator.State.WAITING_INVALID,
+		indicator.State.ENTERING,
+		indicator.State.INVALID,
+		indicator.State.EXITING
+	]:
+		return
+
+	# Identificar esta transición.
+	indicator.transition_id += 1
+	var my_transition = indicator.transition_id
+
+	var t = anim.current_animation_position
+
+	# Comprobar si la carta es un objetivo válido.
+	var is_valid_target = (
+		is_in_ai
+		and is_in_slot
+		and not in_hand
+		and board.pause_while_deciding
+		and not slot_discard
+	)
+
+	if is_valid_target:
+		# Deshacerla antes de mostrar el objetivo válido.
+		if previous_state == indicator.State.WAITING_INVALID \
+			or previous_state == indicator.State.INVALID:
+
+			var from_end = previous_state == indicator.State.WAITING_INVALID
+			anim.play_backwards("Not valid")
+			await anim.animation_finished
+
+			if my_transition != indicator.transition_id:
+				return
+
+		indicator.state = indicator.State.ENTERING
+		anim.play("Target valid")
+		await anim.animation_finished
+
+		if my_transition != indicator.transition_id:
+			return
+
+		indicator.state = indicator.State.WAITING_VALID
+		anim.play("Target valid waiting")
+		anim.seek(t, true)
+
+	else:
+		# Deshacerla antes de mostrar el objetivo inválido.
+		if previous_state == indicator.State.WAITING_VALID \
+			or previous_state == indicator.State.ENTERING:
+
+			var from_end = previous_state == indicator.State.WAITING_VALID
+			anim.play_backwards("Target valid")
+			await anim.animation_finished
+
+			if my_transition != indicator.transition_id:
+				return
+
+		indicator.state = indicator.State.INVALID
+		anim.play("Not valid")
+		await anim.animation_finished
+
+		if my_transition != indicator.transition_id:
+			return
+
+		indicator.state = indicator.State.WAITING_INVALID
+		anim.play("Not valid try exit")
+		anim.seek(t, true)
+
+
+func _on_basic_card_mouse_exited() -> void:
+	var indicator = board.atk_indicator
+	var anim = indicator.anim
+
+	if indicator.state not in [
+		indicator.State.WAITING_VALID,
+		indicator.State.WAITING_INVALID,
+		indicator.State.ENTERING,
+		indicator.State.INVALID
+	]:
+		return
+
+	# Identificar esta transición.
+	indicator.transition_id += 1
+	var my_transition = indicator.transition_id
+
+	var t = anim.current_animation_position
+
+	indicator.state = indicator.State.EXITING
+
+	# Invertir la animación que corresponda.
+	match anim.current_animation:
+		"Target valid":
+			anim.play_backwards("Target valid")
+
+		"Target valid waiting":
+			anim.play_backwards("Target valid")
+
+		"Not valid":
+			anim.play_backwards("Not valid")
+
+		"Not valid try exit":
+			anim.play_backwards("Not valid")
+
+		_:
+			return
+
+	await anim.animation_finished
+
+	if my_transition != indicator.transition_id:
+		return
+
+	indicator.state = indicator.State.SELECT
+	anim.play("Select")
+	anim.seek(t, true)

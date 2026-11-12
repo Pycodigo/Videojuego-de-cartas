@@ -1,10 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://0qv0xluy23g7"]
+[gd_scene load_steps=14 format=3 uid="uid://0qv0xluy23g7"]
 
 [ext_resource type="Script" uid="uid://buk5gympwj3cx" path="res://Scripts/ai_board.gd" id="1_6uulp"]
 [ext_resource type="PackedScene" uid="uid://d0dhxg263iuv0" path="res://Scenes/slot.tscn" id="2_t2wnw"]
 [ext_resource type="PackedScene" uid="uid://6wcl4hftxfrs" path="res://Scenes/deck.tscn" id="3_ks1o3"]
 [ext_resource type="PackedScene" uid="uid://yloww08rggwj" path="res://Scenes/energy_battery_bar.tscn" id="4_6uulp"]
 [ext_resource type="PackedScene" uid="uid://bbba428tosxgy" path="res://Scenes/hp_core.tscn" id="5_2vo5t"]
+[ext_resource type="PackedScene" uid="uid://bo4b1xjh1bdrb" path="res://Scenes/Animations/atk_indicator.tscn" id="7_bm7oe"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6uulp"]
 bg_color = Color(1, 1, 1, 1)
@@ -93,6 +94,10 @@ script = ExtResource("1_6uulp")
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="AtkIndicator" parent="Player" instance=ExtResource("7_bm7oe")]
+z_index = 10
+layout_mode = 1
 
 [node name="Slots" type="Control" parent="Player"]
 layout_mode = 3

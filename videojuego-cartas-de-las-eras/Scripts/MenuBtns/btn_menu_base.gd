@@ -9,11 +9,12 @@ extends Control
 @export var btn_want_select: bool
 
 # Nodos del botón.
-@onready var btn_menu = $BtnMenu
-@onready var icon_bg = $BtnMenu/IconBG
-@onready var icon_texture = $BtnMenu/IconBG/TextureIcon
-@onready var menu_name_bg = $BtnMenu/NameBG
-@onready var menu_name = $BtnMenu/NameBG/Name
+@onready var scale_container = $ScaleContainer
+@onready var btn_menu = $ScaleContainer/BtnMenu
+@onready var icon_bg = $ScaleContainer/BtnMenu/IconBG
+@onready var icon_texture = $ScaleContainer/BtnMenu/IconBG/TextureIcon
+@onready var menu_name_bg = $ScaleContainer/BtnMenu/NameBG
+@onready var menu_name = $ScaleContainer/BtnMenu/NameBG/Name
 
 # Ruta a la que manda el botón.
 var path = ""
@@ -26,23 +27,30 @@ func _ready() -> void:
 	var tween = create_tween()
 	# Secuencia: centro -> izda -> centro -> dcha -> centro -> (repetir).
 	tween.set_loops()
+
+	# Centro -> izquierda.
 	tween.tween_property(btn_menu, "scale:x", 0.7, 1.5)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tween.parallel().tween_property(btn_menu, "rotation", deg_to_rad(-5), 1.5)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	# Izquierda -> centro.
 	tween.tween_property(btn_menu, "scale:x", 1.0, 1.5)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.parallel().tween_property(btn_menu, "rotation", 0, 1.5)\
+	tween.parallel().tween_property(btn_menu, "rotation", 0.0, 1.5)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	# Centro -> derecha.
 	tween.tween_property(btn_menu, "scale:x", 0.7, 1.5)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tween.parallel().tween_property(btn_menu, "rotation", deg_to_rad(5), 1.5)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	# Derecha -> centro.
 	tween.tween_property(btn_menu, "scale:x", 1.0, 1.5)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tween.parallel().tween_property(btn_menu, "rotation", 0, 1.5)\
+	tween.parallel().tween_property(btn_menu, "rotation", 0.0, 1.5)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	
 
 func _init_btn_menu() -> void:
 	menu_name.text = btn_menu_name
@@ -64,12 +72,12 @@ func _on_btn_menu_pressed() -> void:
 func _on_btn_menu_mouse_entered() -> void:
 	# Aumentar un poco el tamaño de la carta para destacarla.
 	var tween_entered = create_tween()
-	tween_entered.tween_property(btn_menu, "scale", Vector2(1.3, 1.3), 0.3)\
+	tween_entered.tween_property(scale_container, "scale", Vector2(1.3, 1.3), 0.3)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 
 func _on_btn_menu_mouse_exited() -> void:
 	# Devolver a tamaño original al salir.
 	var tween_exit = create_tween()
-	tween_exit.tween_property(btn_menu, "scale", Vector2(1.0, 1.0), 0.3)\
+	tween_exit.tween_property(scale_container, "scale", Vector2(1.0, 1.0), 0.3)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)

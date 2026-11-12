@@ -7,5 +7,5 @@
 [node name="BtnMenuRules" instance=ExtResource("1_wivs4")]
 script = ExtResource("2_8rul8")
 
-[node name="TextureIcon" parent="BtnMenu/IconBG" index="0"]
+[node name="TextureIcon" parent="ScaleContainer/BtnMenu/IconBG" index="0"]
 texture = ExtResource("2_8e2sn")

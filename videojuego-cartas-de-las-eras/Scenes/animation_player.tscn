@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://yq82suwl1fe1"]
+
+[node name="AnimationPlayer" type="AnimationPlayer"]
+
+[node name="Line2D" type="Line2D" parent="."]

@@ -26,6 +26,7 @@ var ai_deck
 @onready var actions_border = $ActionsBorder
 @onready var actions_lbl = $ActionsBorder/ActionsLabel
 @onready var actions_num = $ActionsBorder/ActionsNumber
+@onready var atk_indicator = $Player/AtkIndicator
 
 # Cartas a robar al inicio.
 var start_draw: int = 7

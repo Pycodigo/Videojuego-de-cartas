@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://cicrvxwxhy0s"]
+[gd_scene load_steps=10 format=3 uid="uid://cicrvxwxhy0s"]
 
 [ext_resource type="Script" uid="uid://c5jhssky1nust" path="res://Scripts/deck_builder_2.gd" id="1_1img4"]
 [ext_resource type="Texture2D" uid="uid://chi5vg0ejenqd" path="res://Images/Portada baraja - fondo nombre.png" id="1_gh66y"]
 [ext_resource type="Texture2D" uid="uid://bieotg22v3wkg" path="res://Images/favorito sin marcar.png" id="2_yyvls"]
 [ext_resource type="Texture2D" uid="uid://bgb014lbv4p2p" path="res://Images/Test/volver.png" id="3_1img4"]
 [ext_resource type="PackedScene" uid="uid://b0ex2dmq4qxlc" path="res://Scenes/quick_menu.tscn" id="5_xi04x"]
+[ext_resource type="PackedScene" uid="uid://gvsjht1tllsf" path="res://Scenes/cursor.tscn" id="6_j4hdy"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3iv38"]
 bg_color = Color(0.370364, 0.370365, 0.370364, 1)
@@ -259,6 +260,12 @@ metadata/_tab_index = 1
 
 [node name="QuickMenu" parent="." instance=ExtResource("5_xi04x")]
 layout_mode = 1
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 128
+
+[node name="cursor" parent="CanvasLayer" instance=ExtResource("6_j4hdy")]
+metadata/_edit_use_anchors_ = true
 
 [connection signal="pressed" from="DeckBG/SaveBtn" to="." method="_on_save_btn_pressed"]
 [connection signal="pressed" from="DeckBG/BackBtn" to="." method="_on_back_btn_pressed"]

@@ -1190,6 +1190,8 @@ offset_top = -0.8
 theme_override_styles/panel = SubResource("StyleBoxFlat_2sihe")
 
 [connection signal="gui_input" from="BasicCard" to="." method="_on_basic_card_gui_input"]
+[connection signal="mouse_entered" from="BasicCard" to="." method="_on_basic_card_mouse_entered"]
+[connection signal="mouse_exited" from="BasicCard" to="." method="_on_basic_card_mouse_exited"]
 [connection signal="pressed" from="BasicCard/ATKBtn" to="." method="_on_atk_btn_pressed"]
 [connection signal="pressed" from="BasicCard/DefBtn" to="." method="_on_def_btn_pressed"]
 [connection signal="pressed" from="BasicCard/PlusBtn" to="." method="_on_plus_btn_pressed"]
