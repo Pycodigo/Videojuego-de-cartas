@@ -109,6 +109,7 @@
 - [x] Crear núcleo (con mejor diseño).
 - [ ] Volver a crear las cartas de era.
 - [x] Hacer que las cartas de la IA ataquen al núcleo (si no hay cartas en juego).
+- [x] Crear alguna animación de prueba.
 - [ ] Poner cronómetro en las partidas.
 - [ ] Implementar algunas habilidades de prueba.
 	- [ ] Activas.
